@@ -1,0 +1,21 @@
+
+.multi-language-field .wp-switch-editor  { border-color: #dfdfdf; position: relative; top: 1px; z-index: 999; }
+.multi-language-field.focused .wp-switch-editor  { border-color: #bbb; }
+.multi-language-field .wp-switch-editor.current-language { background-color: #fff; border-bottom-color: #fff; color: #333; }
+.multi-language-field > input,
+.multi-language-field > textarea,
+.multi-language-field > fieldset,
+.multi-language-field .acf_wysiwyg { display: none; }
+.multi-language-field .acf_input input,
+.multi-language-field .acf_input textarea,
+.multi-language-field .current-language { display: block !important; }
+
+.multi-language-widget .wp-switch-editor { height: 18px; font: 13px/18px Arial,Helvetica,sans-serif normal; margin: 5px 5px 0 0; padding: 4px 5px 2px; float: right; cursor: pointer; border-width: 1px; border-style: solid; border-top-right-radius: 3px; border-top-left-radius: 3px; background-color: #f1f1f1; border-color: #dfdfdf; color: #999; }
+.multi-language-widget .wp-switch-editor.current-language { background: #ededed; border-bottom-color: #ededed; }
+
+.multi-language-widget.button-widget .wp-switch-editor.current-language { background-color: #fff; border-bottom-color: #fff; }
+
+.multi-language-widget.text-widget fieldset { background: #ededed; border: 1px solid #dfdfdf; border-radius: 5px; margin: 0 0 10px 0; padding: 10px; width: 95%; }
+
+.multi-language-field-wysiwyg .wp-switch-editor { background-color: #f1f1f1; border-color: #dfdfdf; border-bottom-color: #ccc; top: 0px; }
+.multi-language-field-wysiwyg .wp-switch-editor.current-language { background-color: #f4f4f4; border-color: #ccc; border-bottom-color: #f4f4f4; }
