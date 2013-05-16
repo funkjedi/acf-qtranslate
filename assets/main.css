@@ -1,4 +1,5 @@
-
+.multi-language-field { margin-top: -32px; }
+.repeater .multi-language-field { margin-top: 0; }
 .multi-language-field .wp-switch-editor  { border-color: #dfdfdf; position: relative; top: 1px; z-index: 999; }
 .multi-language-field.focused .wp-switch-editor  { border-color: #bbb; }
 .multi-language-field .wp-switch-editor.current-language { background-color: #fff; border-bottom-color: #fff; color: #333; }
@@ -17,5 +18,6 @@
 
 .multi-language-widget.text-widget fieldset { background: #ededed; border: 1px solid #dfdfdf; border-radius: 5px; margin: 0 0 10px 0; padding: 10px; width: 95%; }
 
+.multi-language-field-wysiwyg { margin-top: 0; }
 .multi-language-field-wysiwyg .wp-switch-editor { background-color: #f1f1f1; border-color: #dfdfdf; border-bottom-color: #ccc; top: 0px; }
 .multi-language-field-wysiwyg .wp-switch-editor.current-language { background-color: #f4f4f4; border-color: #ccc; border-bottom-color: #f4f4f4; }

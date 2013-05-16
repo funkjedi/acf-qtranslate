@@ -13,8 +13,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 // http://support.advancedcustomfields.com/discussion/1181/prease-check-wp3-3-qtranslate-advance-custom-field/p1
 
 
+
 function acf_qtranslate_enabled() {
-	return function_exists('qtrans_getSortedLanguages');
+	// ACF uses core fields internally when editing or creating Field Groups so we
+	// need to detect when we're editing Field Groups and act as if qTranslate is disabled
+	if (isset($_POST['post_id']) && get_post_type($_POST['post_id']) === 'acf') {
+		return false;
+	}
+	return (get_post_type() !== 'acf' && function_exists('qtrans_getSortedLanguages'));
 }
 
 add_action('acf/register_fields', 'acf_qtranslate_plugin_register_fields');

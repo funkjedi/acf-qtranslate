@@ -5,9 +5,20 @@ class acf_field_qtranslate_wysiwyg extends acf_field_wysiwyg
 
 	function __construct()
 	{
-		$this->name = 'qtranslate_wysiwyg';
+		$this->name = 'wysiwyg';
 		$this->label = __("Wysiwyg Editor",'acf');
-		$this->category = __("qTranslate",'acf');
+		$this->category = __("Content",'acf');
+
+		// remove registered core filters and actions for text field
+		remove_all_filters('acf/load_value/type=' . $this->name);
+		remove_all_filters('acf/update_value/type=' . $this->name);
+		remove_all_filters('acf/format_value/type=' . $this->name);
+		remove_all_filters('acf/format_value_for_api/type=' . $this->name);
+		remove_all_filters('acf/load_field/type=' . $this->name);
+		remove_all_filters('acf/update_field/type=' . $this->name);
+		remove_all_actions('acf/create_field/type=' . $this->name);
+		remove_all_actions('acf/create_field_options/type=' . $this->name);
+		remove_all_filters('acf/fields/wysiwyg/toolbars');
 
 		acf_field::__construct();
 

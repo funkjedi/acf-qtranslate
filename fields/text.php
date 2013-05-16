@@ -5,9 +5,18 @@ class acf_field_qtranslate_text extends acf_field_text
 
 	function __construct()
 	{
-		$this->name = 'qtranslate_text';
+		$this->name = 'text';
 		$this->label = __("Text",'acf');
-		$this->category = __("qTranslate",'acf');
+
+		// remove registered core filters and actions for text field
+		remove_all_filters('acf/load_value/type=' . $this->name);
+		remove_all_filters('acf/update_value/type=' . $this->name);
+		remove_all_filters('acf/format_value/type=' . $this->name);
+		remove_all_filters('acf/format_value_for_api/type=' . $this->name);
+		remove_all_filters('acf/load_field/type=' . $this->name);
+		remove_all_filters('acf/update_field/type=' . $this->name);
+		remove_all_actions('acf/create_field/type=' . $this->name);
+		remove_all_actions('acf/create_field_options/type=' . $this->name);
 
 		acf_field::__construct();
 	}
@@ -42,6 +51,10 @@ class acf_field_qtranslate_text extends acf_field_text
 
 	function format_value($value, $post_id, $field)
 	{
+		if (!acf_qtranslate_enabled()) {
+			return acf_field_text::format_value($value, $post_id, $field);
+		}
+
 		return $value;
 	}
 
