@@ -23,6 +23,7 @@ function acf_qtranslate_plugin_register_fields() {
 	require_once dirname(__FILE__) . '/fields/text.php';
 	require_once dirname(__FILE__) . '/fields/textarea.php';
 	require_once dirname(__FILE__) . '/fields/wysiwyg.php';
+	require_once dirname(__FILE__) . '/fields/image.php';
 
 }
 
