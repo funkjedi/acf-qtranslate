@@ -7,7 +7,7 @@
 	border-color: #dfdfdf;
 	position: relative;
 	top: 1px;
-	z-index: 999;
+	z-index: 100;
 }
 
 .multi-language-field.focused .wp-switch-editor { border-color: #bbb }
