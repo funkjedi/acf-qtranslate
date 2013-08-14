@@ -65,6 +65,8 @@
 	width: 95%;
 }
 
+.multi-language-field-wysiwyg { margin-top: 0 }
+
 .multi-language-field .acf-image-uploader {
   padding: 20px 10px 10px;
   clear: right;
