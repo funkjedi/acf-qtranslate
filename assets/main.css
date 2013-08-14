@@ -22,7 +22,8 @@
 .multi-language-field > input,
 .multi-language-field > textarea,
 .multi-language-field > fieldset,
-.multi-language-field .acf_wysiwyg { display: none }
+.multi-language-field .acf_wysiwyg,
+.multi-language-field .acf-image-uploader { display: none }
 
 .multi-language-field .acf_input input,
 .multi-language-field .acf_input textarea,
@@ -65,16 +66,16 @@
 }
 
 
-.multi-language-field-wysiwyg { margin-top: 0 }
+.multi-language-field-wysiwyg, .multi-language-field-image { margin-top: 0 }
 
-.multi-language-field-wysiwyg .wp-switch-editor {
+.multi-language-field-wysiwyg .wp-switch-editor, .multi-language-field-image .wp-switch-editor {
 	background-color: #f1f1f1;
 	border-color: #dfdfdf;
 	border-bottom-color: #ccc;
 	top: 0px;
 }
 
-.multi-language-field-wysiwyg .wp-switch-editor.current-language {
+.multi-language-field-wysiwyg .wp-switch-editor.current-language, .multi-language-field-image .wp-switch-editor.current-language {
 	background-color: #f4f4f4;
 	border-color: #ccc;
 	border-bottom-color: #f4f4f4;
