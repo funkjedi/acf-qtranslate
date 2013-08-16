@@ -7,7 +7,7 @@
 	border-color: #dfdfdf;
 	position: relative;
 	top: 1px;
-	z-index: 999;
+	z-index: 100;
 }
 
 .multi-language-field.focused .wp-switch-editor { border-color: #bbb }
@@ -22,7 +22,8 @@
 .multi-language-field > input,
 .multi-language-field > textarea,
 .multi-language-field > fieldset,
-.multi-language-field .acf_wysiwyg { display: none }
+.multi-language-field .acf_wysiwyg,
+.multi-language-field .acf-image-uploader { display: none }
 
 .multi-language-field .acf_input input,
 .multi-language-field .acf_input textarea,
@@ -64,8 +65,13 @@
 	width: 95%;
 }
 
-
 .multi-language-field-wysiwyg { margin-top: 0 }
+
+.multi-language-field .acf-image-uploader {
+  padding: 20px 10px 10px;
+  clear: right;
+  border: 1px solid #dfdfdf;
+}
 
 .multi-language-field-wysiwyg .wp-switch-editor {
 	background-color: #f1f1f1;
@@ -79,3 +85,4 @@
 	border-color: #ccc;
 	border-bottom-color: #f4f4f4;
 }
+
