@@ -14,7 +14,7 @@ Adds qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.
 
 **Requires the plug-in [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/).**
 
-This plugin added a new Field Type category called qTranslate. This containing qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.
+This plugin adds a new Field Type category called qTranslate. This contains qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.
 
 Usage:
 
