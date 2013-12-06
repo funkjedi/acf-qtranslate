@@ -8,7 +8,6 @@ class acf_field_qtranslate_image extends acf_field_image
 		$this->name = 'qtranslate_image';
 		$this->label = __("Image", 'acf');
 		$this->category = __("qTranslate", 'acf');
-
 		$this->defaults = array(
 			'save_format'	=>	'object',
 			'preview_size'	=>	'thumbnail',
@@ -17,19 +16,19 @@ class acf_field_qtranslate_image extends acf_field_image
 		$this->l10n = array(
 			'select'		=>	__("Select Image",'acf'),
 			'edit'			=>	__("Edit Image",'acf'),
+			'update'		=>	__("Update Image",'acf'),
 			'uploadedTo'	=>	__("uploaded to this post",'acf'),
 		);
 
-
 		acf_field::__construct();
 
+		// filters
 		add_filter('get_media_item_args', array($this, 'get_media_item_args'));
-		add_action('acf_head-update_attachment-' . $this->name, array($this, 'acf_head_update_attachment'));
-		add_action('admin_head-media-upload-popup', array($this, 'popup_head'));
+		add_filter('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
 
+		// JSON
 		add_action('wp_ajax_acf/fields/image/get_images', array($this, 'ajax_get_images'), 10, 1);
 		add_action('wp_ajax_nopriv_acf/fields/image/get_images', array($this, 'ajax_get_images'), 10, 1);
-		add_action('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
 	}
 
 	function create_field($field)
@@ -68,6 +67,7 @@ class acf_field_qtranslate_image extends acf_field_image
 				$o['class'] = 'active';
 				$o['url'] = $url[0];
 			}
+
 			$field['class'] = $base_class;
 			if ($language === $currentLanguage) {
 				$field['class'] .= ' current-language';
@@ -76,24 +76,23 @@ class acf_field_qtranslate_image extends acf_field_image
 
 			$field['name'] = $base_name . '[' . $language . ']';
 
-?>
-	<div class="acf-image-uploader clearfix <?php echo $o['class']; ?>" data-preview_size="<?php echo $field['preview_size']; ?>" data-library="<?php echo $field['library']; ?>" data-language="<?php echo $language; ?>" >
-		<input class="acf-image-value" type="hidden" name="<?php echo $field['name']; ?>" value="<?php echo $value; ?>" />
-		<div class="has-image">
-			<div class="hover">
-				<ul class="bl">
-					<li><a class="acf-button-delete ir" href="#"><?php _e("Remove", 'acf'); ?></a></li>
-					<li><a class="acf-button-edit ir" href="#"><?php _e("Edit", 'acf'); ?></a></li>
-				</ul>
+			?>
+			<div class="acf-image-uploader clearfix <?php echo $o['class']; ?>" data-preview_size="<?php echo $field['preview_size']; ?>" data-library="<?php echo $field['library']; ?>" data-language="<?php echo $language; ?>" >
+				<input class="acf-image-value" type="hidden" name="<?php echo $field['name']; ?>" value="<?php echo $value; ?>" />
+				<div class="has-image">
+					<div class="hover">
+						<ul class="bl">
+							<li><a class="acf-button-delete ir" href="#"><?php _e("Remove", 'acf'); ?></a></li>
+							<li><a class="acf-button-edit ir" href="#"><?php _e("Edit", 'acf'); ?></a></li>
+						</ul>
+					</div>
+					<img class="acf-image-image" src="<?php echo $o['url']; ?>" alt="" />
+				</div>
+				<div class="no-image">
+					<p><?php _e('No image selected','acf'); ?> <input type="button" class="button add-image" value="<?php _e('Add Image','acf'); ?>" />
+				</div>
 			</div>
-			<img class="acf-image-image" src="<?php echo $o['url']; ?>" alt="" />
-		</div>
-		<div class="no-image">
-			<p><?php _e('No image selected','acf'); ?> <input type="button" class="button add-image" value="<?php _e('Add Image','acf'); ?>" />
-		</div>
-	</div>
-
-<?php endforeach;
+		<?php endforeach;
 
 		echo '</div>';
 	}

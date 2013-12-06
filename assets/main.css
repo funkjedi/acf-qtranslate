@@ -73,6 +73,8 @@
   border: 1px solid #dfdfdf;
 }
 
+.multi-language-field .acf-image-uploader.current-language { background: #fff; }
+
 .multi-language-field-wysiwyg .wp-switch-editor {
 	background-color: #f1f1f1;
 	border-color: #dfdfdf;
