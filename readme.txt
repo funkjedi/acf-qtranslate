@@ -3,7 +3,7 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.0.0
 Tested up to: 3.7.1
-Version: 1.2
+Version: 1.3
 Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,10 @@ The plugin is based on code samples posted to the [ACF support forums](http://ol
 1. Shows the qTranslate Text and Image fields.
 
 == Changelog ==
+
+= 1.3 =
+Updated styles for Wordpress 3.8
+Updated monkey patch qTranslate to fix [bug with multiple WYSIWYG editors](https://github.com/funkjedi/acf-qtranslate/issues/2#issuecomment-37612918)
 
 = 1.2 =
 Monkey patch qTranslate to fix [bug with multiple WYSIWYG editors](http://www.qianqin.de/qtranslate/forum/viewtopic.php?f=3&t=3497).
