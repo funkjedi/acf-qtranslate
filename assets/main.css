@@ -1,23 +1,54 @@
 
-.multi-language-field { margin-top: -32px }
-.repeater .multi-language-field { margin-top: 0 }
 
+#edit-slug-box { margin-top: -15px; }
+
+.qtrans_title_wrap {
+	margin-bottom: 20px;
+	padding: 0 !important;
+	border: 0 !important;
+}
+
+.qtrans_title_input {
+	padding: 3px 8px !important;
+	font-size: 1.7em;
+	line-height: 100%;
+	height: 1.7em;
+	outline: 0 !important;
+	margin: 0;
+}
+
+
+.acf_wysiwyg .wp-editor-container { border: 1px solid #e5e5e5 !important; }
 
 .multi-language-field .wp-switch-editor {
-	border-color: #dfdfdf;
+	border-color: #dedede;
 	position: relative;
 	top: 1px;
 	z-index: 100;
 }
 
-.multi-language-field.focused .wp-switch-editor { border-color: #bbb }
+.multi-language-field input,
+.multi-language-field input:focus,
+.multi-language-field textarea,
+.multi-language-field textarea:focus {
+	border-color: #ddd;
+	box-shadow: none;
+}
+
+.multi-language-field.focused .wp-switch-editor {
+	border-bottom-color: #ddd;
+}
+
+.multi-language-field.focused .wp-switch-editor.current-language {
+	border-color: #ddd;
+	border-bottom-color: #fff;
+}
 
 .multi-language-field .wp-switch-editor.current-language {
 	background-color: #fff;
 	border-bottom-color: #fff;
 	color: #333;
 }
-
 
 .multi-language-field > input,
 .multi-language-field > textarea,
@@ -28,42 +59,6 @@
 .multi-language-field .acf_input input,
 .multi-language-field .acf_input textarea,
 .multi-language-field .current-language { display: block !important }
-
-
-.multi-language-widget .wp-switch-editor {
-	height: 18px;
-	font: 13px/18px Arial,Helvetica,sans-serif normal;
-	margin: 5px 5px 0 0;
-	padding: 4px 5px 2px;
-	float: right;
-	cursor: pointer;
-	border-width: 1px;
-	border-style: solid;
-	border-top-right-radius: 3px;
-	border-top-left-radius: 3px;
-	background-color: #f1f1f1;
-	border-color: #dfdfdf;
-	color: #999;
-}
-
-.multi-language-widget .wp-switch-editor.current-language {
-	background: #ededed;
-	border-bottom-color: #ededed;
-}
-
-.multi-language-widget.button-widget .wp-switch-editor.current-language {
-	background-color: #fff;
-	border-bottom-color: #fff;
-}
-
-.multi-language-widget.text-widget fieldset {
-	background: #ededed;
-	border: 1px solid #dfdfdf;
-	border-radius: 5px;
-	margin: 0 0 10px 0;
-	padding: 10px;
-	width: 95%;
-}
 
 .multi-language-field-wysiwyg { margin-top: 0 }
 
@@ -76,15 +71,12 @@
 .multi-language-field .acf-image-uploader.current-language { background: #fff; }
 
 .multi-language-field-wysiwyg .wp-switch-editor {
-	background-color: #f1f1f1;
-	border-color: #dfdfdf;
-	border-bottom-color: #ccc;
-	top: 0px;
+	background-color: #ebebeb;
+	border-color: #dedede;
 }
 
 .multi-language-field-wysiwyg .wp-switch-editor.current-language {
-	background-color: #f4f4f4;
-	border-color: #ccc;
-	border-bottom-color: #f4f4f4;
+	background-color: #f5f5f5;
+	border-bottom-color: #f5f5f5;
 }
 
