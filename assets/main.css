@@ -58,7 +58,10 @@
 
 .multi-language-field .acf_input input,
 .multi-language-field .acf_input textarea,
-.multi-language-field .current-language { display: block !important; clear: both; }
+.multi-language-field .current-language { display: block !important; }
+
+.multi-language-field .acf_input input,
+.multi-language-field .acf_input textarea {  clear: both; }
 
 .multi-language-field-wysiwyg { margin-top: 0 }
 
