@@ -1,7 +1,5 @@
 
 
-#edit-slug-box { margin-top: -15px; }
-
 .qtrans_title_wrap {
 	margin-bottom: 20px;
 	padding: 0 !important;
@@ -18,7 +16,15 @@
 }
 
 
-.acf_wysiwyg .wp-editor-container { border: 1px solid #e5e5e5 !important; }
+.acf-wysiwyg-wrap .wp-editor-container { border: 1px solid #e5e5e5 !important; }
+
+.multi-language-field {
+	margin-top: -38px;
+}
+
+.acf-table .multi-language-field {
+	margin-top: -6px;
+}
 
 .multi-language-field .wp-switch-editor {
 	border-color: #dedede;
@@ -53,7 +59,7 @@
 .multi-language-field > input,
 .multi-language-field > textarea,
 .multi-language-field > fieldset,
-.multi-language-field .acf_wysiwyg,
+.multi-language-field .acf-wysiwyg-wrap,
 .multi-language-field .acf-image-uploader { display: none }
 
 .multi-language-field .acf_input input,
@@ -63,7 +69,7 @@
 .multi-language-field-wysiwyg { margin-top: 0 }
 
 .multi-language-field .acf-image-uploader {
-  padding: 20px 10px 10px;
+  padding: 10px 10px 10px;
   clear: right;
   border: 1px solid #dfdfdf;
 }
@@ -75,6 +81,8 @@
 	border-color: #dedede;
 }
 
+.multi-language-field-wysiwyg .html-active .switch-html,
+.multi-language-field-wysiwyg .tmce-active .switch-tmce,
 .multi-language-field-wysiwyg .wp-switch-editor.current-language {
 	background-color: #f5f5f5;
 	border-bottom-color: #f5f5f5;
