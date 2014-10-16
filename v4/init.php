@@ -14,6 +14,7 @@ function acf_qtranslate_plugin_v4_register_fields() {
 	require_once dirname(__FILE__) . '/fields/textarea.php';
 	require_once dirname(__FILE__) . '/fields/wysiwyg.php';
 	require_once dirname(__FILE__) . '/fields/image.php';
+	require_once dirname(__FILE__) . '/fields/file.php';
 }
 
 add_filter('acf/format_value_for_api', 'acf_qtranslate_plugin_v4_format_value_for_api');
