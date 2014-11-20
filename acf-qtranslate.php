@@ -35,6 +35,11 @@ function acf_qtranslate_acf_major_version() {
 add_action('plugins_loaded', 'acf_qtranslate_monkey_patch', 3);
 function acf_qtranslate_monkey_patch() {
 	global $q_config;
+	
+	if (!array_key_exists('js', $q_config))
+	{
+		return;
+	}
 
 	// http://www.qianqin.de/qtranslate/forum/viewtopic.php?f=3&t=3497
 	if (strpos($q_config['js']['qtrans_switch'], 'originalSwitchEditors') === false) {
