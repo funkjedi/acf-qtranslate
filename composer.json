@@ -1,5 +1,5 @@
 {
-  "name": "wp-plugins/acf-repeater",
+  "name": "wp-plugins/acf-qtranslate",
   "type": "wordpress-plugin",
   "license": "MIT",
   "description" : "Adds qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.",
