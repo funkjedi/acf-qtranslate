@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": ">=5.3.3",
-    "wpackagist-plugin/advanced-custom-fields": "dev-master",
+    "wpackagist-plugin/advanced-custom-fields": "*",
     "fruitware/wp-plugin-mqtranslate": "dev-master"
   }
 }
