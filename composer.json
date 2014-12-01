@@ -20,7 +20,5 @@
     "php": ">=5.3.3",
     "wpackagist-plugin/advanced-custom-fields": "dev-master",
     "fruitware/wp-plugin-mqtranslate": "dev-master"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  }
 }
