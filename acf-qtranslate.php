@@ -29,21 +29,35 @@ function acf_qtranslate_acf_major_version() {
 }
 
 
+// if using qTranslate-X include a qTranslate compatibility
+// layer for all required functions
+add_action('plugins_loaded', 'acf_qtranslate_compatibility', 3);
+function acf_qtranslate_compatibility() {
+	if (defined('QTX_VERSION')) {
+		require_once dirname(__FILE__) . '/qtranslate-compatibility.php';
+	}
+}
+
 
 // qTranslate Monkey Patches
-
-add_action('plugins_loaded', 'acf_qtranslate_monkey_patch', 3);
-function acf_qtranslate_monkey_patch() {
+add_action('plugins_loaded', 'acf_qtranslate_monkey_patches', 3);
+function acf_qtranslate_monkey_patches() {
 	global $q_config;
 
-	// http://www.qianqin.de/qtranslate/forum/viewtopic.php?f=3&t=3497
-	if (strpos($q_config['js']['qtrans_switch'], 'originalSwitchEditors') === false) {
-		$q_config['js']['qtrans_switch'] = "originalSwitchEditors = jQuery.extend(true, {}, switchEditors);\n" . $q_config['js']['qtrans_switch'];
-		$q_config['js']['qtrans_switch'] = preg_replace("/(var vta = document\.getElementById\('qtrans_textarea_' \+ id\);)/", "\$1\nif(!vta)return originalSwitchEditors.go(id, lang);", $q_config['js']['qtrans_switch']);
-	}
+	// qTranslate and mqTranslate init at priority 3 so if they
+	// are active then QTRANS_INIT should be defined
+	if (acf_qtranslate_enabled() && defined('QTRANS_INIT')) {
 
-	// https://github.com/funkjedi/acf-qtranslate/issues/2#issuecomment-37612918
-	if (strpos($q_config['js']['qtrans_hook_on_tinyMCE'], 'ed.editorId.match(/^qtrans_/)') === false) {
-		$q_config['js']['qtrans_hook_on_tinyMCE'] = preg_replace("/(qtrans_save\(switchEditors\.pre_wpautop\(o\.content\)\);)/", "if (ed.editorId.match(/^qtrans_/)) \$1", $q_config['js']['qtrans_hook_on_tinyMCE']);
+		// http://www.qianqin.de/qtranslate/forum/viewtopic.php?f=3&t=3497
+		if (strpos($q_config['js']['qtrans_switch'], 'originalSwitchEditors') === false) {
+			$q_config['js']['qtrans_switch'] = "originalSwitchEditors = jQuery.extend(true, {}, switchEditors);\n" . $q_config['js']['qtrans_switch'];
+			$q_config['js']['qtrans_switch'] = preg_replace("/(var vta = document\.getElementById\('qtrans_textarea_' \+ id\);)/", "\$1\nif(!vta)return originalSwitchEditors.go(id, lang);", $q_config['js']['qtrans_switch']);
+		}
+
+		// https://github.com/funkjedi/acf-qtranslate/issues/2#issuecomment-37612918
+		if (strpos($q_config['js']['qtrans_hook_on_tinyMCE'], 'ed.editorId.match(/^qtrans_/)') === false) {
+			$q_config['js']['qtrans_hook_on_tinyMCE'] = preg_replace("/(qtrans_save\(switchEditors\.pre_wpautop\(o\.content\)\);)/", "if (ed.editorId.match(/^qtrans_/)) \$1", $q_config['js']['qtrans_hook_on_tinyMCE']);
+		}
+
 	}
 }
