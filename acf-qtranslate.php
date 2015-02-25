@@ -61,3 +61,103 @@ function acf_qtranslate_monkey_patches() {
 
 	}
 }
+
+
+
+function acf_qtranslate_get_visible_fields($args = false) {
+	global $post, $typenow;
+	if ($args === false) {
+		$args = array(
+			'post_id'	=> $post->ID, 
+			'post_type'	=> $typenow,
+		);
+	}
+	$supported_field_types = array(
+		'text',
+		'textarea',
+	);
+	$field_ids = array();
+	foreach (acf_get_field_groups($args) as $field_group) {
+		$fields = acf_get_fields($field_group);
+		foreach ($fields as $field) {
+			if (in_array($field['type'], $supported_field_types)) {
+				$field_ids[] = array('id' => 'acf-' . $field['key']);
+			}
+		}
+	}
+	return $field_ids;
+}
+
+
+add_filter('qtranslate_load_admin_page_config', 'acf_qtranslate_load_admin_page_config');
+function acf_qtranslate_load_admin_page_config($page_configs)
+{
+	global $pagenow;
+	switch ($pagenow) {
+
+		// add support for regular pages and posts
+		case 'post.php':
+		case 'post-new.php':
+			$page_configs[] = array(
+				'pages' => array(
+					'post.php'     => '', 
+					'post-new.php' => ''), 
+				'forms' => array(
+					array('fields' => acf_qtranslate_get_visible_fields())
+				));
+			break;
+
+		// add support for ACF Option Pages
+		case 'admin.php':
+			foreach (acf_get_options_pages() as $page) {
+				$page_configs[] = array(
+					'pages' => array('admin.php' => 'page=' . $page['menu_slug']), 
+					'forms' => array(
+						array('fields' => acf_qtranslate_get_visible_fields())
+					));
+			}
+			break;
+
+		// add support for new user page
+		case 'user-new.php':
+			$args = array(
+				'user_id'   => 'new',
+				'user_form' => 'edit',
+			);
+			$page_configs[] = array(
+				'pages' => array('user-new.php'  => ''), 
+				'forms' => array(
+					array('fields' => acf_qtranslate_get_visible_fields($args))
+				));
+			break;
+
+		// add support for edit user page
+		case 'user-edit.php':
+			$args = array(
+				'user_id'   => @$_GET['user_id'],
+				'user_form' => 'edit',
+			);
+			$page_configs[] = array(
+				'pages' => array('user-edit.php' => 'user_id='), 
+				'forms' => array(
+					array('fields' => acf_qtranslate_get_visible_fields($args))
+				));
+			break;
+
+		// add support for profile page
+		case 'profile.php':
+			$args = array(
+				'user_id'   => get_current_user_id(),
+				'user_form' => 'edit',
+			);
+			$page_configs[] = array(
+				'pages' => array('profile.php' => ''), 
+				'forms' => array(
+					array('fields' => acf_qtranslate_get_visible_fields($args))
+				));
+			break;
+
+	}
+
+	return $page_configs;
+}
