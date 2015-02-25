@@ -63,7 +63,6 @@ function acf_qtranslate_monkey_patches() {
 }
 
 
-
 function acf_qtranslate_get_visible_fields($args = false) {
 	global $post, $typenow;
 	if ($args === false) {
@@ -93,6 +92,34 @@ add_filter('qtranslate_load_admin_page_config', 'acf_qtranslate_load_admin_page_
 function acf_qtranslate_load_admin_page_config($page_configs)
 {
 	global $pagenow;
+
+	// very hacky support for v4
+	if (acf_qtranslate_acf_major_version() === 4) {
+		$args = array('post_id' => apply_filters('acf/get_post_id', false));
+		$match_field_groups = apply_filters('acf/location/match_field_groups', array(), $args);
+		$acfs = apply_filters('acf/get_field_groups', array());
+		if (is_array($acfs)) {
+			$field_ids = array();
+			foreach ($acfs as $acf) {
+				if (in_array($acf['id'], $match_field_groups)) {
+					$fields = apply_filters('acf/field_group/get_fields', array(), $acf['id']);
+					foreach ($fields as $field) {
+						$field_ids[] = array('id' => $field['id']);
+					}
+				}
+			}
+			if (count($field_ids)) {
+				$page_configs[] = array(
+					'pages' => array('' => ''), 
+					'forms' => array(
+						array('fields' => $field_ids)
+					));
+			}
+		}
+		return $page_configs;
+	}
+
+
 	switch ($pagenow) {
 
 		// add support for regular pages and posts

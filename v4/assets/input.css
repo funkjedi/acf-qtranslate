@@ -26,6 +26,7 @@
 	position: relative;
 	top: 1px;
 	z-index: 100;
+	float: right;
 }
 
 .multi-language-field input,
