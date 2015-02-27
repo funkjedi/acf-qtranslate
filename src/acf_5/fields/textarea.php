@@ -1,81 +1,84 @@
 <?php
 
-class acf_field_qtranslate_textarea extends acf_field_textarea
-{
+namespace acf_qtranslate\acf_5\fields;
 
-	function __construct()
-	{
+use acf_field;
+use acf_field_textarea;
+
+class textarea extends acf_field_textarea {
+
+	/*
+	 *  __construct
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
+	function __construct() {
 		$this->name = 'qtranslate_textarea';
 		$this->label = __("Text Area",'acf');
 		$this->category = __("qTranslate",'acf');
 		$this->defaults = array(
-			'default_value'	=> '',
-			'new_lines'		=> '',
-			'maxlength'		=> '',
-			'placeholder'	=> '',
-			'readonly'		=> 0,
-			'disabled'		=> 0,
-			'rows'			=> ''
+			'default_value' => '',
+			'new_lines'     => '',
+			'maxlength'     => '',
+			'placeholder'   => '',
+			'readonly'      => 0,
+			'disabled'      => 0,
+			'rows'          => ''
 		);
 
 		acf_field::__construct();
 	}
 
-
-	function render_field($field)
-	{
-		if (!acf_qtranslate_enabled()) {
-			acf_field_textarea::render_field($field);
-			return;
-		}
-
+	/*
+	 *  render_field()
+	 *
+	 *  Create the HTML interface for your field
+	 *
+	 *  @param	$field - an array holding all the field's data
+	 *
+	 *  @type	action
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 */
+	function render_field($field) {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
-
 
 		// vars
 		$o = array( 'id', 'class', 'name', 'placeholder', 'rows' );
 		$s = array( 'readonly', 'disabled' );
 		$e = '';
 
-
 		// maxlength
 		if( $field['maxlength'] !== '' ) {
-
 			$o[] = 'maxlength';
-
 		}
-
 
 		// rows
 		if( empty($field['rows']) ) {
-
 			$field['rows'] = 8;
-
 		}
-
 
 		// populate atts
 		$atts = array();
 		foreach( $o as $k ) {
-
 			$atts[ $k ] = $field[ $k ];
-
 		}
-
 
 		// special atts
 		foreach( $s as $k ) {
-
 			if( $field[ $k ] ) {
-
 				$atts[ $k ] = $k;
-
 			}
-
 		}
-
 
 		// render
 		$e .= '<div class="acf-input-wrap multi-language-field">';
@@ -98,22 +101,27 @@ class acf_field_qtranslate_textarea extends acf_field_textarea
 
 		$e .= '</div>';
 
-
 		// return
 		echo $e;
 	}
 
-
-	function update_value($value, $post_id, $field)
-	{
-		if (acf_qtranslate_enabled()) {
-			$value = qtrans_join($value);
-		}
-
-		return $value;
+	/*
+	 *  update_value()
+	 *
+	 *  This filter is appied to the $value before it is updated in the db
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value - the value which will be saved in the database
+	 *  @param	$post_id - the $post_id of which the value will be saved
+	 *  @param	$field - the field array holding all the field options
+	 *
+	 *  @return	$value - the modified value
+	 */
+	function update_value($value, $post_id, $field) {
+		return qtrans_join($value);
 	}
 
 }
-
-
-new acf_field_qtranslate_textarea;

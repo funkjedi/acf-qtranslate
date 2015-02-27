@@ -1,10 +1,21 @@
 <?php
 
-class acf_field_qtranslate_wysiwyg extends acf_field_wysiwyg
-{
+namespace acf_qtranslate\acf_4\fields;
 
-	function __construct()
-	{
+use acf_field;
+use acf_field_wysiwyg;
+
+class wysiwyg extends acf_field_wysiwyg {
+
+	/*
+	 *  __construct
+	 *
+	 *  Set name / label needed for actions / filters
+	 *
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 */
+	function __construct() {
 		$this->name = 'qtranslate_wysiwyg';
 		$this->label = __("Wysiwyg Editor",'acf');
 		$this->category = __("qTranslate",'acf');
@@ -14,20 +25,35 @@ class acf_field_qtranslate_wysiwyg extends acf_field_wysiwyg
 		add_filter('acf/fields/wysiwyg/toolbars', array($this, 'toolbars'), 1, 1);
 	}
 
-
-	function toolbars($toolbars)
-	{
-		return acf_field_wysiwyg::toolbars($toolbars);
+	/*
+	 *  toolbars()
+	 *
+	 *  This filter allowsyou to customize the WYSIWYG toolbars
+	 *
+	 *  @param	$toolbars - an array of toolbars
+	 *
+	 *  @return	$toolbars - the modified $toolbars
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 */
+	function toolbars($toolbars) {
+		return parent::toolbars($toolbars);
 	}
 
-
-	function create_field($field)
-	{
-		if (!acf_qtranslate_enabled()) {
-			acf_field_wysiwyg::create_field($field);
-			return;
-		}
-
+	/*
+	 *  create_field()
+	 *
+	 *  Create the HTML interface for your field
+	 *
+	 *  @param	$field - an array holding all the field's data
+	 *
+	 *  @type	action
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 */
+	function create_field($field) {
 		$defaults = array(
 			'toolbar'		=>	'full',
 			'media_upload' 	=>	'yes',
@@ -78,32 +104,54 @@ class acf_field_qtranslate_wysiwyg extends acf_field_wysiwyg
 		echo '</div>';
 	}
 
-
-	function format_value($value, $post_id, $field)
-	{
+	/*
+	 *  format_value
+	 *
+	 *  @description: uses the basic value and allows the field type to format it
+	 *  @since: 3.6
+	 *  @created: 26/01/13
+	 */
+	function format_value($value, $post_id, $field) {
 		return $value;
 	}
 
-
+	/*
+	 *  format_value_for_api()
+	 *
+	 *  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value	- the value which was loaded from the database
+	 *  @param	$post_id - the $post_id from which the value was loaded
+	 *  @param	$field	- the field array holding all the field options
+	 *
+	 *  @return	$value	- the modified value
+	 */
 	function format_value_for_api($value, $post_id, $field) {
-		if (acf_qtranslate_enabled()) {
-			$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
-		}
-
-		return acf_field_wysiwyg::format_value_for_api($value, $post_id, $field);
+		$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
+		return parent::format_value_for_api($value, $post_id, $field);
 	}
 
-
-	function update_value($value, $post_id, $field)
-	{
-		if (acf_qtranslate_enabled()) {
-			$value = qtrans_join($value);
-		}
-
-		return $value;
+	/*
+	 *  update_value()
+	 *
+	 *  This filter is appied to the $value before it is updated in the db
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value - the value which will be saved in the database
+	 *  @param	$post_id - the $post_id of which the value will be saved
+	 *  @param	$field - the field array holding all the field options
+	 *
+	 *  @return	$value - the modified value
+	 */
+	function update_value($value, $post_id, $field) {
+		return qtrans_join($value);
 	}
 
 }
-
-
-new acf_field_qtranslate_wysiwyg;

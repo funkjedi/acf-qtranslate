@@ -1,23 +1,34 @@
 <?php
 
-class acf_field_qtranslate_image extends acf_field_image
-{
+namespace acf_qtranslate\acf_4\fields;
 
-	function __construct()
-	{
+use acf_field;
+use acf_field_image;
+
+class image extends acf_field_image {
+
+	/*
+	 *  __construct
+	 *
+	 *  Set name / label needed for actions / filters
+	 *
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 */
+	function __construct() {
 		$this->name = 'qtranslate_image';
 		$this->label = __("Image", 'acf');
 		$this->category = __("qTranslate", 'acf');
 		$this->defaults = array(
-			'save_format'	=>	'object',
-			'preview_size'	=>	'thumbnail',
-			'library'		=>	'all'
+			'save_format'  => 'object',
+			'preview_size' => 'thumbnail',
+			'library'      => 'all'
 		);
 		$this->l10n = array(
-			'select'		=>	__("Select Image",'acf'),
-			'edit'			=>	__("Edit Image",'acf'),
-			'update'		=>	__("Update Image",'acf'),
-			'uploadedTo'	=>	__("uploaded to this post",'acf'),
+			'select'     =>	__("Select Image",'acf'),
+			'edit'       =>	__("Edit Image",'acf'),
+			'update'     =>	__("Update Image",'acf'),
+			'uploadedTo' =>	__("uploaded to this post",'acf'),
 		);
 
 		acf_field::__construct();
@@ -31,13 +42,18 @@ class acf_field_qtranslate_image extends acf_field_image
 		add_action('wp_ajax_nopriv_acf/fields/image/get_images', array($this, 'ajax_get_images'), 10, 1);
 	}
 
-	function create_field($field)
-	{
-		if (!acf_qtranslate_enabled()) {
-			acf_field_image::create_field($field);
-			return;
-		}
-
+	/*
+	 *  create_field()
+	 *
+	 *  Create the HTML interface for your field
+	 *
+	 *  @param	$field - an array holding all the field's data
+	 *
+	 *  @type	action
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 */
+	function create_field($field) {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
@@ -97,34 +113,54 @@ class acf_field_qtranslate_image extends acf_field_image
 		echo '</div>';
 	}
 
-	function format_value($value, $post_id, $field)
-	{
+	/*
+	 *  format_value
+	 *
+	 *  @description: uses the basic value and allows the field type to format it
+	 *  @since: 3.6
+	 *  @created: 26/01/13
+	 */
+	function format_value($value, $post_id, $field) {
 		return $value;
 	}
 
-	function format_value_for_api($value, $post_id, $field)
-	{
-		if (acf_qtranslate_enabled()) {
-			$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
-		}
-
-		return acf_field_image::format_value_for_api($value, $post_id, $field);
+	/*
+	 *  format_value_for_api()
+	 *
+	 *  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value	- the value which was loaded from the database
+	 *  @param	$post_id - the $post_id from which the value was loaded
+	 *  @param	$field	- the field array holding all the field options
+	 *
+	 *  @return	$value	- the modified value
+	 */
+	function format_value_for_api($value, $post_id, $field) {
+		$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
+		return parent::format_value_for_api($value, $post_id, $field);
 	}
 
-	function update_value($value, $post_id, $field)
-	{
-		if (acf_qtranslate_enabled()) {
-			$value = qtrans_join($value);
-		}
-
-		return $value;
+	/*
+	 *  update_value()
+	 *
+	 *  This filter is appied to the $value before it is updated in the db
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value - the value which will be saved in the database
+	 *  @param	$post_id - the $post_id of which the value will be saved
+	 *  @param	$field - the field array holding all the field options
+	 *
+	 *  @return	$value - the modified value
+	 */
+	function update_value($value, $post_id, $field) {
+		return qtrans_join($value);
 	}
 
-	function create_options( $field )
-	{
-		acf_field_image::create_options($field);
-	}
 }
-
-new acf_field_qtranslate_image();
-

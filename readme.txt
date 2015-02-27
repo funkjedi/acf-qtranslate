@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.0.0
 Tested up to: 4.1.1
-Version: 1.6
-Stable tag: 1.6
+Version: 1.7
+Stable tag: 1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,12 +12,9 @@ Adds qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.
 
 == Description ==
 
-**Requires the following plugins**
-
-* [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/)
-* [qTranslate](http://wordpress.org/plugins/qtranslate/)
-
 This plugin adds a new Field Type category called qTranslate. This contains qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.
+
+If using qTranslate-X then the standard Text, Text Area and Email fields automatically support translation.
 
 Usage:
 
@@ -47,6 +44,9 @@ The plugin is based on code samples posted to the [ACF support forums](http://ol
 1. Shows the qTranslate Text and Image fields.
 
 == Changelog ==
+
+= 1.7 =
+Improved qTranslate-X support and utilize new language switchers
 
 = 1.6 =
 Added ACFv4 support for qTranslate-X

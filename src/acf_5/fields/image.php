@@ -1,23 +1,38 @@
 <?php
 
-class acf_field_qtranslate_image extends acf_field_image
-{
+namespace acf_qtranslate\acf_5\fields;
 
-	function __construct()
-	{
+use acf_field;
+use acf_field_image;
+
+class image extends acf_field_image {
+
+	/*
+	 *  __construct
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
+	function __construct() {
 		$this->name = 'qtranslate_image';
 		$this->label = __("Image", 'acf');
 		$this->category = __("qTranslate", 'acf');
 		$this->defaults = array(
-			'return_format'	=> 'array',
-			'preview_size'	=> 'thumbnail',
-			'library'		=> 'all'
+			'return_format' => 'array',
+			'preview_size'  => 'thumbnail',
+			'library'       => 'all'
 		);
 		$this->l10n = array(
-			'select'		=> __("Select Image",'acf'),
-			'edit'			=> __("Edit Image",'acf'),
-			'update'		=> __("Update Image",'acf'),
-			'uploadedTo'	=> __("uploaded to this post",'acf'),
+			'select'     => __("Select Image",'acf'),
+			'edit'       => __("Edit Image",'acf'),
+			'update'     => __("Update Image",'acf'),
+			'uploadedTo' => __("uploaded to this post",'acf'),
 		);
 
 		acf_field::__construct();
@@ -27,22 +42,25 @@ class acf_field_qtranslate_image extends acf_field_image
 		add_filter('wp_prepare_attachment_for_js',	array($this, 'wp_prepare_attachment_for_js'), 10, 3);
 	}
 
-	function render_field($field)
-	{
-		if (!acf_qtranslate_enabled()) {
-			acf_field_image::render_field($field);
-			return;
-		}
-
+	/*
+	 *  render_field()
+	 *
+	 *  Create the HTML interface for your field
+	 *
+	 *  @param	$field - an array holding all the field's data
+	 *
+	 *  @type	action
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 */
+	function render_field($field) {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
 		$currentLanguage = qtrans_getLanguage();
 
-
 		// enqueue
 		acf_enqueue_uploader();
-
 
 		// vars
 		$div_atts = array(
@@ -57,7 +75,6 @@ class acf_field_qtranslate_image extends acf_field_image
 			'data-name'				=> 'value-id'
 		);
 		$url = '';
-
 
 		echo '<div class="multi-language-field multi-language-field-image">';
 
@@ -78,12 +95,10 @@ class acf_field_qtranslate_image extends acf_field_image
 
 			// has value?
 			if( $field['value'] && is_numeric($field['value']) ) {
-
 				$url = wp_get_attachment_image_src($field['value'], $field['preview_size']);
 				$url = $url[0];
 
 				$div_atts['class'] .= ' has-value';
-
 			}
 
 			if ($language === $currentLanguage) {
@@ -112,19 +127,24 @@ class acf_field_qtranslate_image extends acf_field_image
 		echo '</div>';
 	}
 
-
-	function update_value($value, $post_id, $field)
-	{
-		$value = acf_field_image::update_value($value, $post_id, $field);
-
-		if (acf_qtranslate_enabled()) {
-			$value = qtrans_join($value);
-		}
-
-		return $value;
+	/*
+	 *  update_value()
+	 *
+	 *  This filter is appied to the $value before it is updated in the db
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value - the value which will be saved in the database
+	 *  @param	$post_id - the $post_id of which the value will be saved
+	 *  @param	$field - the field array holding all the field options
+	 *
+	 *  @return	$value - the modified value
+	 */
+	function update_value($value, $post_id, $field) {
+		$value = parent::update_value($value, $post_id, $field);
+		return qtrans_join($value);
 	}
 
 }
-
-new acf_field_qtranslate_image();
-

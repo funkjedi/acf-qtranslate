@@ -1,6 +1,6 @@
 <?php
 
-// compatibility with qTranslate-X
+// provide qTranslate compatibility when using qTranslate-X
 
 if (function_exists('qtrans_getLanguage') === false):
 	function qtrans_getLanguage() {
