@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.1.1
-Version: 1.7.1
-Stable tag: 1.7.1
+Version: 1.7.2
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,8 +56,15 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 == Changelog ==
 
+= 1.7.2 =
+* Bug Fix: Corrected misnamed variable
+* Bug Fix: ACF5 issues using WYSIWYG with the repeater field type
+* Bug Fix: qTranslate-X saving content using WYSIWYG with repeater field type
+* Core: Support for `qtrans_edit_language` cookie set by qTranslate-X
+* Core: Keep switches between Visual/Html modes in sync across languages
+
 = 1.7.1 =
-* Core: Added back ACFv5 support for WYSIWYG
+* Core: Added back ACF5 support for WYSIWYG
 * Core: Added qTranslate-X support for the standard WYSIWYG field type
 * Core: Bumped version requirement to match ACF
 * Bug Fix: qTranslate-X switcher showing up on every admin page
@@ -67,14 +74,14 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 * Core: Support for qTranslate-X language switchers
 
 = 1.6 =
-* Added ACFv4 support for qTranslate-X
+* Core: Added ACFv4 support for qTranslate-X
 
 = 1.5 =
 * Core: Added compatibility for qTranslate-X
-* Bug Fix: Remove the broken ACFv5 WYSIWYG implementation
+* Bug Fix: Remove the broken ACF5 WYSIWYG implementation
 
 = 1.4 =
-* Core: Added support for ACFv5
+* Core: Added support for ACF5
 * Core: Tested compatibility with mqTranslate
 
 = 1.3 =

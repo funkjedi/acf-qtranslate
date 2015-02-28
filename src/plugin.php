@@ -112,24 +112,31 @@ class plugin {
 	}
 
 	/**
-	 * Check if qTranslate Plus is enabled
+	 * Check if qTranslate Plus is enabled.
 	 */
 	public function ppqtranslate_enabled() {
 		return function_exists('ppqtrans_getLanguage');
 	}
 
 	/**
-	 * Check if qTranslate-X is enabled
+	 * Check if qTranslate-X is enabled.
 	 */
 	public function qtranslatex_enabled() {
 		return function_exists('qtranxf_getLanguage');
 	}
 
 	/**
-	 * Check if mqTranslate is enabled
+	 * Check if mqTranslate is enabled.
 	 */
 	public function mqtranslate_enabled() {
 		return function_exists('mqtrans_currentUserCanEdit');
+	}
+
+	/**
+	 * Get the active language.
+	 */
+	public function get_active_language() {
+		return apply_filters('acf_qtranslate_get_active_language', qtrans_getLanguage());
 	}
 
 }

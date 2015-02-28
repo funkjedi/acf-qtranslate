@@ -68,7 +68,7 @@ class acf implements acf_interface {
 	 * @return array
 	 */
 	public function get_visible_acf_fields() {
-		global $post, $pagenow, $typenow;
+		global $post, $pagenow, $typenow, $plugin_page;
 
 		$filter = array();
 		if ($pagenow === 'post.php' || $pagenow === 'post-new.php') {
@@ -77,9 +77,8 @@ class acf implements acf_interface {
 				$filter['post_type'] = $typenow;
 			}
 		}
-		elseif ($pagenow === 'admin.php' && isset($_GET['page'])) {
+		elseif ($pagenow === 'admin.php' && isset($plugin_page)) {
 			$filter['post_id'] = apply_filters('acf/get_post_id', false);
-			$filter['post_type'] = $typenow;
 		}
 		elseif ($pagenow === 'edit-tags.php' && isset($_GET['taxonomy'])) {
 			$filter['ef_taxonomy'] = filter_var($_GET['taxonomy'], FILTER_SANITIZE_STRING);

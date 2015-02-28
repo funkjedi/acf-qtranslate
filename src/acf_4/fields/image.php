@@ -66,7 +66,7 @@ class image extends acf_field_image {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
-		$currentLanguage = qtrans_getLanguage();
+		$currentLanguage = $this->plugin->get_active_language();
 
 		echo '<div class="multi-language-field multi-language-field-image">';
 

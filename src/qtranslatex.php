@@ -28,9 +28,11 @@ class qtranslatex {
 		// include compatibility functions
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'compatibility/qtranslatex.php';
 
-		add_filter('admin_head',                        array($this, 'admin_head'));
-		add_filter('qtranslate_custom_admin_js',        array($this, 'qtranslate_custom_admin_js'));
-		add_filter('qtranslate_load_admin_page_config', array($this, 'qtranslate_load_admin_page_config'));
+		add_action('admin_head',                         array($this, 'admin_head'));
+		add_action('admin_footer',                       array($this, 'admin_footer'), 9999); //after qTranslate-X
+		add_filter('qtranslate_custom_admin_js',         array($this, 'qtranslate_custom_admin_js'));
+		add_filter('qtranslate_load_admin_page_config',  array($this, 'qtranslate_load_admin_page_config'));
+		add_filter('acf_qtranslate_get_active_language', array($this, 'get_active_language'));
 	}
 
 	/**
@@ -40,9 +42,23 @@ class qtranslatex {
 		?>
 		<style>
 		.multi-language-field {margin-top:0!important;}
-		.multi-language-field .wp-switch-editor {display:none!important;}
+		.multi-language-field .wp-switch-editor[data-language] {display:none!important;}
 		</style>
 		<?php
+	}
+
+	/**
+	 * Load custom version of edit-post.js if needed.
+	 */
+	public function admin_footer() {
+		if (wp_script_is('qtranslate-admin-edit')) {
+
+			//$handle = wp_script_is('qtranslate-admin-edit', 'registered');
+
+			//wp_register_script('qtranslate-admin-edit', $script_url, array(), QTX_VERSION);
+			//wp_enqueue_script('qtranslate-admin-edit');
+
+		}
 	}
 
 	/**
@@ -77,6 +93,19 @@ class qtranslatex {
 		if ($pagenow === 'admin.php' && isset($_GET['page'])) {
 			return 'admin/js/edit-post';
 		}
+	}
+
+	/**
+	 * Get the active language.
+	 */
+	public function get_active_language($language) {
+		if (empty($_COOKIE['qtrans_edit_language']) === false) {
+			$enabledLanguages = qtrans_getSortedLanguages();
+			if (in_array($_COOKIE['qtrans_edit_language'], $enabledLanguages)) {
+				$language = $_COOKIE['qtrans_edit_language'];
+			}
+		}
+		return $language;
 	}
 
 }

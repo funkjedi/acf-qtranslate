@@ -47,16 +47,17 @@ class textarea extends acf_field_textarea {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
+		$currentLanguage = $this->plugin->get_active_language();
 
 		echo '<div class="multi-language-field">';
 
 		foreach ($languages as $language) {
-			$class = ($language === end($languages)) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
+			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
 			echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
 
 		foreach ($languages as $language) {
-			$class = ($language === end($languages)) ? $field['class'] . ' current-language' : $field['class'];
+			$class = ($language === $currentLanguage) ? $field['class'] . ' current-language' : $field['class'];
 			echo '<textarea data-language="' . esc_attr($language) . '" id="' . esc_attr( $field['id'] ) . '" rows="4" class="' . esc_attr($class) . '" name="' . esc_attr($field['name'] . "[$language]") . '">' . esc_textarea($values[$language]) . '</textarea>';
 		}
 

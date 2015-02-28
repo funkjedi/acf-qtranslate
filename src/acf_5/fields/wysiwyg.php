@@ -117,11 +117,12 @@ class wysiwyg extends acf_field_wysiwyg {
 		global $q_config, $wp_version;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
+		$currentLanguage = $this->plugin->get_active_language();
 
 		echo '<div class="multi-language-field multi-language-field-wysiwyg">';
 
 		foreach ($languages as $language) {
-			$class = ($language === end($languages)) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
+			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
 			echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
 
@@ -130,12 +131,13 @@ class wysiwyg extends acf_field_wysiwyg {
 			$value = apply_filters('acf_the_editor_content', $values[$language]);
 			$id = $uid . "-$language";
 			$name = $field['name'] . "[$language]";
-			if ($language === end($languages)) {
-				$switch_class .= ' current-language';
+			$class = $switch_class;
+			if ($language === $currentLanguage) {
+				$class .= ' current-language';
 			}
 
 			?>
-			<div id="wp-<?php echo $id; ?>-wrap" class="acfqt-inactive acf-editor-wrap wp-core-ui wp-editor-wrap <?php echo $switch_class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
+			<div id="wp-<?php echo $id; ?>-wrap" class="acf-editor-wrap wp-core-ui wp-editor-wrap <?php echo $class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
 				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools hide-if-no-js">
 					<?php if( $field['media_upload'] ): ?>
 					<div id="wp-<?php echo $id; ?>-media-buttons" class="wp-media-buttons">
@@ -150,7 +152,7 @@ class wysiwyg extends acf_field_wysiwyg {
 					<?php endif; ?>
 				</div>
 				<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
-					<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $name; ?>" <?php if($height): ?>style="height:<?php echo $height; ?>px;"<?php endif; ?>><?php echo $value; ?></textarea>
+					<textarea id="<?php echo $id; ?>" class="qtx-wp-editor-area" name="<?php echo $name; ?>" <?php if($height): ?>style="height:<?php echo $height; ?>px;"<?php endif; ?>><?php echo $value; ?></textarea>
 				</div>
 			</div>
 

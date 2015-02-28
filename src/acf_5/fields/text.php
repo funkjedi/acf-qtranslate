@@ -60,6 +60,7 @@ class text extends acf_field_text {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
+		$currentLanguage = $this->plugin->get_active_language();
 
 		// vars
 		$o = array( 'type', 'id', 'class', 'name', 'value', 'placeholder' );
@@ -88,12 +89,13 @@ class text extends acf_field_text {
 		$e .= '<div class="acf-input-wrap multi-language-field">';
 
 		foreach ($languages as $language) {
-			$class = ($language === end($languages)) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
+			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
 			$e .= '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
 
 		foreach ($languages as $language) {
-			if ($language === end($languages)) {
+			$atts['class'] = $field['class'];
+			if ($language === $currentLanguage) {
 				$atts['class'] .= ' current-language';
 			}
 			$atts['type'] = 'text';

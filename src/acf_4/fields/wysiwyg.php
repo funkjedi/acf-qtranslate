@@ -73,11 +73,12 @@ class wysiwyg extends acf_field_wysiwyg {
 		global $q_config, $wp_version;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
+		$currentLanguage = $this->plugin->get_active_language();
 
 		echo '<div class="multi-language-field multi-language-field-wysiwyg">';
 
 		foreach ($languages as $language) {
-			$class = ($language === end($languages)) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
+			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
 			echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
 
@@ -85,7 +86,7 @@ class wysiwyg extends acf_field_wysiwyg {
 			$value = $values[$language];
 			$id = 'wysiwyg' . $field['id'] . "[$language]";
 			$name = $field['name'] . "[$language]";
-			$class = ($language === end($languages)) ? 'acf_wysiwyg wp-editor-wrap current-language' : 'acf_wysiwyg wp-editor-wrap';
+			$class = ($language === $currentLanguage) ? 'acf_wysiwyg wp-editor-wrap current-language' : 'acf_wysiwyg wp-editor-wrap';
 
 			?>
 			<div id="wp-<?php echo $id; ?>-wrap" class="<?php echo $class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
@@ -105,7 +106,7 @@ class wysiwyg extends acf_field_wysiwyg {
 					<?php endif; ?>
 				<?php endif; ?>
 				<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
-					<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $name; ?>" ><?php echo wp_richedit_pre($value); ?></textarea>
+					<textarea id="<?php echo $id; ?>" class="qtx-wp-editor-area" name="<?php echo $name; ?>" ><?php echo wp_richedit_pre($value); ?></textarea>
 				</div>
 			</div>
 		<?php endforeach;

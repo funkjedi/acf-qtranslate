@@ -32,35 +32,15 @@ acf.fields.qtranslate_wysiwyg = acf.fields.wysiwyg.extend({
 		this.o = acf.get_data(this.$el);
 		this.o.id = this.$textarea.attr('id');
 	},
-	initialize: function(){
-		if (typeof tinyMCEPreInit === 'undefined' || typeof tinymce === 'undefined') {
-			return false;
-		}
+	initialize: function() {
 		var self = this;
 		this.$field.find('.wp-editor-wrap').each(function() {
 			self.$el = jQuery(this);
 			self.$textarea = self.$el.find('textarea');
 			self.o = acf.get_data(self.$el);
 			self.o.id = self.$textarea.attr('id');
-			// vars
-			var mceInit = self.get_mceInit();
-			var qtInit = self.get_qtInit();
-			// append settings
-			tinyMCEPreInit.mceInit[ mceInit.id ] = mceInit;
-			tinyMCEPreInit.qtInit[ qtInit.id ] = qtInit;
-			// initialize mceInit
-			if (self.$el.hasClass('tmce-active')) {
-				try {
-					tinymce.init( mceInit );
-				} catch(e){}
-			}
-			// initialize qtInit
-			try {
-				var qtag = quicktags( qtInit );
-				self._buttonsInit( qtag );
-			} catch(e){}
+			acf.fields.wysiwyg.initialize.call(self);
 		});
 		this.focus();
 	}
 });
-

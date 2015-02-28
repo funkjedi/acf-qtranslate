@@ -47,16 +47,17 @@ class text extends acf_field_text {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
+		$currentLanguage = $this->plugin->get_active_language();
 
 		echo '<div class="multi-language-field">';
 
 		foreach ($languages as $language) {
-			$class = ($language === end($languages)) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
+			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
 			echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
 
 		foreach ($languages as $language) {
-			$class = ($language === end($languages)) ? $field['class'] . ' current-language' : $field['class'];
+			$class = ($language === $currentLanguage) ? $field['class'] . ' current-language' : $field['class'];
 			echo '<input type="text" data-language="' . esc_attr($language) . '" value="' . esc_attr($values[$language]) . '" id="' . esc_attr( $field['id'] ) . '" class="' . esc_attr($class) . '" name="' . esc_attr($field['name'] . "[$language]") . '" />';
 		}
 
