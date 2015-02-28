@@ -3,12 +3,12 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.1.1
-Version: 1.7.2
-Stable tag: 1.7.2
+Version: 1.7.3
+Stable tag: 1.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds qTranslate compatible field types for Text, Text Area, Wysiwyg Editor and Image.
+Provides qTranslate compatible ACF field types for Text, Text Area, WYSIWYG, Image and File.
 
 
 == Description ==
@@ -55,6 +55,9 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.3 =
+* Core: Removed namespaces to make code compatible with PHP 5.2
 
 = 1.7.2 =
 * Bug Fix: Corrected misnamed variable

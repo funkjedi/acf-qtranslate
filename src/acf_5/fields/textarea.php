@@ -1,11 +1,6 @@
 <?php
 
-namespace acf_qtranslate\acf_5\fields;
-
-use acf_field;
-use acf_field_textarea;
-
-class textarea extends acf_field_textarea {
+class acf_qtranslate_acf_5_textarea extends acf_field_textarea {
 
 	/**
 	 * The plugin instance.

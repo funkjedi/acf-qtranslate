@@ -1,8 +1,6 @@
 <?php
 
-namespace acf_qtranslate;
-
-interface acf_interface {
+interface acf_qtranslate_acf_interface {
 
 	/**
 	 * Get the visible ACF fields.

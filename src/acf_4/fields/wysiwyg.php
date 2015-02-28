@@ -1,15 +1,10 @@
 <?php
 
-namespace acf_qtranslate\acf_4\fields;
-
-use acf_field;
-use acf_field_wysiwyg;
-
-class wysiwyg extends acf_field_wysiwyg {
+class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 
 	/**
 	 * The plugin instance.
-	 * @var \acf_qtranslate\plugin
+	 * @var \acf_qtranslate_plugin
 	 */
 	protected $plugin;
 

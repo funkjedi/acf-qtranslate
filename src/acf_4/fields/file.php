@@ -1,15 +1,10 @@
 <?php
 
-namespace acf_qtranslate\acf_4\fields;
-
-use acf_field;
-use acf_field_file;
-
-class file extends acf_field_file {
+class acf_qtranslate_acf_4_file extends acf_field_file {
 
 	/**
 	 * The plugin instance.
-	 * @var \acf_qtranslate\plugin
+	 * @var \acf_qtranslate_plugin
 	 */
 	protected $plugin;
 

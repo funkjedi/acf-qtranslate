@@ -1,18 +1,18 @@
 <?php
 
-namespace acf_qtranslate;
+require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_interface.php';
 
-class qtranslatex {
+class acf_qtranslate_qtranslatex {
 
 	/**
 	 * An ACF instance.
-	 * @var \acf_qtranslate\acf_interface
+	 * @var \acf_qtranslate_acf_interface
 	 */
 	protected $acf;
 
 	/**
 	 * The plugin instance.
-	 * @var \acf_qtranslate\plugin
+	 * @var \acf_qtranslate_plugin
 	 */
 	protected $plugin;
 
@@ -21,7 +21,7 @@ class qtranslatex {
 	 * Create an instance.
 	 * @return void
 	 */
-	public function __construct(plugin $plugin, acf_interface $acf) {
+	public function __construct(acf_qtranslate_plugin $plugin, acf_qtranslate_acf_interface $acf) {
 		$this->acf = $acf;
 		$this->plugin = $plugin;
 

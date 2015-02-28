@@ -1,11 +1,6 @@
 <?php
 
-namespace acf_qtranslate;
-
-use acf_qtranslate\acf_4\acf as acf_4;
-use acf_qtranslate\acf_5\acf as acf_5;
-
-class plugin {
+class acf_qtranslate_plugin {
 
 	/**
 	 * Create an instance.
@@ -24,22 +19,26 @@ class plugin {
 
 			// setup qtranslate fields for ACF 4
 			if ($this->acf_major_version() === 4) {
-				$acf = new acf_4($this);
+				require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_4/acf.php';
+				$acf = new acf_qtranslate_acf_4($this);
 			}
 
 			// setup qtranslate fields for ACF 5
 			if ($this->acf_major_version() === 5) {
-				$acf = new acf_5($this);
+				require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/acf.php';
+				$acf = new acf_qtranslate_acf_5($this);
 			}
 
 			// setup ppqtranslate integration
 			if ($this->ppqtranslate_enabled()) {
-				new ppqtranslate($this, $acf);
+				require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/ppqtranslate.php';
+				new acf_qtranslate_ppqtranslate($this, $acf);
 			}
 
 			// setup qtranslatex integration
 			if ($this->qtranslatex_enabled()) {
-				new qtranslatex($this, $acf);
+				require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/qtranslatex.php';
+				new acf_qtranslate_qtranslatex($this, $acf);
 			}
 
 		}

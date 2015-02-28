@@ -1,11 +1,6 @@
 <?php
 
-namespace acf_qtranslate\acf_4\fields;
-
-use acf_field;
-use acf_field_text;
-
-class text extends acf_field_text {
+class acf_qtranslate_acf_4_text extends acf_field_text {
 
 	/**
 	 * The plugin instance.

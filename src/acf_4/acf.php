@@ -1,20 +1,12 @@
 <?php
 
-namespace acf_qtranslate\acf_4;
+require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_interface.php';
 
-use acf_qtranslate\acf_4\fields\file;
-use acf_qtranslate\acf_4\fields\image;
-use acf_qtranslate\acf_4\fields\text;
-use acf_qtranslate\acf_4\fields\textarea;
-use acf_qtranslate\acf_4\fields\wysiwyg;
-use acf_qtranslate\acf_interface;
-use acf_qtranslate\plugin;
-
-class acf implements acf_interface {
+class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 
 	/**
 	 * The plugin instance.
-	 * @var \acf_qtranslate\plugin
+	 * @var \acf_qtranslate_plugin
 	 */
 	protected $plugin;
 
@@ -37,11 +29,17 @@ class acf implements acf_interface {
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function register_fields() {
-		new text($this->plugin);
-		new textarea($this->plugin);
-		new wysiwyg($this->plugin);
-		new image($this->plugin);
-		new file($this->plugin);
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_4/fields/file.php';
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_4/fields/image.php';
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_4/fields/text.php';
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_4/fields/textarea.php';
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_4/fields/wysiwyg.php';
+
+		new acf_qtranslate_acf_4_text($this->plugin);
+		new acf_qtranslate_acf_4_textarea($this->plugin);
+		new acf_qtranslate_acf_4_wysiwyg($this->plugin);
+		new acf_qtranslate_acf_4_image($this->plugin);
+		new acf_qtranslate_acf_4_file($this->plugin);
 	}
 
 	/**
