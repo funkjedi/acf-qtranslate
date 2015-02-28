@@ -1,73 +1,97 @@
 === ACF qTranslate ===
 Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
-Requires at least: 3.0.0
+Requires at least: 3.5.0
 Tested up to: 4.1.1
-Version: 1.7
-Stable tag: 1.7
+Version: 1.7.1
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.
+Adds qTranslate compatible field types for Text, Text Area, Wysiwyg Editor and Image.
+
 
 == Description ==
 
-This plugin adds a new Field Type category called qTranslate. This contains qTranslate compatible fields for Text, Text Area, Wysiwyg Editor and Image.
+This plugin adds a new Field Type category called qTranslate. This contains qTranslate compatible fields for Text, Text Area, WYSIWYG, Image and File.
 
-If using qTranslate-X then the standard Text, Text Area and Email fields automatically support translation.
+= Field Types =
+* qTranslate Text (type text, api returns text)
+* qTranslate Text Area (type text, api returns text)
+* qTranslate WYSIWYG (a wordpress wysiwyg editor, api returns html)
+* qTranslate Image (upload an image, api returns the url)
+* qTranslate File (upload a file, api returns the url)
 
-Usage:
+= qTranslate-X =
+If using qTranslate-X the standard Text, Text Area and WYSIWYG field types all automatically support translation out of the box.
 
-* Install the plug-in (standard WordPress installation)
-* Set up a qTranslate field (standard Advanced Custom Field configuration)
-* Add or Edit a post and language tabs will show up above the qTranslate field
-* Click a language tab above the qTranslate field to switch languages
+= Bug Submission =
+https://github.com/funkjedi/acf-qtranslate/issues/
 
-Issues:
-
-All bugs reports or feature requests should be made in the [Github repository](https://github.com/funkjedi/acf-qtranslate/issues)
 
 == Installation ==
 
-1. Be sure to have **Advanced Custom Fields** installed and activated first
-2. Upload `acf-qtranslate` directory to the `/wp-content/plugins/` directory
-3. Activate the plugin through the 'Plugins' menu in WordPress
+**This plugins requires a qTranslate-based plugin to be installed:**
+
+* [qTranslate](http://wordpress.org/extend/plugins/qtranslate/)
+* [qTranslate-X](https://wordpress.org/plugins/qtranslate-x/)
+* [qTranslate Plus](https://wordpress.org/plugins/qtranslate-xp/)
+* [mqTranslate](https://wordpress.org/plugins/mqtranslate/)
+* [zTranslate](http://wordpress.org/extend/plugins/ztranslate/)
+
+1. Upload `acf-qtranslate` directory to the `/wp-content/plugins/` directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+
 
 == Frequently Asked Questions ==
 
 = What's the history behind this plugin? =
+The plugin is based on code samples posted to the ACF support forums by taeo back in 2013.
 
-The plugin is based on code samples posted to the [ACF support forums](http://old.support.advancedcustomfields.com/discussion/comment/20351#Comment_20351) by taeo.
 
 == Screenshots ==
 
 1. Shows the qTranslate Text and Image fields.
 
+
 == Changelog ==
 
+= 1.7.1 =
+* Core: Added back ACFv5 support for WYSIWYG
+* Core: Added qTranslate-X support for the standard WYSIWYG field type
+* Core: Bumped version requirement to match ACF
+* Bug Fix: qTranslate-X switcher showing up on every admin page
+
 = 1.7 =
-Improved qTranslate-X support and utilize new language switchers
+* Core: Refactor of codebase
+* Core: Support for qTranslate-X language switchers
 
 = 1.6 =
-Added ACFv4 support for qTranslate-X
+* Added ACFv4 support for qTranslate-X
 
 = 1.5 =
-Added support for qTranslate-X
-Remove ACFv5 WYSIWYG implementation as it was very broken
+* Core: Added compatibility for qTranslate-X
+* Bug Fix: Remove the broken ACFv5 WYSIWYG implementation
 
 = 1.4 =
-Updated with support for Advanced Customs Fields v5
-Tested using mqTranslate in place of qTranslate
+* Core: Added support for ACFv5
+* Core: Tested compatibility with mqTranslate
 
 = 1.3 =
-Updated styles for Wordpress 3.8
-Updated monkey patch qTranslate to fix [bug with multiple WYSIWYG editors](https://github.com/funkjedi/acf-qtranslate/issues/2#issuecomment-37612918)
+* Core: Updated styles for Wordpress 3.8
+* Bug Fix: qTranslate bug with multiple WYSIWYG editors
 
 = 1.2 =
-Monkey patch qTranslate to fix [bug with multiple WYSIWYG editors](http://www.qianqin.de/qtranslate/forum/viewtopic.php?f=3&t=3497).
+* Bug Fix: qTranslate bug with multiple WYSIWYG editors
 
 = 1.1 =
-Added support for Image Fields. Thanks to bookwyrm for the contribution.
+* Core: Added support for Image Fields. Thanks to bookwyrm for the contribution.
 
 = 1.0 =
-Initial Release. Thanks to taeo for the code samples this plugin was based on.
+* Initial Release. Thanks to taeo for the code samples this plugin was based on.
+
+
+== Upgrade Notice ==
+
+= 1.7.1 =
+Added qTranslate-X support for the standard WYSIWYG field type

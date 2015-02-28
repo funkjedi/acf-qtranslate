@@ -1,4 +1,5 @@
 
+
 jQuery(function($) {
 
 	var $body = $('body');
@@ -12,7 +13,7 @@ jQuery(function($) {
 
 		parent.find('.current-language').removeClass('current-language');
 		parent.find('[data-language="' + language + '"]').addClass('current-language');
-		parent.find('input[data-language="' + language + '"], textarea[data-language="' + language + '"]').focus();
+		parent.find('input[data-language="' + language + '"], textarea[data-language="' + language + '"]');
 	});
 
 	/**
@@ -37,5 +38,5 @@ jQuery(function($) {
 		$(this).parent('.multi-language-field').removeClass('focused');
 	});
 
-
 });
+

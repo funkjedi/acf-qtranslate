@@ -24,12 +24,17 @@ class plugin {
 
 			// setup qtranslate fields for ACF 4
 			if ($this->acf_major_version() === 4) {
-				$acf = new acf_4;
+				$acf = new acf_4($this);
 			}
 
 			// setup qtranslate fields for ACF 5
 			if ($this->acf_major_version() === 5) {
-				$acf = new acf_5;
+				$acf = new acf_5($this);
+			}
+
+			// setup ppqtranslate integration
+			if ($this->ppqtranslate_enabled()) {
+				new ppqtranslate($this, $acf);
 			}
 
 			// setup qtranslatex integration
@@ -98,7 +103,7 @@ class plugin {
 			'qtranslate-x/qtranslate.php',
 			'qtranslate-xp/ppqtranslate.php',
 		);
-		foreach ($plugins as $name => $identifier) {
+		foreach ($plugins as $identifier) {
 			if ($this->is_plugin_active($identifier)) {
 				return true;
 			}
@@ -107,10 +112,24 @@ class plugin {
 	}
 
 	/**
+	 * Check if qTranslate Plus is enabled
+	 */
+	public function ppqtranslate_enabled() {
+		return function_exists('ppqtrans_getLanguage');
+	}
+
+	/**
 	 * Check if qTranslate-X is enabled
 	 */
 	public function qtranslatex_enabled() {
-		return defined('QTX_VERSION');
+		return function_exists('qtranxf_getLanguage');
+	}
+
+	/**
+	 * Check if mqTranslate is enabled
+	 */
+	public function mqtranslate_enabled() {
+		return function_exists('mqtrans_currentUserCanEdit');
 	}
 
 }

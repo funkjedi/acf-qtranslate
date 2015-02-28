@@ -3,15 +3,16 @@
 namespace acf_qtranslate\acf_5\fields;
 
 use acf_field;
-use acf_field_image;
+use acf_field_file;
 
-class image extends acf_field_image {
+class file extends acf_field_file {
 
 	/**
 	 * The plugin instance.
 	 * @var \acf_qtranslate\plugin
 	 */
 	protected $plugin;
+
 
 	/*
 	 *  __construct
@@ -28,27 +29,21 @@ class image extends acf_field_image {
 	function __construct($plugin) {
 		$this->plugin = $plugin;
 
-		$this->name = 'qtranslate_image';
-		$this->label = __("Image", 'acf');
+		$this->name = 'qtranslate_file';
+		$this->label = __("File", 'acf');
 		$this->category = __("qTranslate", 'acf');
 		$this->defaults = array(
 			'return_format' => 'array',
-			'preview_size'  => 'thumbnail',
 			'library'       => 'all',
-			'min_width'     => 0,
-			'min_height'    => 0,
 			'min_size'      => 0,
-			'max_width'     => 0,
-			'max_height'    => 0,
 			'max_size'      => 0,
 			'mime_types'    => ''
 		);
-		$this->l10n = array(
-			'select'     => __("Select Image",'acf'),
-			'edit'       => __("Edit Image",'acf'),
-			'update'     => __("Update Image",'acf'),
-			'uploadedTo' => __("Uploaded to this post",'acf'),
-			'all'        => __("All images",'acf'),
+		$this->l10n  = array(
+			'select'     => __("Select File",'acf'),
+			'edit'       => __("Edit File",'acf'),
+			'update'     => __("Update File",'acf'),
+			'uploadedTo' => __("uploaded to this post",'acf'),
 		);
 
 
@@ -80,11 +75,18 @@ class image extends acf_field_image {
 		acf_enqueue_uploader();
 
 		// vars
+		$o = array(
+			'icon'		=> '',
+			'title'		=> '',
+			'size'		=> '',
+			'url'		=> '',
+			'name'		=> '',
+		);
+
 		$div = array(
-			'class'					=> 'acf-image-uploader acf-cf',
-			'data-preview_size'		=> $field['preview_size'],
-			'data-library'			=> $field['library'],
-			'data-mime_types'		=> $field['mime_types']
+			'class'				=> 'acf-file-uploader acf-cf',
+			'data-library' 		=> $field['library'],
+			'data-mime_types'	=> $field['mime_types']
 		);
 
 		$input_atts = array(
@@ -111,14 +113,22 @@ class image extends acf_field_image {
 			$input_atts['name'] = $field['name'] . '[' . $language . ']';
 			$field['value'] = $values[$language];
 			$div['data-language'] = $language;
-			$div['class'] = 'acf-image-uploader acf-cf';
+			$div['class'] = 'acf-file-uploader acf-cf';
 
 			// has value?
 			if( $field['value'] && is_numeric($field['value']) ) {
-				$url = wp_get_attachment_image_src($field['value'], $field['preview_size']);
-				$url = $url[0];
+				$file = get_post( $field['value'] );
+				if( $file ) {
+					$div['class'] .= ' has-value';
 
-				$div['class'] .= ' has-value';
+					$o['icon'] = wp_mime_type_icon( $file->ID );
+					$o['title']	= $file->post_title;
+					$o['size'] = @size_format(filesize( get_attached_file( $file->ID ) ));
+					$o['url'] = wp_get_attachment_url( $file->ID );
+
+					$explode = explode('/', $o['url']);
+					$o['name'] = end( $explode );
+				}
 			}
 
 			// basic?
@@ -132,28 +142,50 @@ class image extends acf_field_image {
 			}
 
 			?>
-			<div <?php acf_esc_attr_e( $div ); ?>>
+			<div <?php acf_esc_attr_e($div); ?>>
 				<div class="acf-hidden">
 					<?php acf_hidden_input(array( 'name' => $input_atts['name'], 'value' => $field['value'], 'data-name' => 'id' )); ?>
 				</div>
-				<div class="view show-if-value acf-soh">
-					<img data-name="image" src="<?php echo $url; ?>" alt=""/>
-					<ul class="acf-hl acf-soh-target">
-						<?php if( !$basic ): ?>
-							<li><a class="acf-icon dark" data-name="edit" href="#"><i class="acf-sprite-edit"></i></a></li>
-						<?php endif; ?>
-						<li><a class="acf-icon dark" data-name="remove" href="#"><i class="acf-sprite-delete"></i></a></li>
-					</ul>
+				<div class="show-if-value file-wrap acf-soh">
+					<div class="file-icon">
+						<img data-name="icon" src="<?php echo $o['icon']; ?>" alt=""/>
+					</div>
+					<div class="file-info">
+						<p>
+							<strong data-name="title"><?php echo $o['title']; ?></strong>
+						</p>
+						<p>
+							<strong><?php _e('File Name', 'acf'); ?>:</strong>
+							<a data-name="name" href="<?php echo $o['url']; ?>" target="_blank"><?php echo $o['name']; ?></a>
+						</p>
+						<p>
+							<strong><?php _e('File Size', 'acf'); ?>:</strong>
+							<span data-name="size"><?php echo $o['size']; ?></span>
+						</p>
+
+						<ul class="acf-hl acf-soh-target">
+							<?php if( !$basic ): ?>
+								<li><a class="acf-icon dark" data-name="edit" href="#"><i class="acf-sprite-edit"></i></a></li>
+							<?php endif; ?>
+							<li><a class="acf-icon dark" data-name="remove" href="#"><i class="acf-sprite-delete"></i></a></li>
+						</ul>
+					</div>
 				</div>
-				<div class="view hide-if-value">
+				<div class="hide-if-value">
 					<?php if( $basic ): ?>
+
 						<?php if( $field['value'] && !is_numeric($field['value']) ): ?>
 							<div class="acf-error-message"><p><?php echo $field['value']; ?></p></div>
 						<?php endif; ?>
+
 						<input type="file" name="<?php echo $field['name']; ?>" id="<?php echo $field['id']; ?>" />
+
 					<?php else: ?>
-						<p style="margin:0;"><?php _e('No image selected','acf'); ?> <a data-name="add" class="acf-button" href="#"><?php _e('Add Image','acf'); ?></a></p>
+
+						<p style="margin:0;"><?php _e('No File selected','acf'); ?> <a data-name="add" class="acf-button" href="#"><?php _e('Add File','acf'); ?></a></p>
+
 					<?php endif; ?>
+
 				</div>
 			</div>
 

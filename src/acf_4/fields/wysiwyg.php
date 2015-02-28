@@ -7,6 +7,13 @@ use acf_field_wysiwyg;
 
 class wysiwyg extends acf_field_wysiwyg {
 
+	/**
+	 * The plugin instance.
+	 * @var \acf_qtranslate\plugin
+	 */
+	protected $plugin;
+
+
 	/*
 	 *  __construct
 	 *
@@ -15,7 +22,9 @@ class wysiwyg extends acf_field_wysiwyg {
 	 *  @since	3.6
 	 *  @date	23/01/13
 	 */
-	function __construct() {
+	function __construct($plugin) {
+		$this->plugin = $plugin;
+
 		$this->name = 'qtranslate_wysiwyg';
 		$this->label = __("Wysiwyg Editor",'acf');
 		$this->category = __("qTranslate",'acf');

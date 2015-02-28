@@ -15,7 +15,7 @@
 }
 
 .acf_wysiwyg .wp-editor-container,
-.acf-wysiwyg-wrap .wp-editor-container {
+.acf-editor-wrap .wp-editor-container {
 	border: 1px solid #e5e5e5 !important;
 }
 
@@ -62,7 +62,7 @@
 .multi-language-field > textarea,
 .multi-language-field > fieldset,
 .multi-language-field .acf_wysiwyg,
-.multi-language-field .acf-wysiwyg-wrap,
+.multi-language-field .acf-editor-wrap,
 .multi-language-field .acf-file-uploader,
 .multi-language-field .acf-image-uploader { display: none }
 

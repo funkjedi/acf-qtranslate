@@ -7,6 +7,13 @@ use acf_field_textarea;
 
 class textarea extends acf_field_textarea {
 
+	/**
+	 * The plugin instance.
+	 * @var \acf_qtranslate\plugin
+	 */
+	protected $plugin;
+
+
 	/*
 	 *  __construct
 	 *
@@ -19,7 +26,9 @@ class textarea extends acf_field_textarea {
 	 *  @param	n/a
 	 *  @return	n/a
 	 */
-	function __construct() {
+	function __construct($plugin) {
+		$this->plugin = $plugin;
+
 		$this->name = 'qtranslate_textarea';
 		$this->label = __("Text Area",'acf');
 		$this->category = __("qTranslate",'acf');

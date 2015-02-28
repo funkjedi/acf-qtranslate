@@ -3,6 +3,7 @@
 namespace acf_qtranslate\acf_5;
 
 use acf_qtranslate\acf_5\fields\image;
+use acf_qtranslate\acf_5\fields\file;
 use acf_qtranslate\acf_5\fields\text;
 use acf_qtranslate\acf_5\fields\textarea;
 use acf_qtranslate\acf_5\fields\wysiwyg;
@@ -11,11 +12,20 @@ use acf_qtranslate\plugin;
 
 class acf implements acf_interface {
 
+	/**
+	 * The plugin instance.
+	 * @var \acf_qtranslate\plugin
+	 */
+	protected $plugin;
+
+
 	/*
 	 * Create an instance.
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct($plugin) {
+		$this->plugin = $plugin;
+
 		add_filter('acf/format_value',                array($this, 'format_value'));
 		add_action('acf/include_fields',              array($this, 'include_fields'));
 		add_action('acf/input/admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
@@ -25,18 +35,20 @@ class acf implements acf_interface {
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function include_fields() {
-		new image;
-		new text;
-		new textarea;
-		new wysiwyg;
+		new text($this->plugin);
+		new textarea($this->plugin);
+		new wysiwyg($this->plugin);
+		new image($this->plugin);
+		new file($this->plugin);
 	}
 
 	/**
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function admin_enqueue_scripts() {
-		wp_enqueue_style('acf_qtranslate_input',  plugins_url('/assets/input.css', ACF_QTRANSLATE_PLUGIN));
-		wp_enqueue_script('acf_qtranslate_input', plugins_url('/assets/input.js',  ACF_QTRANSLATE_PLUGIN));
+		wp_enqueue_style('acf_qtranslate_common',  plugins_url('/assets/common.css',    ACF_QTRANSLATE_PLUGIN), array('acf-input'));
+		wp_enqueue_script('acf_qtranslate_common', plugins_url('/assets/common.js',     ACF_QTRANSLATE_PLUGIN), array('acf-input'));
+		wp_enqueue_script('acf_qtranslate_main',   plugins_url('/assets/acf_5/main.js', ACF_QTRANSLATE_PLUGIN), array('acf-input'));
 	}
 
 	/**

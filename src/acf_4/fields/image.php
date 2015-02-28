@@ -7,6 +7,13 @@ use acf_field_image;
 
 class image extends acf_field_image {
 
+	/**
+	 * The plugin instance.
+	 * @var \acf_qtranslate\plugin
+	 */
+	protected $plugin;
+
+
 	/*
 	 *  __construct
 	 *
@@ -15,7 +22,9 @@ class image extends acf_field_image {
 	 *  @since	3.6
 	 *  @date	23/01/13
 	 */
-	function __construct() {
+	function __construct($plugin) {
+		$this->plugin = $plugin;
+
 		$this->name = 'qtranslate_image';
 		$this->label = __("Image", 'acf');
 		$this->category = __("qTranslate", 'acf');

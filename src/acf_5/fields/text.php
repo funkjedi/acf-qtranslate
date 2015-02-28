@@ -7,6 +7,13 @@ use acf_field_text;
 
 class text extends acf_field_text {
 
+	/**
+	 * The plugin instance.
+	 * @var \acf_qtranslate\plugin
+	 */
+	protected $plugin;
+
+
 	/*
 	 *  __construct
 	 *
@@ -19,7 +26,9 @@ class text extends acf_field_text {
 	 *  @param	n/a
 	 *  @return	n/a
 	 */
-	function __construct() {
+	function __construct($plugin) {
+		$this->plugin = $plugin;
+
 		$this->name = 'qtranslate_text';
 		$this->label = __("Text",'acf');
 		$this->category = __("qTranslate",'acf');

@@ -5,8 +5,14 @@ namespace acf_qtranslate\acf_4\fields;
 use acf_field;
 use acf_field_file;
 
-class file extends acf_field_file
-{
+class file extends acf_field_file {
+
+	/**
+	 * The plugin instance.
+	 * @var \acf_qtranslate\plugin
+	 */
+	protected $plugin;
+
 
 	/*
 	 *  __construct
@@ -16,9 +22,9 @@ class file extends acf_field_file
 	 *  @since	3.6
 	 *  @date	23/01/13
 	 */
-	function __construct()
-	{
-		// Grab defaults
+	function __construct($plugin) {
+		$this->plugin = $plugin;
+
 		$this->name = 'qtranslate_file';
 		$this->label = __("File",'acf');
 		$this->category = __("qTranslate", 'acf');
@@ -38,8 +44,8 @@ class file extends acf_field_file
 		// filters
 		add_filter('get_media_item_args', array($this, 'get_media_item_args'));
 		add_filter('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
-		
-		
+
+
 		// JSON
 		add_action('wp_ajax_acf/fields/file/get_files', array($this, 'ajax_get_files'));
 		add_action('wp_ajax_nopriv_acf/fields/file/get_files', array($this, 'ajax_get_files'), 10, 1);
@@ -56,8 +62,7 @@ class file extends acf_field_file
 	 *  @since	3.6
 	 *  @date	23/01/13
 	 */
-	function create_field($field)
-	{
+	function create_field($field) {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
@@ -95,9 +100,9 @@ class file extends acf_field_file
 					$o['title'] = $file->post_title;
 					$o['size'] = size_format(filesize( get_attached_file( $file->ID ) ));
 					$o['url'] = wp_get_attachment_url( $file->ID );
-					
+
 					$explode = explode('/', $o['url']);
-					$o['name'] = end( $explode );       
+					$o['name'] = end( $explode );
 				}
 			}
 
@@ -135,7 +140,7 @@ class file extends acf_field_file
 								<strong><?php _e('Size', 'acf'); ?>:</strong>
 								<span class="acf-file-size"><?php echo $o['size']; ?></span>
 							</p>
-							
+
 						</li>
 					</ul>
 				</div>
@@ -159,8 +164,7 @@ class file extends acf_field_file
 	 *  @since: 3.6
 	 *  @created: 26/01/13
 	 */
-	function format_value($value, $post_id, $field)
-	{
+	function format_value($value, $post_id, $field) {
 		return $value;
 	}
 
@@ -179,8 +183,7 @@ class file extends acf_field_file
 	 *
 	 *  @return	$value	- the modified value
 	 */
-	function format_value_for_api($value, $post_id, $field)
-	{
+	function format_value_for_api($value, $post_id, $field) {
 		$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
 		return parent::format_value_for_api($value, $post_id, $field);
 	}
@@ -200,8 +203,7 @@ class file extends acf_field_file
 	 *
 	 *  @return	$value - the modified value
 	 */
-	function update_value($value, $post_id, $field)
-	{
+	function update_value($value, $post_id, $field) {
 		return qtrans_join($value);
 	}
 

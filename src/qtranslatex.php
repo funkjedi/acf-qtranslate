@@ -25,10 +25,11 @@ class qtranslatex {
 		$this->acf = $acf;
 		$this->plugin = $plugin;
 
-		// load qtranslate compatibility layer
-		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/qtranslatex/qtranslate-compatibility.php';
+		// include compatibility functions
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'compatibility/qtranslatex.php';
 
 		add_filter('admin_head',                        array($this, 'admin_head'));
+		add_filter('qtranslate_custom_admin_js',        array($this, 'qtranslate_custom_admin_js'));
 		add_filter('qtranslate_load_admin_page_config', array($this, 'qtranslate_load_admin_page_config'));
 	}
 
@@ -52,12 +53,30 @@ class qtranslatex {
 		global $pagenow;
 
 		$fields = $this->acf->get_visible_acf_fields();
-		array_push($configs, array(
-			'pages' => array($pagenow => ''),
-			'forms' => array(array('fields' => $fields))
-		));
+		if (count($fields)) {
+			// ACF uses a single tinyMCE editor mceInit
+			// for all it's WYSIWYG fields
+			$fields[] = array('id' => 'acf_settings');
+
+			array_push($configs, array(
+				'pages' => array($pagenow => ''),
+				'forms' => array(array('fields' => $fields))
+			));
+		}
 
 		return $configs;
+	}
+
+	/**
+	 * Use the edit-post script on admin pages.
+	 * @return string
+	 */
+	public function qtranslate_custom_admin_js() {
+		global $pagenow;
+
+		if ($pagenow === 'admin.php' && isset($_GET['page'])) {
+			return 'admin/js/edit-post';
+		}
 	}
 
 }
