@@ -13,7 +13,7 @@ Provides qTranslate compatible ACF field types for Text, Text Area, WYSIWYG, Ima
 
 == Description ==
 
-This plugin adds a new Field Type category called qTranslate. This contains qTranslate compatible fields for Text, Text Area, WYSIWYG, Image and File.
+This plugin provides qTranslate (qTranslate-X, qTranslate Plus and mqTranslate) compatible ACF4 and ACF5PRO field types for Text, Text Area, WYSIWYG, Image and File. When adding a field to a field group these new field types will be listed under the qTranslate category in the Field Type dropdown.
 
 = Field Types =
 * qTranslate Text (type text, api returns text)
@@ -31,16 +31,19 @@ https://github.com/funkjedi/acf-qtranslate/issues/
 
 == Installation ==
 
-**This plugins requires a qTranslate-based plugin to be installed:**
+1. Upload `acf-qtranslate` directory to the `/wp-content/plugins/` directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
 
-* [qTranslate](http://wordpress.org/extend/plugins/qtranslate/)
+= Requires ACF4 or ACF5PRO
+* [ACF](https://wordpress.org/plugins/advanced-custom-fields/)
+* [ACF5PRO](http://www.advancedcustomfields.com/pro/)
+
+= Requires qTranslate (or qTranslate-based) Plugin =
+* [qTranslate](https://wordpress.org/extend/plugins/qtranslate/)
 * [qTranslate-X](https://wordpress.org/plugins/qtranslate-x/)
 * [qTranslate Plus](https://wordpress.org/plugins/qtranslate-xp/)
 * [mqTranslate](https://wordpress.org/plugins/mqtranslate/)
-* [zTranslate](http://wordpress.org/extend/plugins/ztranslate/)
-
-1. Upload `acf-qtranslate` directory to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+* [zTranslate](https://wordpress.org/extend/plugins/ztranslate/)
 
 
 == Frequently Asked Questions ==
@@ -103,5 +106,5 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 == Upgrade Notice ==
 
-= 1.7.1 =
-Added qTranslate-X support for the standard WYSIWYG field type
+= 1.7.3 =
+Removed namespaces to make code compatible with PHP 5.2
