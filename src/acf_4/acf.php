@@ -46,8 +46,10 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function admin_enqueue_scripts() {
-		wp_enqueue_style('acf_qtranslate_common',  plugins_url('/assets/common.css', ACF_QTRANSLATE_PLUGIN), array('acf-input'));
-		wp_enqueue_script('acf_qtranslate_common', plugins_url('/assets/common.js',  ACF_QTRANSLATE_PLUGIN), array('acf-input'));
+		if ($this->get_visible_acf_fields()) {
+			wp_enqueue_style('acf_qtranslate_common',  plugins_url('/assets/common.css', ACF_QTRANSLATE_PLUGIN), array('acf-input'));
+			wp_enqueue_script('acf_qtranslate_common', plugins_url('/assets/common.js',  ACF_QTRANSLATE_PLUGIN), array('acf-input'));
+		}
 	}
 
 	/**
@@ -69,6 +71,8 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 		global $post, $pagenow, $typenow, $plugin_page;
 
 		$filter = array();
+		$visible_fields = array();
+
 		if ($pagenow === 'post.php' || $pagenow === 'post-new.php') {
 			if ($typenow !== 'acf') {
 				$filter['post_id'] = apply_filters('acf/get_post_id', false);
@@ -76,7 +80,9 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 			}
 		}
 		elseif ($pagenow === 'admin.php' && isset($plugin_page)) {
-			$filter['post_id'] = apply_filters('acf/get_post_id', false);
+			if ($this->acf_get_options_page($plugin_page)) {
+				$filter['post_id'] = apply_filters('acf/get_post_id', false);
+			}
 		}
 		elseif ($pagenow === 'edit-tags.php' && isset($_GET['taxonomy'])) {
 			$filter['ef_taxonomy'] = filter_var($_GET['taxonomy'], FILTER_SANITIZE_STRING);
@@ -95,7 +101,7 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 		}
 
 		if (count($filter) === 0) {
-			return array();
+			return $visible_fields;
 		}
 
 		$supported_field_types = array(
@@ -106,7 +112,6 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 
 		$visible_field_groups = apply_filters('acf/location/match_field_groups', array(), $filter);
 
-		$visible_fields = array();
 		foreach (apply_filters('acf/get_field_groups', array()) as $field_group) {
 			if (in_array($field_group['id'], $visible_field_groups)) {
 				$fields = apply_filters('acf/field_group/get_fields', array(), $field_group['id']);
@@ -119,6 +124,33 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 		}
 
 		return $visible_fields;
+	}
+
+	/**
+	 * Get details about ACF Options page.
+	 */
+	public function acf_get_options_page($slug) {
+		global $acf_options_page;
+
+		if (is_array($acf_options_page->settings) === false) {
+			return false;
+		}
+
+		if ($acf_options_page->settings['slug'] === $slug) {
+			return array(
+				'title'       => $acf_options_page->settings['title'],
+				'menu'        => $acf_options_page->settings['menu'],
+				'slug'        => $acf_options_page->settings['slug'],
+				'capability'  => $acf_options_page->settings['capability'],
+				'show_parent' => $acf_options_page->settings['show_parent'],
+			);
+		}
+
+		foreach ($acf_options_page->settings['pages'] as $page) {
+			if ($page['slug'] === $slug) {
+				return $page;
+			}
+		}
 	}
 
 	/**

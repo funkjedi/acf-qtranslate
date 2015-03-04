@@ -88,9 +88,9 @@ class acf_qtranslate_qtranslatex {
 	 * @return string
 	 */
 	public function qtranslate_custom_admin_js() {
-		global $pagenow;
+		global $pagenow, $plugin_page;
 
-		if ($pagenow === 'admin.php' && isset($_GET['page'])) {
+		if ($pagenow === 'admin.php' && isset($plugin_page)) {
 			return 'admin/js/edit-post';
 		}
 	}
