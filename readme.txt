@@ -34,7 +34,7 @@ https://github.com/funkjedi/acf-qtranslate/issues/
 1. Upload `acf-qtranslate` directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
-= Requires ACF4 or ACF5PRO
+= Requires ACF4 or ACF5PRO =
 * [ACF](https://wordpress.org/plugins/advanced-custom-fields/)
 * [ACF5PRO](http://www.advancedcustomfields.com/pro/)
 
