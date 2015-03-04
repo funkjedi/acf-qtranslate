@@ -44,7 +44,7 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function admin_enqueue_scripts() {
-		if ($this->get_visible_acf_fields()) {
+		if ($this->get_acf_field_group_filters()) {
 			wp_enqueue_style('acf_qtranslate_common',  plugins_url('/assets/common.css',    ACF_QTRANSLATE_PLUGIN), array('acf-input'));
 			wp_enqueue_script('acf_qtranslate_common', plugins_url('/assets/common.js',     ACF_QTRANSLATE_PLUGIN), array('acf-input'));
 			wp_enqueue_script('acf_qtranslate_main',   plugins_url('/assets/acf_5/main.js', ACF_QTRANSLATE_PLUGIN), array('acf-input'));
@@ -66,12 +66,58 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 	 * Get the visible ACF fields.
 	 * @return array
 	 */
-	public function get_visible_acf_fields($id = null) {
-		global $post, $pagenow, $typenow, $plugin_page, $wp_registered_widgets;
+	public function get_visible_acf_fields($widget_id = null) {
+		global $wp_registered_widgets;
 
-		$filter = array();
 		$visible_fields = array();
 
+		// build field group filters required for current screen
+		$filter = $this->get_acf_field_group_filters();
+		if (count($filter) === 0) {
+			return $visible_fields;
+		}
+
+		// widgets need some special handling since they
+		// require multiple acf_get_field_group_visibility()
+		// calls in order to return all the visible fields
+		if (acf_is_screen('widgets') || acf_is_screen('customize')) {
+			if ($widget_id) {
+				$filter['widget'] = _get_widget_id_base($widget_id);
+			}
+			else {
+				// process each widget form individually for any visible fields
+				foreach ($wp_registered_widgets as $widget) {
+					$visible_fields += $this->get_visible_acf_fields($widget['id']);
+				}
+				return $visible_fields;
+			}
+		}
+
+		$supported_field_types = array(
+			'email',
+			'text',
+			'textarea',
+		);
+
+		foreach (acf_get_field_groups($filter) as $field_group) {
+			$fields = acf_get_fields($field_group);
+			foreach ($fields as $field) {
+				if (in_array($field['type'], $supported_field_types)) {
+					$visible_fields[] = array('id' => 'acf-' . $field['key']);
+				}
+			}
+		}
+
+		return $visible_fields;
+	}
+
+	/**
+	 * Get field group filters based on active screen.
+	 */
+	public function get_acf_field_group_filters() {
+		global $post, $pagenow, $typenow, $plugin_page;
+
+		$filter = array();
 		if ($pagenow === 'post.php' || $pagenow === 'post-new.php') {
 			if ($typenow !== 'acf') {
 				$filter['post_id'] = $post->ID;
@@ -102,38 +148,10 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 			$filter['attachment'] = 'All';
 		}
 		elseif (acf_is_screen('widgets') || acf_is_screen('customize')) {
-			if ($id) {
-				$filter['widget'] = _get_widget_id_base($id);
-			}
-			else {
-				// process each widget form individually for any visible fields
-				// required due to how acf_get_field_group_visibility() works
-				foreach ($wp_registered_widgets as $widget) {
-					$visible_fields += $this->get_visible_acf_fields($widget['id']);
-				}
-			}
+			$filter['widget'] = 'all';
 		}
 
-		if (count($filter) === 0) {
-			return $visible_fields;
-		}
-
-		$supported_field_types = array(
-			'email',
-			'text',
-			'textarea',
-		);
-
-		foreach (acf_get_field_groups($filter) as $field_group) {
-			$fields = acf_get_fields($field_group);
-			foreach ($fields as $field) {
-				if (in_array($field['type'], $supported_field_types)) {
-					$visible_fields[] = array('id' => 'acf-' . $field['key']);
-				}
-			}
-		}
-
-		return $visible_fields;
+		return $filter;
 	}
 
 }

@@ -46,7 +46,7 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function admin_enqueue_scripts() {
-		if ($this->get_visible_acf_fields()) {
+		if ($this->get_acf_field_group_filters()) {
 			wp_enqueue_style('acf_qtranslate_common',  plugins_url('/assets/common.css', ACF_QTRANSLATE_PLUGIN), array('acf-input'));
 			wp_enqueue_script('acf_qtranslate_common', plugins_url('/assets/common.js',  ACF_QTRANSLATE_PLUGIN), array('acf-input'));
 		}
@@ -68,11 +68,43 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 	 * @return array
 	 */
 	public function get_visible_acf_fields() {
+		$visible_fields = array();
+
+		// build field group filters required for current screen
+		$filter = $this->get_acf_field_group_filters();
+		if (count($filter) === 0) {
+			return $visible_fields;
+		}
+
+		$supported_field_types = array(
+			'email',
+			'text',
+			'textarea',
+		);
+
+		$visible_field_groups = apply_filters('acf/location/match_field_groups', array(), $filter);
+
+		foreach (apply_filters('acf/get_field_groups', array()) as $field_group) {
+			if (in_array($field_group['id'], $visible_field_groups)) {
+				$fields = apply_filters('acf/field_group/get_fields', array(), $field_group['id']);
+				foreach ($fields as $field) {
+					if (in_array($field['type'], $supported_field_types)) {
+						$visible_fields[] = array('id' => $field['id']);
+					}
+				}
+			}
+		}
+
+		return $visible_fields;
+	}
+
+	/**
+	 * Get field group filters based on active screen.
+	 */
+	public function get_acf_field_group_filters() {
 		global $post, $pagenow, $typenow, $plugin_page;
 
 		$filter = array();
-		$visible_fields = array();
-
 		if ($pagenow === 'post.php' || $pagenow === 'post-new.php') {
 			if ($typenow !== 'acf') {
 				$filter['post_id'] = apply_filters('acf/get_post_id', false);
@@ -100,30 +132,7 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 			$filter['post_type'] = 'attachment';
 		}
 
-		if (count($filter) === 0) {
-			return $visible_fields;
-		}
-
-		$supported_field_types = array(
-			'email',
-			'text',
-			'textarea',
-		);
-
-		$visible_field_groups = apply_filters('acf/location/match_field_groups', array(), $filter);
-
-		foreach (apply_filters('acf/get_field_groups', array()) as $field_group) {
-			if (in_array($field_group['id'], $visible_field_groups)) {
-				$fields = apply_filters('acf/field_group/get_fields', array(), $field_group['id']);
-				foreach ($fields as $field) {
-					if (in_array($field['type'], $supported_field_types)) {
-						$visible_fields[] = array('id' => $field['id']);
-					}
-				}
-			}
-		}
-
-		return $visible_fields;
+		return $filter;
 	}
 
 	/**

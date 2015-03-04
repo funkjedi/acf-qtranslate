@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.1.1
-Version: 1.7.4
-Stable tag: 1.7.4
+Version: 1.7.5
+Stable tag: 1.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.5 =
+* Core: Updates to README file
+* Bug Fix: Updated to visible ACF fields detection
 
 = 1.7.4 =
 * Bug Fix: Only load admin javascript when there are visible ACF fields
