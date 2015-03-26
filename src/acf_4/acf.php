@@ -46,7 +46,7 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function admin_enqueue_scripts() {
-		if ($this->get_acf_field_group_filters()) {
+		if ($this->get_visible_acf_fields()) {
 			wp_enqueue_style('acf_qtranslate_common',  plugins_url('/assets/common.css', ACF_QTRANSLATE_PLUGIN), array('acf-input'));
 			wp_enqueue_script('acf_qtranslate_common', plugins_url('/assets/common.js',  ACF_QTRANSLATE_PLUGIN), array('acf-input'));
 		}
