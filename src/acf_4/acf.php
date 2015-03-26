@@ -80,6 +80,11 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 			'email',
 			'text',
 			'textarea',
+			'qtranslate_file',
+			'qtranslate_image',
+			'qtranslate_text',
+			'qtranslate_textarea',
+			'qtranslate_wysiwyg'
 		);
 
 		$visible_field_groups = apply_filters('acf/location/match_field_groups', array(), $filter);
