@@ -145,7 +145,7 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 	public function acf_get_options_page($slug) {
 		global $acf_options_page;
 
-		if (is_array($acf_options_page->settings) === false) {
+		if (!is_object($acf_options_page) || !is_array($acf_options_page->settings)) {
 			return false;
 		}
 
