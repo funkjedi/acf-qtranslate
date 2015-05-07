@@ -23,6 +23,11 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 		$this->name = 'qtranslate_wysiwyg';
 		$this->label = __("Wysiwyg Editor",'acf');
 		$this->category = __("qTranslate",'acf');
+		$this->defaults = array(
+			'toolbar'		=>	'full',
+			'media_upload' 	=>	'yes',
+			'default_value'	=>	'',
+		);
 
 		acf_field::__construct();
 

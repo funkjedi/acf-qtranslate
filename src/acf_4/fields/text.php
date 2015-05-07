@@ -23,6 +23,14 @@ class acf_qtranslate_acf_4_text extends acf_field_text {
 		$this->name = 'qtranslate_text';
 		$this->label = __("Text",'acf');
 		$this->category = __("qTranslate",'acf');
+		$this->defaults = array(
+			'default_value'	=>	'',
+			'formatting' 	=>	'html',
+			'maxlength'		=>	'',
+			'placeholder'	=>	'',
+			'prepend'		=>	'',
+			'append'		=>	''
+		);
 
 		acf_field::__construct();
 	}
