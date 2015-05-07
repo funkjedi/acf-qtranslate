@@ -18,9 +18,9 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 	public function __construct($plugin) {
 		$this->plugin = $plugin;
 
-		add_filter('acf/format_value_for_api', array($this, 'format_value_for_api'));
-		add_action('acf/register_fields',      array($this, 'register_fields'));
-		add_action('admin_enqueue_scripts',    array($this, 'admin_enqueue_scripts'));
+		add_filter('acf/format_value_for_api',        array($this, 'format_value_for_api'));
+		add_action('acf/register_fields',             array($this, 'register_fields'));
+		add_action('acf/input/admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
 
 		$this->monkey_patch_qtranslate();
 	}
@@ -46,11 +46,7 @@ class acf_qtranslate_acf_4 implements acf_qtranslate_acf_interface {
 	 * Load javascript and stylesheets on admin pages.
 	 */
 	public function admin_enqueue_scripts() {
-		if ($this->get_visible_acf_fields()) {
-			wp_enqueue_style('acf_qtranslate_common',  plugins_url('/assets/common.css',    ACF_QTRANSLATE_PLUGIN), array('acf-input'));
-			wp_enqueue_script('acf_qtranslate_common', plugins_url('/assets/common.js',     ACF_QTRANSLATE_PLUGIN), array('acf-input','underscore'));
-			wp_enqueue_script('acf_qtranslate_main',   plugins_url('/assets/acf_4/main.js', ACF_QTRANSLATE_PLUGIN), array('acf-input','underscore'));
-		}
+		wp_enqueue_script('acf_qtranslate_main', plugins_url('/assets/acf_4/main.js', ACF_QTRANSLATE_PLUGIN), array('acf-input','underscore'));
 	}
 
 	/**

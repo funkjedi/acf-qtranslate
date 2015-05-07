@@ -23,7 +23,8 @@
 	margin-top: -38px;
 }
 
-.acf-table .multi-language-field {
+.acf-table .multi-language-field,
+.acf-input-table .multi-language-field {
 	margin-top: -6px;
 }
 

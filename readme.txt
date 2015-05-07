@@ -2,9 +2,9 @@
 Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
-Tested up to: 4.1.1
-Version: 1.7.6
-Stable tag: 1.7.6
+Tested up to: 4.2.1
+Version: 1.7.7
+Stable tag: 1.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,7 @@ This plugin provides qTranslate (qTranslate-X, qTranslate Plus and mqTranslate) 
 * qTranslate File (upload a file, api returns the url)
 
 = qTranslate-X =
-If using qTranslate-X the standard Text, Text Area and WYSIWYG field types all automatically support translation out of the box.
+If using qTranslate-X the standard Text, Text Area and WYSIWYG field types can be enabled for translation.
 
 = Bug Submission =
 https://github.com/funkjedi/acf-qtranslate/issues/
@@ -58,6 +58,13 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.7 =
+* Core: Added configuration page
+* Core: Support for Standard Field Types when using qTranslate-X is disabled by default
+* Core: Display standard language toggles when using qTranslate-X
+* Bug Fix: qTranslate-X problem with content from languages being mixed
+* Bug Fix: Corrected repeater problems introduced by qTranslate-X update
 
 = 1.7.6 =
 * Core: qTranslate-X support for Text, Text Area and WYSIWYG inside repeater
@@ -117,6 +124,9 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Upgrade Notice ==
+
+= 1.7.7 =
+If using qTranslate-X translation of the standard Text, Text Area and WYSIWYG field types is now disabled by default.
 
 = 1.7.3 =
 Removed namespaces to make code compatible with PHP 5.2

@@ -27,7 +27,6 @@ class acf_qtranslate_ppqtranslate {
 
 		// include compatibility functions
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'compatibility/ppqtranslate.php';
-
 	}
 
 }

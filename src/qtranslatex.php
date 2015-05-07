@@ -29,58 +29,43 @@ class acf_qtranslate_qtranslatex {
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'compatibility/qtranslatex.php';
 
 		add_action('admin_head',                         array($this, 'admin_head'));
-		add_action('admin_footer',                       array($this, 'admin_footer'), 9999); //after qTranslate-X
 		add_filter('qtranslate_custom_admin_js',         array($this, 'qtranslate_custom_admin_js'));
-		add_filter('qtranslate_load_admin_page_config',  array($this, 'qtranslate_load_admin_page_config'));
 		add_filter('acf_qtranslate_get_active_language', array($this, 'get_active_language'));
+		add_action('acf/input/admin_enqueue_scripts',    array($this, 'admin_enqueue_scripts'));
 	}
 
 	/**
-	 * Add class to the body element.
+	 * Add additional styles and scripts to head.
 	 */
 	public function admin_head() {
-		?>
-		<style>
-		.multi-language-field {margin-top:0!important;}
-		.multi-language-field .wp-switch-editor[data-language] {display:none!important;}
-		</style>
-		<?php
-	}
+		// Hide the language tabs if they shouldn't be displayed
+		$show_language_tabs = $this->plugin->get_plugin_setting('show_language_tabs');
+		if (!$show_language_tabs) {
+			?>
+			<style>
+			.multi-language-field {margin-top:0!important;}
+			.multi-language-field .wp-switch-editor[data-language] {display:none!important;}
+			</style>
+			<?php
+		}
 
-	/**
-	 * Load custom version of edit-post.js if needed.
-	 */
-	public function admin_footer() {
-		if (wp_script_is('qtranslate-admin-edit')) {
-
-			//$handle = wp_script_is('qtranslate-admin-edit', 'registered');
-
-			//wp_register_script('qtranslate-admin-edit', $script_url, array(), QTX_VERSION);
-			//wp_enqueue_script('qtranslate-admin-edit');
-
+		// Enable translation of standard field types
+		$translate_standard_field_types = $this->plugin->get_plugin_setting('translate_standard_field_types');
+		if ($translate_standard_field_types) {
+			?>
+			<script>
+			var acf_qtranslate_translate_standard_field_types = <?= json_encode($translate_standard_field_types) ?>;
+			</script>
+			<?php
 		}
 	}
 
 	/**
-	 * Load ACF form element ids into qTranslate-X.
-	 * @return void
+	 * Load javascript and stylesheets on admin pages.
 	 */
-	public function qtranslate_load_admin_page_config($configs) {
-		global $pagenow;
-
-		$fields = $this->acf->get_visible_acf_fields();
-		if (count($fields)) {
-			// ACF uses a single tinyMCE editor mceInit
-			// for all it's WYSIWYG fields
-			$fields[] = array('id' => 'acf_settings');
-
-			array_push($configs, array(
-				'pages' => array($pagenow => ''),
-				'forms' => array(array('fields' => $fields))
-			));
-		}
-
-		return $configs;
+	public function admin_enqueue_scripts() {
+		$version = $this->plugin->acf_major_version();
+		wp_enqueue_script('acf_qtranslatex', plugins_url("/assets/acf_{$version}/qtranslatex.js",  ACF_QTRANSLATE_PLUGIN), array('acf_qtranslate_common'));
 	}
 
 	/**
