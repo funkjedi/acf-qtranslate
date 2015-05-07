@@ -41,6 +41,12 @@ class acf_qtranslate_plugin {
 				$this->acf = new acf_qtranslate_acf_5($this);
 			}
 
+			// setup mqtranslate integration
+			if ($this->mqtranslate_enabled()) {
+				require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/mqtranslate.php';
+				new acf_qtranslate_mqtranslate($this, $this->acf);
+			}
+
 			// setup ppqtranslate integration
 			if ($this->ppqtranslate_enabled()) {
 				require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/ppqtranslate.php';
