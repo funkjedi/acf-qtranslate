@@ -30,26 +30,20 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 		);
 
 		acf_field::__construct();
-
-		add_filter('acf/fields/wysiwyg/toolbars', array($this, 'toolbars'), 1, 1);
 	}
 
 	/*
-	 *  toolbars()
+	 *  input_admin_head()
 	 *
-	 *  This filter allowsyou to customize the WYSIWYG toolbars
+	 *  This action is called in the admin_head action on the edit screen where your field is created.
+	 *  Use this action to add css and javascript to assist your create_field() action.
 	 *
-	 *  @param	$toolbars - an array of toolbars
-	 *
-	 *  @return	$toolbars - the modified $toolbars
-	 *
-	 *  @type	filter
+	 *  @info	http://codex.wordpress.org/Plugin_API/Action_Reference/admin_head
+	 *  @type	action
 	 *  @since	3.6
 	 *  @date	23/01/13
 	 */
-	function toolbars($toolbars) {
-		return parent::toolbars($toolbars);
-	}
+	function input_admin_head() {}
 
 	/*
 	 *  create_field()
@@ -63,13 +57,6 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 	 *  @date	23/01/13
 	 */
 	function create_field($field) {
-		$defaults = array(
-			'toolbar'		=>	'full',
-			'media_upload' 	=>	'yes',
-		);
-		$field = array_merge($defaults, $field);
-
-
 		global $q_config, $wp_version;
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
@@ -84,13 +71,13 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 
 		foreach ($languages as $language):
 			$value = $values[$language];
-			$id = 'wysiwyg' . $field['id'] . "[$language]";
+			$id = 'wysiwyg-' . $field['id'] . '-' . uniqid();
 			$name = $field['name'] . "[$language]";
 			$class = ($language === $currentLanguage) ? 'acf_wysiwyg wp-editor-wrap current-language' : 'acf_wysiwyg wp-editor-wrap';
 
 			?>
 			<div id="wp-<?php echo $id; ?>-wrap" class="<?php echo $class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
-				<?php if($field['media_upload'] == 'yes'): ?>
+				<?php if( user_can_richedit() && $field['media_upload'] == 'yes' ): ?>
 					<?php if( version_compare($wp_version, '3.3', '<') ): ?>
 						<div id="editor-toolbar">
 							<div id="media-buttons" class="hide-if-no-js">
@@ -106,7 +93,18 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 					<?php endif; ?>
 				<?php endif; ?>
 				<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
-					<textarea id="<?php echo $id; ?>" class="qtx-wp-editor-area" name="<?php echo $name; ?>" ><?php echo wp_richedit_pre($value); ?></textarea>
+					<textarea id="<?php echo $id; ?>" class="qtx-wp-editor-area" name="<?php echo $name; ?>" ><?php
+
+					if( user_can_richedit() )
+					{
+						echo wp_richedit_pre( $field['value'] );
+					}
+					else
+					{
+						echo wp_htmledit_pre( $field['value'] );
+					}
+
+					?></textarea>
 				</div>
 			</div>
 		<?php endforeach;
