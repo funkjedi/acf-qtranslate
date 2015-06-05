@@ -97,11 +97,11 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 
 					if( user_can_richedit() )
 					{
-						echo wp_richedit_pre( $field['value'] );
+						echo wp_richedit_pre( $value );
 					}
 					else
 					{
-						echo wp_htmledit_pre( $field['value'] );
+						echo wp_htmledit_pre( $value );
 					}
 
 					?></textarea>
