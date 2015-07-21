@@ -1,6 +1,15 @@
 
 (function(){
 
+	// Check for qtranslate-x
+	if ( 'object' !== typeof( qTranslateConfig ) || 'object' !== typeof( qTranslateConfig.qtx ) ) {
+		return;
+	}
+	// Check for ACF
+	if ( 'object' !== typeof( acf ) ) {
+		return;
+	}
+
 	acf.qtx = acf.qtx || {};
 
 	acf.qtx.image = function( field ) {
@@ -81,11 +90,6 @@
 		}
 
 		windowLoadCompleted = true;
-
-		// Only proceed if qTranslate is loaded
-		if (typeof qTranslateConfig != 'object' || typeof qTranslateConfig.qtx != 'object') {
-			return;
-		}
 
 		// Enable the language switching buttons
 		qTranslateConfig.qtx.enableLanguageSwitchingButtons('block');
