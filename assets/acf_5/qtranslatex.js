@@ -1,5 +1,77 @@
 
 (function(){
+
+	acf.qtx = acf.qtx || {};
+
+	acf.qtx.image = function( field ) {
+		this.$field = jQuery(field);
+		this.$field_container = this.$field.closest('.acf-image-uploader');
+		this.id = this.$field.val();
+		this.needs_render = false;
+		return this;
+	};
+
+	// Check if image needs updating and prepare attachment
+	acf.qtx.image.prototype.prepare = function() {
+		// Check if attachment is shown and matches current value
+		if ( this.$field_container.hasClass('has-value') && this.id === this.$field.val() ) {
+			this.needs_render = false;
+			return this;
+		}
+		this.needs_render = true;
+		// Check if image was removed
+		if ( '' === this.$field.val() ) {
+			this.attachment = {};
+			return this;
+		}
+		this.attachment = wp.media.model.Attachment.get( this.$field.val() );
+		return this;
+	};
+
+	// Remove image on language switch if val is empty
+	acf.qtx.image.prototype.remove = function() {
+		this.$field_container.find('img').attr('src', '' );
+		this.$field_container.removeClass('has-value');
+		this.$field_container.trigger('change');
+		this.needs_render = false;
+		return this;
+	}
+
+	// Render image html
+	acf.qtx.image.prototype.render = function() {
+		// Called inappropriately
+		if ( !this.needs_render ) {
+			return this;
+		}
+		if ( '' === this.$field.val() ) {
+			return this.remove();
+		}
+		// Have to do this because inside the success context, this = window
+		var $this = this;
+		this.attachment.fetch({
+			success: function( att ) {
+				// Parse attachment for image arguments
+				image = acf.fields.image.prepare( att );
+				$this.$field_container.find('img').attr('src', image.url );
+				$this.$field_container.addClass('has-value');
+				$this.$field_container.trigger('change');
+				// Update internal id
+				$this.id = $this.$field.val();
+				$this.needs_render = false;
+			}
+		});
+		return this;
+	}
+
+	// Convenience function for adding language switch handler
+	acf.qtx.image.prototype.watch = function() {
+		var image = this;
+		qTranslateConfig.qtx.addLanguageSwitchAfterListener( function() {
+			console.log('hook');
+			image.prepare().render();
+		});
+	}
+
 	var windowLoadCompleted = false;
 	jQuery(window).load(function() {
 
@@ -35,6 +107,7 @@
 			text:      'input:text',
 			textarea:  'textarea',
 			wysiwyg:   '.wp-editor-area',
+			image:     '.acf-image-uploader input',
 		};
 
 		// Remove content hooks from ACF Fields
@@ -50,6 +123,11 @@
 				var form = jQuery(this).closest('form').get(0);
 				var field = jQuery(this).find(selector).get(0);
 				qTranslateConfig.qtx.addContentHookC(field, form);
+
+				if ('image' === field_type ) {
+					image = new acf.qtx.image( field );
+					image.prepare().render().watch();
+				}
 			});
 
 			// Watch and add content hooks when new fields are added
