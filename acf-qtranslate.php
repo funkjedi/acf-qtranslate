@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Advanced Custom Fields: qTranslate
+Plugin Name: Advanced Custom Fields: qTranslate (Casumo Fork)
 Plugin URI: http://github.com/funkjedi/acf-qtranslate
 Description: Provides multilingual versions of the text, text area, and wysiwyg fields.
 Version: 1.7.9
