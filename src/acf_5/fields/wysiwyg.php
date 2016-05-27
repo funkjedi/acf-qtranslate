@@ -50,7 +50,7 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 		add_filter( 'acf_the_content', 'do_shortcode', 11);
 
 		// actions
-		add_action('acf/input/admin_footer_js', 	array($this, 'input_admin_footer_js'));
+		add_action('acf/input/admin_footer', 	array($this, 'input_admin_footer'));
 
 		acf_field::__construct();
 	}

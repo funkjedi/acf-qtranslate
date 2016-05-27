@@ -3,11 +3,14 @@
  * Clone functionality from standard Image field type
  */
 acf.fields.qtranslate_image = acf.fields.image.extend({
-	type: 'qtranslate_image',
-	focus: function() {
-		this.$el = this.$field.find('.acf-image-uploader.current-language');
-		this.o = acf.get_data(this.$el);
-	}
+    type: 'qtranslate_image',
+    focus: function() {
+        this.$el = this.$field.find('.acf-image-uploader.current-language');
+        this.$input = this.$el.find('[data-name="id"]');
+        this.$img = this.$el.find('[data-name="image"]');
+
+        this.o = acf.get_data(this.$el);
+    }
 });
 
 /**

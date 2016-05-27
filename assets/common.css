@@ -33,7 +33,11 @@
 	position: relative;
 	top: 1px;
 	z-index: 100;
-	border-color: #dedede;
+    border: 1px solid #ededed;
+    margin-left: -1px;
+    padding: 6px 7px;
+    text-transform: uppercase;
+	cursor: pointer
 }
 
 .multi-language-field input,
@@ -96,4 +100,3 @@
 	background-color: #f5f5f5;
 	border-bottom-color: #f5f5f5;
 }
-
