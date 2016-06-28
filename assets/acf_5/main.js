@@ -20,6 +20,9 @@ acf.fields.qtranslate_file = acf.fields.file.extend({
 	type: 'qtranslate_file',
 	focus: function() {
 		this.$el = this.$field.find('.acf-file-uploader.current-language');
+		this.$input = this.$el.find('[data-name="id"]');
+		this.$img = this.$el.find('[data-name="file"]');
+		
 		this.o = acf.get_data(this.$el);
 	}
 });
