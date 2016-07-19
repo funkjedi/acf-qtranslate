@@ -50,7 +50,7 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 		add_filter( 'acf_the_content', 'do_shortcode', 11);
 
 		// actions
-		add_action('acf/input/admin_footer_js', 	array($this, 'input_admin_footer_js'));
+		add_action('acf/input/admin_footer', 	array($this, 'input_admin_footer'));
 
 		acf_field::__construct();
 	}
@@ -97,19 +97,22 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 		}
 
 		// mode
-		$switch_class = $mode . '-active';
+		$switch_class = ($mode === 'html') ? 'html-active' : 'tmce-active';
 
 		// filter value for editor
 		remove_all_filters('acf_the_editor_content');
-
-		if ($mode == 'tmce') {
-			add_filter('acf_the_editor_content', 'wp_richedit_pre');
-		}
-		else {
-			add_filter('acf_the_editor_content', 'wp_htmledit_pre');
-		}
-
+		
 		global $q_config, $wp_version;
+		
+		// WP 4.3
+		if( version_compare($wp_version, '4.3', '>=' ) ) {
+			add_filter( 'acf_the_editor_content', 'format_for_editor', 10, 2 );			
+		// WP < 4.3
+		} else {
+			$function = ($mode === 'html') ? 'wp_htmledit_pre' : 'wp_richedit_pre';
+			add_filter('acf_the_editor_content', $function, 10, 1);			
+		}
+		
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
 		$currentLanguage = $this->plugin->get_active_language();
@@ -123,14 +126,23 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 
 		$uid = uniqid('acf-editor-');
 		foreach ($languages as $language):
-			$value = apply_filters('acf_the_editor_content', $values[$language]);
+		
 			$id = $uid . "-$language";
 			$name = $field['name'] . "[$language]";
 			$class = $switch_class;
 			if ($language === $currentLanguage) {
 				$class .= ' current-language';
 			}
-
+			// WP 4.3
+			if( version_compare($wp_version, '4.3', '>=' ) ) {
+				$button = 'data-wp-editor-id="' . $id . '"';				
+			// WP < 4.3
+			} else {	
+				$button = 'onclick="switchEditors.switchto(this);"';	
+			}
+	
+			$value = apply_filters('acf_the_editor_content', $values[$language], $mode);
+		
 			?>
 			<div id="wp-<?php echo $id; ?>-wrap" class="acf-editor-wrap wp-core-ui wp-editor-wrap <?php echo $class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
 				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools hide-if-no-js">
@@ -141,8 +153,8 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 					<?php endif; ?>
 					<?php if( user_can_richedit() && $show_tabs ): ?>
 						<div class="wp-editor-tabs">
-							<button id="<?php echo $id; ?>-tmce" class="wp-switch-editor switch-tmce" onclick="switchEditors.switchto(this);" type="button"><?php echo __('Visual', 'acf'); ?></button>
-							<button id="<?php echo $id; ?>-html" class="wp-switch-editor switch-html" onclick="switchEditors.switchto(this);" type="button"><?php echo _x( 'Text', 'Name for the Text editor tab (formerly HTML)', 'acf' ); ?></button>
+							<button id="<?php echo $id; ?>-tmce" class="wp-switch-editor switch-tmce" <?php echo  $button; ?> type="button"><?php echo __('Visual', 'acf'); ?></button>
+							<button id="<?php echo $id; ?>-html" class="wp-switch-editor switch-html" <?php echo  $button; ?> type="button"><?php echo _x( 'Text', 'Name for the Text editor tab (formerly HTML)', 'acf' ); ?></button>
 						</div>
 					<?php endif; ?>
 				</div>

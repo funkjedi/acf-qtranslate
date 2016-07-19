@@ -81,7 +81,9 @@
 		// we must hook into handler and perform updates there
 		var _hooked_repeater_remove = acf.fields.repeater.remove;
 		acf.fields.repeater.remove = function(event) {
-			var row = event.$el.closest('.acf-row');
+			var $el = (typeof event.$el !== 'undefined') ? event.$el : event;
+			var row = $el.closest('.acf-row');
+
 			row.find(_.toArray(field_types).join(',')).filter('.qtranxs-translatable').each(function() {
 				qTranslateConfig.qtx.removeContentHook(this);
 			});

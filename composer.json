@@ -7,19 +7,16 @@
     "wordpress",
     "plugin",
     "acf",
-    "qtranslate",
-    "mqtranslate"
+    "qtranslate"
   ],
-  "homepage": "https://wordpress.org/plugins/acf-qtranslate/",
+  "homepage": "https://github.com/Fruitware/acf-qtranslate",
   "authors": [
     {
-      "name": "funkjedi"
+      "name": "fruitware"
     }
   ],
   "require": {
     "php": ">=5.3.3",
-    "wpackagist/advanced-custom-fields": "*",
-    "fruitware/wp-plugin-mqtranslate": "dev-master"
   }
 }
 
