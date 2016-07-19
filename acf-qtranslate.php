@@ -3,18 +3,18 @@
 Plugin Name: Advanced Custom Fields: qTranslate
 Plugin URI: http://github.com/funkjedi/acf-qtranslate
 Description: Provides multilingual versions of the text, text area, and wysiwyg fields.
-Version: 1.4
+Version: 1.7.8
 Author: funkjedi
 Author URI: http://funkjedi.com
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-// http://support.advancedcustomfields.com/discussion/1181/prease-check-wp3-3-qtranslate-advance-custom-field/p1
+define('ACF_QTRANSLATE_PLUGIN',     __FILE__);
+define('ACF_QTRANSLATE_PLUGIN_DIR', plugin_dir_path(ACF_QTRANSLATE_PLUGIN));
 
 require_once dirname(__FILE__) . '/v4/init.php';
 require_once dirname(__FILE__) . '/v5/init.php';
-
 
 function acf_qtranslate_enabled() {
 	return function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage');
@@ -31,11 +31,10 @@ function acf_qtranslate_acf_major_version() {
 
 
 // qTranslate Monkey Patches
-
 add_action('plugins_loaded', 'acf_qtranslate_monkey_patch', 3);
 function acf_qtranslate_monkey_patch() {
 	global $q_config;
-	
+
 	if (!array_key_exists('js', $q_config))
 	{
 		return;

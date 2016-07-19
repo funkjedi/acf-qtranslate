@@ -1,5 +1,4 @@
 
-
 .qtrans_title_wrap {
 	margin-bottom: 20px;
 	padding: 0 !important;
@@ -15,22 +14,26 @@
 	margin: 0;
 }
 
-
-.acf-wysiwyg-wrap .wp-editor-container { border: 1px solid #e5e5e5 !important; }
+.acf_wysiwyg .wp-editor-container,
+.acf-editor-wrap .wp-editor-container {
+	border: 1px solid #e5e5e5 !important;
+}
 
 .multi-language-field {
 	margin-top: -38px;
 }
 
-.acf-table .multi-language-field {
+.acf-table .multi-language-field,
+.acf-input-table .multi-language-field {
 	margin-top: -6px;
 }
 
 .multi-language-field .wp-switch-editor {
-	border-color: #dedede;
+	float: right;
 	position: relative;
 	top: 1px;
 	z-index: 100;
+	border-color: #dedede;
 }
 
 .multi-language-field input,
@@ -59,22 +62,28 @@
 .multi-language-field > input,
 .multi-language-field > textarea,
 .multi-language-field > fieldset,
-.multi-language-field .acf-wysiwyg-wrap,
+.multi-language-field .acf_wysiwyg,
+.multi-language-field .acf-editor-wrap,
+.multi-language-field .acf-file-uploader,
 .multi-language-field .acf-image-uploader { display: none }
 
 .multi-language-field .acf_input input,
 .multi-language-field .acf_input textarea,
 .multi-language-field .current-language { display: block !important }
 
-.multi-language-field-wysiwyg { margin-top: 0 }
-
-.multi-language-field .acf-image-uploader {
-  padding: 10px 10px 10px;
-  clear: right;
-  border: 1px solid #dfdfdf;
+.multi-language-field-wysiwyg {
+	margin-top: 0;
 }
 
-.multi-language-field .acf-image-uploader.current-language { background: #fff; }
+.multi-language-field .acf-file-uploader,
+.multi-language-field .acf-image-uploader {
+	padding: 20px 10px 10px;
+	clear: right;
+	border: 1px solid #dfdfdf;
+}
+
+.multi-language-field .acf-image-uploader.current-language,
+.multi-language-field .acf-file-uploader { background: #fff; }
 
 .multi-language-field-wysiwyg .wp-switch-editor {
 	background-color: #ebebeb;
