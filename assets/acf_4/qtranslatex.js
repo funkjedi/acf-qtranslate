@@ -57,6 +57,23 @@ jQuery(window).load(function() {
 					tinyMCEPreInit.mceInit[this.id] = mceInit;
 				}
 			}
+
+			/**
+			 * TODO
+			 *  add code to qtranslate-x/admin/js/common.js and minify to common.min.js
+			 *
+			 *  if(window.acf_qtranslate_translate_standard_field_types){
+			 *  	inpField.className += ' ';
+			 *  }
+			 *  	else{ inpField.className += ' qtranxs-translatable';
+			 *  }
+			 *
+			 */
+
+			if(field.hasClass('textarea') && !field.hasClass('qtranxs-translatable')){
+				field.addClass('qtranxs-translatable');
+			}
+
 		});
 
 		// Run in a setTimeout block to give the tinyMCE instance
