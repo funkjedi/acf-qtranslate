@@ -17,11 +17,10 @@ sync:
 	@rm -rf $(WORKING_DIR)
 	@svn co $(REPO_URL) $(WORKING_DIR)
 	@echo "Copying files to trunk"
-	@git ls-tree -r --name-only HEAD | xargs -t -I file rsync -R --exclude 'Makefile' file $(WORKING_DIR)/trunk/
-	@cd $(WORKING_DIR)
-	@svn add trunk/*
-	@svn status
-	@svn commit -m "Syncing with Github"
+	@git ls-tree -r --name-only HEAD | xargs -t -I filename rsync -R --exclude 'Makefile' filename $(WORKING_DIR)/trunk/
+	@cd $(WORKING_DIR); svn add trunk/* --force
+	@cd $(WORKING_DIR); svn status
+	@cd $(WORKING_DIR); svn commit -m "Syncing with Github"
 	@rm -rf $(WORKING_DIR)
 
 release:
