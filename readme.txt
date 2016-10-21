@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.2.1
-Version: 1.7.9
-Stable tag: 1.7.9
+Version: 1.7.10
+Stable tag: 1.7.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,15 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.10 =
+* Bug Fix: (HeikoMamerow) ACF5 File compatibility fix
+* Bug Fix: (Tusko) ACF5 Image compatibility fix
+* Bug Fix: (Tusko) Replace deprecated `acf/input/admin_footer_js` action
+* Bug Fix: (Tusko) Switcher styles fixed
+* Bug Fix: (fburatti) ACF4 WYSIWYG WP 4.3 compatibility fix
+* Bug Fix: (fburatti) WYSIWYG was appending all values together
+* Bug Fix: (fburatti) WP 4.3 PHP warning in WYSIWYG value
 
 = 1.7.9 =
 * Bug Fix: WYSIWYG was creating second acf_settings wp_editor instance
