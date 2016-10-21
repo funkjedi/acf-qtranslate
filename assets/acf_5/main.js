@@ -17,13 +17,14 @@ acf.fields.qtranslate_image = acf.fields.image.extend({
  * Clone functionality from standard File field type
  */
 acf.fields.qtranslate_file = acf.fields.file.extend({
-    type: 'qtranslate_file',
-    focus: function () {
-        this.$el = this.$field.find('.acf-file-uploader.current-language');
-        //add
-        this.$input = this.$el.find('[data-name="id"]');
-        this.o = acf.get_data(this.$el);
-    }
+	type: 'qtranslate_file',
+	focus: function() {
+		this.$el = this.$field.find('.acf-file-uploader.current-language');
+		this.$input = this.$el.find('[data-name="id"]');
+		this.$img = this.$el.find('[data-name="file"]');
+
+		this.o = acf.get_data(this.$el);
+	}
 });
 
 /**
