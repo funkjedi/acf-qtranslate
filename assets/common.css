@@ -28,7 +28,7 @@
 	margin-top: -6px;
 }
 
-.multi-language-field .wp-switch-editor {
+.multi-language-field > .wp-switch-editor {
 	float: right;
 	position: relative;
 	top: 1px;

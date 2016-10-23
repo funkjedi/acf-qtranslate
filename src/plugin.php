@@ -14,7 +14,7 @@ class acf_qtranslate_plugin {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action('plugins_loaded',                  array($this, 'plugins_loaded'), 3);
+		add_action('after_setup_theme',               array($this, 'after_setup_theme'), 3);
 		add_action('acf/input/admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
 		add_action('admin_menu',                      array($this, 'admin_menu'));
 		add_action('admin_init',                      array($this, 'admin_init'));
@@ -26,7 +26,7 @@ class acf_qtranslate_plugin {
 	 * Setup plugin if Advanced Custom Fields is enabled.
 	 * @return void
 	 */
-	public function plugins_loaded() {
+	public function after_setup_theme() {
 		if ($this->acf_enabled() && $this->qtranslate_variant_enabled()) {
 
 			// setup qtranslate fields for ACF 4

@@ -59,6 +59,11 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 == Changelog ==
 
+= 1.7.11 =
+* Core: Enable support for ACF included within theme
+* Bug Fix: Fixed do_action support when removing repeater rows
+* Bug Fix: Removing qTranslateConfig.qtx.addContentHooksTinyMCE calls
+
 = 1.7.10 =
 * Bug Fix: (HeikoMamerow) ACF5 File compatibility fix
 * Bug Fix: (Tusko) ACF5 Image compatibility fix

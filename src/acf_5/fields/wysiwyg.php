@@ -34,20 +34,8 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 			'default_value'	=> '',
 		);
 
-    	// Create an acf version of the_content filter (acf_the_content)
-		if(	!empty($GLOBALS['wp_embed']) ) {
-			add_filter( 'acf_the_content', array( $GLOBALS['wp_embed'], 'run_shortcode' ), 8 );
-			add_filter( 'acf_the_content', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 );
-		}
-
-		add_filter( 'acf_the_content', 'capital_P_dangit', 11 );
-		add_filter( 'acf_the_content', 'wptexturize' );
-		add_filter( 'acf_the_content', 'convert_smilies' );
-		add_filter( 'acf_the_content', 'convert_chars' );
-		add_filter( 'acf_the_content', 'wpautop' );
-		add_filter( 'acf_the_content', 'shortcode_unautop' );
-		add_filter( 'acf_the_content', 'prepend_attachment' );
-		add_filter( 'acf_the_content', 'do_shortcode', 11);
+    	// add acf_the_content filters
+    	$this->add_filters();
 
 		// actions
 		add_action('acf/input/admin_footer', 	array($this, 'input_admin_footer'));
@@ -68,51 +56,89 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 	 */
 	function render_field($field) {
 
+		// global
+   		global $wp_version;
+
+
 		// enqueue
 		acf_enqueue_uploader();
 
+
 		// vars
 		$id = uniqid('acf-editor-');
-		//$id = $field['id'] . '-' . uniqid();
-		$mode = 'html';
+		$default_editor = 'html';
 		$show_tabs = true;
+		$button = '';
+
 
 		// get height
 		$height = acf_get_user_setting('wysiwyg_height', 300);
 		$height = max( $height, 300 ); // minimum height is 300
 
+
 		// detect mode
-		// case: visual tab only
-		if ($field['tabs'] == 'visual') {
-			$mode = 'tmce';
+		if( !user_can_richedit() ) {
+
 			$show_tabs = false;
-		}
-		// case: text tab only
-		elseif ($field['tabs'] == 'text') {
+
+		} elseif( $field['tabs'] == 'visual' ) {
+
+			// case: visual tab only
+			$default_editor = 'tinymce';
 			$show_tabs = false;
+
+		} elseif( $field['tabs'] == 'text' ) {
+
+			// case: text tab only
+			$show_tabs = false;
+
+		} elseif( wp_default_editor() == 'tinymce' ) {
+
+			// case: both tabs
+			$default_editor = 'tinymce';
+
 		}
-		// case: both tabs
-		elseif (wp_default_editor() == 'tinymce') {
-			$mode = 'tmce';
+
+
+		// must be logged in tp upload
+		if( !current_user_can('upload_files') ) {
+
+			$field['media_upload'] = 0;
+
 		}
+
 
 		// mode
-		$switch_class = ($mode === 'html') ? 'html-active' : 'tmce-active';
+		$switch_class = ($default_editor === 'html') ? 'html-active' : 'tmce-active';
+
 
 		// filter value for editor
-		remove_all_filters('acf_the_editor_content');
-		
-		global $q_config, $wp_version;
-		
+		remove_filter( 'acf_the_editor_content', 'format_for_editor', 10, 2 );
+		remove_filter( 'acf_the_editor_content', 'wp_htmledit_pre', 10, 1 );
+		remove_filter( 'acf_the_editor_content', 'wp_richedit_pre', 10, 1 );
+
+
 		// WP 4.3
 		if( version_compare($wp_version, '4.3', '>=' ) ) {
-			add_filter( 'acf_the_editor_content', 'format_for_editor', 10, 2 );			
+
+			add_filter( 'acf_the_editor_content', 'format_for_editor', 10, 2 );
+
+			$button = 'data-wp-editor-id="' . $id . '"';
+
 		// WP < 4.3
 		} else {
-			$function = ($mode === 'html') ? 'wp_htmledit_pre' : 'wp_richedit_pre';
-			add_filter('acf_the_editor_content', $function, 10, 1);			
+
+			$function = ($default_editor === 'html') ? 'wp_htmledit_pre' : 'wp_richedit_pre';
+
+			add_filter('acf_the_editor_content', $function, 10, 1);
+
+			$button = 'onclick="switchEditors.switchto(this);"';
+
 		}
-		
+
+
+		global $q_config;
+
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
 		$currentLanguage = $this->plugin->get_active_language();
@@ -126,23 +152,24 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 
 		$uid = uniqid('acf-editor-');
 		foreach ($languages as $language):
-		
+
 			$id = $uid . "-$language";
 			$name = $field['name'] . "[$language]";
 			$class = $switch_class;
 			if ($language === $currentLanguage) {
 				$class .= ' current-language';
 			}
+
 			// WP 4.3
 			if( version_compare($wp_version, '4.3', '>=' ) ) {
-				$button = 'data-wp-editor-id="' . $id . '"';				
+				$button = 'data-wp-editor-id="' . $id . '"';
 			// WP < 4.3
-			} else {	
-				$button = 'onclick="switchEditors.switchto(this);"';	
+			} else {
+				$button = 'onclick="switchEditors.switchto(this);"';
 			}
-	
-			$value = apply_filters('acf_the_editor_content', $values[$language], $mode);
-		
+
+			$value = apply_filters('acf_the_editor_content', $values[$language], $default_editor);
+
 			?>
 			<div id="wp-<?php echo $id; ?>-wrap" class="acf-editor-wrap wp-core-ui wp-editor-wrap <?php echo $class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
 				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools hide-if-no-js">

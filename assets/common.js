@@ -44,8 +44,8 @@ jQuery(function($) {
 			var id = $(this).attr( 'data-wp-editor-id' );
 			if (id) { // WP 4.3
 				window.switchEditors.go(id, editor);
-			} else { // WP < 4.3		
-				switchEditors.switchto(this);		
+			} else { // WP < 4.3
+				switchEditors.switchto(this);
 			}
 		});
 	});
