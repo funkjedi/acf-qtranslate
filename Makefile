@@ -26,5 +26,5 @@ sync:
 release:
 	@echo "Creating release tag"
 	@svn copy $(REPO_URL)/trunk/ $(REPO_URL)/tags/$(CURRENT_VERSION) -m "Tagging version $(CURRENT_VERSION)"
-	@git tag -a -m "Tagging version $(CURRENT_VERSION)"
+	@git tag -a -m "Tagging version $(CURRENT_VERSION)" "v$(CURRENT_VERSION)"
 	@git push --tags origin master
