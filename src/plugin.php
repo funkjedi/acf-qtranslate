@@ -14,7 +14,7 @@ class acf_qtranslate_plugin {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action('after_setup_theme',               array($this, 'after_setup_theme'), 3);
+		add_action('after_setup_theme',               array($this, 'after_setup_theme'), -10);
 		add_action('acf/input/admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
 		add_action('admin_menu',                      array($this, 'admin_menu'));
 		add_action('admin_init',                      array($this, 'admin_init'));
