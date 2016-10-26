@@ -6,8 +6,8 @@ acf.fields.qtranslate_image = acf.fields.image.extend({
     type: 'qtranslate_image',
     focus: function() {
         this.$el = this.$field.find('.acf-image-uploader.current-language');
-        this.$input = this.$el.find('[data-name="id"]');
-        this.$img = this.$el.find('[data-name="image"]');
+        this.$input = this.$el.find('input[type="hidden"]');
+        this.$img = this.$el.find('img');
 
         this.o = acf.get_data(this.$el);
     }
@@ -17,14 +17,13 @@ acf.fields.qtranslate_image = acf.fields.image.extend({
  * Clone functionality from standard File field type
  */
 acf.fields.qtranslate_file = acf.fields.file.extend({
-	type: 'qtranslate_file',
-	focus: function() {
-		this.$el = this.$field.find('.acf-file-uploader.current-language');
-		this.$input = this.$el.find('[data-name="id"]');
-		this.$img = this.$el.find('[data-name="file"]');
+    type: 'qtranslate_file',
+    focus: function() {
+        this.$el = this.$field.find('.acf-file-uploader.current-language');
+        this.$input = this.$el.find('input[type="hidden"]');
 
-		this.o = acf.get_data(this.$el);
-	}
+        this.o = acf.get_data(this.$el);
+    }
 });
 
 /**

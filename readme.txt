@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.2.1
-Version: 1.7.12
-Stable tag: 1.7.12
+Version: 1.7.13
+Stable tag: 1.7.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,9 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.13 =
+* Bug Fix: ACF5 Image selection fix
 
 = 1.7.12 =
 * Bug Fix: Fixed ACF5 Image/File edit and delete buttons
