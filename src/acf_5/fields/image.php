@@ -67,29 +67,34 @@ class acf_qtranslate_acf_5_image extends acf_field_image {
 	 */
 	function render_field($field) {
 		global $q_config;
+
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
 		$currentLanguage = $this->plugin->get_active_language();
 
-		// enqueue
-		acf_enqueue_uploader();
 
 		// vars
+		$uploader = acf_get_setting('uploader');
+
+		// enqueue
+		if( $uploader == 'wp' ) {
+			acf_enqueue_uploader();
+		}
+
+		// vars
+		$url = '';
+		$alt = '';
 		$div = array(
 			'class'					=> 'acf-image-uploader acf-cf',
 			'data-preview_size'		=> $field['preview_size'],
 			'data-library'			=> $field['library'],
-			'data-mime_types'		=> $field['mime_types']
+			'data-mime_types'		=> $field['mime_types'],
+			'data-uploader'			=> $uploader
 		);
 
-		$input_atts = array(
-			'type'					=> 'hidden',
-			'name'					=> $field['name'],
-			'value'					=> $field['value'],
-			'data-name'				=> 'value-id'
-		);
+		// get size of preview value
+		$size = acf_get_image_size($field['preview_size']);
 
-		$url = '';
 
 		echo '<div class="multi-language-field multi-language-field-image">';
 
@@ -101,25 +106,28 @@ class acf_qtranslate_acf_5_image extends acf_field_image {
 			echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
 
+		$field_name = $field['name'];
+
 		foreach ($languages as $language):
 
-			$input_atts['name'] = $field['name'] . '[' . $language . ']';
+			$field['name'] = $field_name . '[' . $language . ']';
 			$field['value'] = $values[$language];
 			$div['data-language'] = $language;
 			$div['class'] = 'acf-image-uploader acf-cf';
 
 			// has value?
-			if( $field['value'] && is_numeric($field['value']) ) {
+			if( $field['value'] ) {
+				// update vars
 				$url = wp_get_attachment_image_src($field['value'], $field['preview_size']);
-				$url = $url[0];
+				$alt = get_post_meta($field['value'], '_wp_attachment_image_alt', true);
 
-				$div['class'] .= ' has-value';
-			}
+				// url exists
+				if( $url ) $url = $url[0];
 
-			// basic?
-			$basic = !current_user_can('upload_files');
-			if ($basic) {
-				$div['class'] .= ' basic';
+				// url exists
+				if( $url ) {
+					$div['class'] .= ' has-value';
+				}
 			}
 
 			if ($language === $currentLanguage) {
@@ -129,25 +137,30 @@ class acf_qtranslate_acf_5_image extends acf_field_image {
 			?>
 			<div <?php acf_esc_attr_e( $div ); ?>>
 				<div class="acf-hidden">
-					<?php acf_hidden_input(array( 'name' => $input_atts['name'], 'value' => $field['value'], 'data-name' => 'id' )); ?>
+					<?php acf_hidden_input(array( 'name' => $field['name'], 'value' => $field['value'] )); ?>
 				</div>
-				<div class="view show-if-value acf-soh">
-					<img data-name="image" src="<?php echo $url; ?>" alt=""/>
+				<div class="view show-if-value acf-soh" <?php if( $size['width'] ) echo 'style="max-width: '.$size['width'].'px"'; ?>>
+					<img data-name="image" src="<?php echo $url; ?>" alt="<?php echo $alt; ?>"/>
 					<ul class="acf-hl acf-soh-target">
-						<?php if( !$basic ): ?>
-							<li><a class="acf-icon dark" data-name="edit" href="#"><i class="acf-sprite-edit"></i></a></li>
+						<?php if( $uploader != 'basic' ): ?>
+							<li><a class="acf-icon -pencil dark" data-name="edit" href="#" title="<?php _e('Edit', 'acf'); ?>"></a></li>
 						<?php endif; ?>
-						<li><a class="acf-icon dark" data-name="remove" href="#"><i class="acf-sprite-delete"></i></a></li>
+						<li><a class="acf-icon -cancel dark" data-name="remove" href="#" title="<?php _e('Remove', 'acf'); ?>"></a></li>
 					</ul>
 				</div>
 				<div class="view hide-if-value">
-					<?php if( $basic ): ?>
+					<?php if( $uploader == 'basic' ): ?>
+
 						<?php if( $field['value'] && !is_numeric($field['value']) ): ?>
 							<div class="acf-error-message"><p><?php echo $field['value']; ?></p></div>
 						<?php endif; ?>
+
 						<input type="file" name="<?php echo $field['name']; ?>" id="<?php echo $field['id']; ?>" />
+
 					<?php else: ?>
-						<p style="margin:0;"><?php _e('No image selected','acf'); ?> <a data-name="add" class="acf-button" href="#"><?php _e('Add Image','acf'); ?></a></p>
+
+						<p style="margin:0;"><?php _e('No image selected','acf'); ?> <a data-name="add" class="acf-button button" href="#"><?php _e('Add Image','acf'); ?></a></p>
+
 					<?php endif; ?>
 				</div>
 			</div>
