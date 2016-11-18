@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.6.1
-Version: 1.7.15
-Stable tag: 1.7.15
+Version: 1.7.16
+Stable tag: 1.7.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,11 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.16 =
+* Bug Fix: Fixed ACF4 support for standard WYSIWYG field
+* Bug Fix: Updated ACF4 qTranslate WYSIWYG field
+* Bug Fix: Prevent translation of key `acf-field-group` fields
 
 = 1.7.15 =
 * Core: Display LSB on ACF Option pages
