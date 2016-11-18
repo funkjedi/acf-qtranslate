@@ -18,12 +18,6 @@
 		// Enable the language switching buttons
 		qTranslateConfig.qtx.enableLanguageSwitchingButtons('block');
 
-		// Add display hooks to ACF metaboxes
-		jQuery('.acf-postbox h3 span').each(function() {
-			this.id = _.uniqueId('acf-postbox-h3-span');
-			qTranslateConfig.qtx.addDisplayHookById(this.id);
-		});
-
 
 		// Ensure that translation of standard field types is enabled
 		if (!window.acf_qtranslate_translate_standard_field_types) {

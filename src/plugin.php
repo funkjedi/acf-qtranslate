@@ -19,6 +19,7 @@ class acf_qtranslate_plugin {
 		add_action('admin_menu',                      array($this, 'admin_menu'));
 		add_action('admin_init',                      array($this, 'admin_init'));
 
+		add_filter('qtranslate_load_admin_page_config',                             array($this, 'qtranslate_load_admin_page_config'));
 		add_filter('plugin_action_links_' . plugin_basename(ACF_QTRANSLATE_PLUGIN), array($this, 'plugin_action_links'));
 	}
 
@@ -172,6 +173,34 @@ class acf_qtranslate_plugin {
 	public function plugin_action_links($links) {
 		array_unshift($links, '<a href="options-general.php?page=acf-qtranslate">Settings</a>');
 		return $links;
+	}
+
+	/**
+	 * Enable the display of the LSB on ACF Options pages.
+	 * @param array
+	 * @return array
+	 */
+	public function qtranslate_load_admin_page_config($config)
+	{
+		$config['acf-options-page'] = array(
+			'pages'   => array('admin.php' => 'page='),
+			'anchors' => array('poststuff' => array('where' => 'first last')),
+			'forms'   => array(
+				'post' => array(
+					'fields' => array(
+						'acf4-field-group-hX' => array(
+							'jquery' => '.acf_postbox h2 span,.acf_postbox h3 span',
+							'encode' => 'display',
+						),
+						'acf5-field-group-hX' => array(
+							'jquery' => '.acf-postbox h2 span,.acf-postbox h3 span',
+							'encode' => 'display',
+						),
+				)),
+			),
+		);
+
+		return $config;
 	}
 
 	/**
