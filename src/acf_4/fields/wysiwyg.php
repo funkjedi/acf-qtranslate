@@ -29,7 +29,28 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 			'default_value'	=>	'',
 		);
 
+		// Create an acf version of the_content filter (acf_the_content)
+		if(	isset($GLOBALS['wp_embed']) ) {
+
+			add_filter( 'acf_the_content', array( $GLOBALS['wp_embed'], 'run_shortcode' ), 8 );
+			add_filter( 'acf_the_content', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 );
+
+		}
+
+		add_filter( 'acf_the_content', 'capital_P_dangit', 11 );
+		add_filter( 'acf_the_content', 'wptexturize' );
+		add_filter( 'acf_the_content', 'convert_smilies' );
+		add_filter( 'acf_the_content', 'convert_chars' );
+		add_filter( 'acf_the_content', 'wpautop' );
+		add_filter( 'acf_the_content', 'shortcode_unautop' );
+		//add_filter( 'acf_the_content', 'prepend_attachment' ); *should only be for the_content (causes double image on attachment page)
+		add_filter( 'acf_the_content', 'do_shortcode', 11);
+
 		acf_field::__construct();
+
+		// filters
+    	add_filter( 'acf/fields/wysiwyg/toolbars', array( $this, 'toolbars'), 1, 1 );
+    	add_filter( 'mce_external_plugins', array( $this, 'mce_external_plugins'), 20, 1 );
 	}
 
 	/*
@@ -61,17 +82,24 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 		$languages = qtrans_getSortedLanguages(true);
 		$values = qtrans_split($field['value'], $quicktags = true);
 		$currentLanguage = $this->plugin->get_active_language();
-		
+
+		// vars
+		//$id = uniqid('acf-editor-');
+		$id = 'wysiwyg-' . $field['id'] . '-' . uniqid();
+		$default_editor = 'tinymce';
+
 		// filter value for editor
-		remove_all_filters('acf_the_editor_content');
-		
+		remove_filter( 'acf_the_editor_content', 'format_for_editor', 10, 2 );
+		remove_filter( 'acf_the_editor_content', 'wp_htmledit_pre', 10, 1 );
+		remove_filter( 'acf_the_editor_content', 'wp_richedit_pre', 10, 1 );
+
 		// WP 4.3
-		if( version_compare($wp_version, '4.3', '>=' ) ) {				
-			add_filter( 'acf_the_editor_content', 'format_for_editor' );	
+		if( version_compare($wp_version, '4.3', '>=' ) ) {
+			add_filter( 'acf_the_editor_content', 'format_for_editor', 10, 2 );
 		// WP < 4.3
-		} else {		
-			$function = user_can_richedit() ? 'wp_richedit_pre' : 'wp_htmledit_pre';	
-			add_filter('acf_the_editor_content', $function);			
+		} else {
+			$function = user_can_richedit() ? 'wp_richedit_pre' : 'wp_htmledit_pre';
+			add_filter('acf_the_editor_content', $function, 10, 1);
 		}
 
 		echo '<div class="multi-language-field multi-language-field-wysiwyg">';
@@ -82,32 +110,25 @@ class acf_qtranslate_acf_4_wysiwyg extends acf_field_wysiwyg {
 		}
 
 		foreach ($languages as $language):
-			$value = $values[$language];
 			$id = 'wysiwyg-' . $field['id'] . '-' . uniqid();
 			$name = $field['name'] . "[$language]";
-			$class = ($language === $currentLanguage) ? 'acf_wysiwyg wp-editor-wrap current-language' : 'acf_wysiwyg wp-editor-wrap';
+			$class = ($language === $currentLanguage) ? 'current-language' : '';
+			$value = apply_filters('acf_the_editor_content', $values[$language], 'tinymce');
 
 			?>
-			<div id="wp-<?php echo $id; ?>-wrap" class="<?php echo $class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
-				<?php if( user_can_richedit() && $field['media_upload'] == 'yes' ): ?>
-					<?php if( version_compare($wp_version, '3.3', '<') ): ?>
-						<div id="editor-toolbar">
-							<div id="media-buttons" class="hide-if-no-js">
-								<?php do_action( 'media_buttons' ); ?>
-							</div>
-						</div>
-					<?php else: ?>
-						<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
-							<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">
-								<?php do_action( 'media_buttons' ); ?>
-							</div>
-						</div>
+			<div id="wp-<?php echo $id; ?>-wrap" class="acf_wysiwyg wp-core-ui wp-editor-wrap tmce-active <?php echo $class; ?>" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>" data-language="<?php echo $language; ?>">
+				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools hide-if-no-js">
+					<?php if( user_can_richedit() && $field['media_upload'] == 'yes' ): ?>
+					<div id="wp-<?php echo $id; ?>-media-buttons" class="wp-media-buttons">
+						<?php do_action( 'media_buttons', $id ); ?>
+					</div>
 					<?php endif; ?>
-				<?php endif; ?>
+				</div>
 				<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
-					<textarea id="<?php echo $id; ?>" class="qtx-wp-editor-area" name="<?php echo $name; ?>" ><?php	echo apply_filters( 'acf_the_editor_content', $value, 'tinymce' ); ?></textarea>
+					<textarea id="<?php echo $id; ?>" class="qtx-wp-editor-area" name="<?php echo $name; ?>"><?php echo $value; ?></textarea>
 				</div>
 			</div>
+
 		<?php endforeach;
 
 		echo '</div>';
