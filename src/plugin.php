@@ -16,6 +16,7 @@ class acf_qtranslate_plugin {
 	public function __construct() {
 		add_action('after_setup_theme',               array($this, 'after_setup_theme'), -10);
 		add_action('acf/input/admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
+		add_action('admin_footer',                    array($this, 'admin_footer'));
 		add_action('admin_menu',                      array($this, 'admin_menu'));
 		add_action('admin_init',                      array($this, 'admin_init'));
 
@@ -166,6 +167,14 @@ class acf_qtranslate_plugin {
 	}
 
 	/**
+	 * Output a hidden block that can be use to force qTranslate-X
+	 * to include the LSB.
+	 */
+	public function admin_footer() {
+		echo '<span id="acf-qtranslate-lsb-shim" style="display:none">[:en]LSB[:]</span>';
+	}
+
+	/**
 	 * Add settings link on plugin page.
 	 * @param array
 	 * @return array
@@ -182,18 +191,43 @@ class acf_qtranslate_plugin {
 	 */
 	public function qtranslate_load_admin_page_config($config)
 	{
-		$config['acf-options-page'] = array(
-			'pages'   => array('admin.php' => 'page='),
-			'anchors' => array('poststuff' => array('where' => 'first last')),
-			'forms'   => array(
-				'post' => array(
+		$config['acf-display-nodes'] = array(
+			'pages' => array('post.php' => '', 'admin.php' => 'page='),
+			'forms' => array(
+				'wpwrap' => array(
 					'fields' => array(
-						'acf4-field-group-hX' => array(
+						'lsb-shim' => array(
+							'jquery' => '#acf-qtranslate-lsb-shim',
+							'encode' => 'display',
+						),
+						'acf4-field-group-handle' => array(
 							'jquery' => '.acf_postbox h2 span,.acf_postbox h3 span',
 							'encode' => 'display',
 						),
-						'acf5-field-group-hX' => array(
+						'acf5-field-group-handle' => array(
 							'jquery' => '.acf-postbox h2 span,.acf-postbox h3 span',
+							'encode' => 'display',
+						),
+						'acf5-field-label' => array(
+							'jquery' => '.acf-field .acf-label label',
+							'encode' => 'display',
+						),
+						'acf5-field-description' => array(
+							'jquery' => '.acf-field .acf-label p.description',
+							'encode' => 'display',
+						),
+				)),
+			),
+		);
+
+		$config['acf-field-group'] = array(
+			'pages'     => array('post.php' => ''),
+			'post_type' => 'acf-field-group',
+			'forms'     => array(
+				'post' => array(
+					'fields' => array(
+						'field-group-object-label' => array(
+							'jquery' => '.li-field-label .edit-field',
 							'encode' => 'display',
 						),
 				)),
