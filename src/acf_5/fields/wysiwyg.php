@@ -114,8 +114,7 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 
 		// filter value for editor
 		remove_filter( 'acf_the_editor_content', 'format_for_editor', 10, 2 );
-		remove_filter( 'acf_the_editor_content', 'wp_htmledit_pre', 10, 1 );
-		remove_filter( 'acf_the_editor_content', 'wp_richedit_pre', 10, 1 );
+		
 
 
 		// WP 4.3
@@ -127,7 +126,9 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 
 		// WP < 4.3
 		} else {
-
+			remove_filter( 'acf_the_editor_content', 'wp_htmledit_pre', 10, 1 );
+			remove_filter( 'acf_the_editor_content', 'wp_richedit_pre', 10, 1 );
+			
 			$function = ($default_editor === 'html') ? 'wp_htmledit_pre' : 'wp_richedit_pre';
 
 			add_filter('acf_the_editor_content', $function, 10, 1);
