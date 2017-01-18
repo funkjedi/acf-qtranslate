@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.6.1
-Version: 1.7.17
-Stable tag: 1.7.17
+Version: 1.7.18
+Stable tag: 1.7.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,10 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.18 =
+* Core: Prevent error on older versions of ACF5
+* Bug Fix: Updated ACF5 qTranslate File field to match recent ACF update
 
 = 1.7.17 =
 * Core: Initialize on either `plugins_loaded` or `after_setup_theme`

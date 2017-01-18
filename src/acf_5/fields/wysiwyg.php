@@ -34,8 +34,10 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 			'default_value'	=> '',
 		);
 
-    	// add acf_the_content filters
-    	$this->add_filters();
+		// add acf_the_content filters
+		if (method_exists($this, 'add_filters')) {
+			$this->add_filters();
+		}
 
 		// actions
 		add_action('acf/input/admin_footer', 	array($this, 'input_admin_footer'));
