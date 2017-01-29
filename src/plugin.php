@@ -17,7 +17,7 @@ class acf_qtranslate_plugin {
 		add_action('plugins_loaded',                  array($this, 'init'), 3);
 		add_action('after_setup_theme',               array($this, 'init'), -10);
 		add_action('acf/input/admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-		add_action('admin_footer',                    array($this, 'admin_footer'));
+		add_action('admin_footer',                    array($this, 'admin_footer'), -10);
 		add_action('admin_menu',                      array($this, 'admin_menu'));
 		add_action('admin_init',                      array($this, 'admin_init'));
 
@@ -101,7 +101,26 @@ class acf_qtranslate_plugin {
 	 * to include the LSB.
 	 */
 	public function admin_footer() {
-		echo '<span id="acf-qtranslate-lsb-shim" style="display:none">[:en]LSB[:]</span>';
+?>
+<script type="text/javascript">
+(function($){
+	var anchors = {
+		'#post-body-content': 'prepend',
+		'#widgets-right': 'before',
+		'#posts-filter': 'prepend',
+		'#wpbody-content h1': 'after',
+		'#wpbody-content': 'prepend'
+	};
+	$.each(anchors, function(anchor, fn){
+		var $anchor = $(anchor);
+		if ($anchor.length) {
+			$anchor[fn]('<span id="acf-qtranslate-lsb-shim" style="display:none">[:en]LSB[:]</span>');
+			return false;
+		}
+	});
+})(jQuery);
+</script>
+<?php
 	}
 
 	/**
@@ -121,9 +140,21 @@ class acf_qtranslate_plugin {
 	 */
 	public function qtranslate_load_admin_page_config($config)
 	{
+		$pages = array(
+			'post.php' => '',
+			'admin.php' => 'page=',
+		);
+
+		foreach (explode("\n", $this->get_plugin_setting('show_on_pages')) as $page) {
+			$pages[$page] = '';
+		}
+
 		$config['acf-display-nodes'] = array(
-			'pages' => array('post.php' => '', 'admin.php' => 'page='),
-			'forms' => array(
+			'pages'   => $pages,
+			'anchors' => array(
+				'acf-qtranslate-lsb-shim' => array('where' => 'after'),
+			),
+			'forms'   => array(
 				'wpwrap' => array(
 					'fields' => array(
 						'lsb-shim' => array(
@@ -213,6 +244,14 @@ class acf_qtranslate_plugin {
 			'acf_qtranslate',
 			'qtranslatex_section'
 		);
+
+		add_settings_field(
+			'show_on_pages',
+			'Display the LSB on the following pages',
+			array($this, 'render_setting_show_on_pages'),
+			'acf_qtranslate',
+			'qtranslatex_section'
+		);
 	}
 
 	/**
@@ -259,6 +298,16 @@ class acf_qtranslate_plugin {
 	function render_setting_show_language_tabs() {
 		?>
 		<input type="checkbox" name="acf_qtranslate[show_language_tabs]" <?php checked($this->get_plugin_setting('show_language_tabs'), 1); ?> value="1">
+		<?php
+	}
+
+	/**
+	 * Render setting.
+	 */
+	function render_setting_show_on_pages() {
+		?>
+		<textarea name="acf_qtranslate[show_on_pages]" style="max-width:500px;width:100%;height:200px;padding-top:6px" placeholder="post.php"><?= esc_html($this->get_plugin_setting('show_on_pages')) ?></textarea><br>
+		<small>Enter each page on it's own line</small>
 		<?php
 	}
 
