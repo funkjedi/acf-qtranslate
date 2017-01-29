@@ -200,9 +200,22 @@ class acf_qtranslate_acf_5_file extends acf_field_file {
 	 *
 	 *  @return	$value - the modified value
 	 */
-	function update_value($value, $post_id, $field) {
-		$value = parent::update_value($value, $post_id, $field);
-		return qtrans_join($value);
+	function update_value($values, $post_id, $field) {
+
+		// validate
+		if ( !is_array($values) ) return false;
+
+		foreach ($values as $value) {
+
+			// bail early if not attachment ID
+			if( !$value || !is_numeric($value) ) continue;
+
+			// maybe connect attacments to post
+			acf_connect_attachment_to_post( (int) $value, $post_id );
+
+		}
+
+		return qtrans_join($values);
 	}
 
 }

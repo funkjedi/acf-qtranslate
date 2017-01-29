@@ -21,6 +21,7 @@ jQuery(function($) {
 		parent.find('.current-language').removeClass('current-language');
 		parent.find('[data-language="' + language + '"]').addClass('current-language');
 		parent.find('input[data-language="' + language + '"], textarea[data-language="' + language + '"]').focus();
+		$('.qtranxs-lang-switch[lang="' + language + '"]:first').trigger('click');
 	});
 
 	/**

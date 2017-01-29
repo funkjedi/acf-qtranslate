@@ -186,8 +186,23 @@ class acf_qtranslate_acf_5_image extends acf_field_image {
 	 *  @return	$value - the modified value
 	 */
 	function update_value($value, $post_id, $field) {
-		$value = parent::update_value($value, $post_id, $field);
-		return qtrans_join($value);
+		return acf_get_field_type('qtranslate_file')->update_value( $value, $post_id, $field );
+	}
+
+	/*
+	*  validate_value
+	*
+	*  This function will validate a basic file input
+	*
+	*  @type	function
+	*  @date	11/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	function validate_value( $valid, $value, $field, $input ){
+		return acf_get_field_type('qtranslate_file')->validate_value( $valid, $value, $field, $input );
 	}
 
 }
