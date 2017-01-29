@@ -3,7 +3,7 @@
 Plugin Name: Advanced Custom Fields: qTranslate
 Plugin URI: http://github.com/funkjedi/acf-qtranslate
 Description: Provides multilingual versions of the text, text area, and wysiwyg fields.
-Version: 1.7.20
+Version: 1.7.21
 Author: funkjedi
 Author URI: http://funkjedi.com
 License: GPLv2 or later

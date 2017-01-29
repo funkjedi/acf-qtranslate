@@ -205,14 +205,16 @@ class acf_qtranslate_acf_5_file extends acf_field_file {
 		// validate
 		if ( !is_array($values) ) return false;
 
-		foreach ($values as $value) {
+		if (function_exists('acf_connect_attachment_to_post')) {
+			foreach ($values as $value) {
 
-			// bail early if not attachment ID
-			if( !$value || !is_numeric($value) ) continue;
+				// bail early if not attachment ID
+				if( !$value || !is_numeric($value) ) continue;
 
-			// maybe connect attacments to post
-			acf_connect_attachment_to_post( (int) $value, $post_id );
+				// maybe connect attacments to post
+				acf_connect_attachment_to_post( (int) $value, $post_id );
 
+			}
 		}
 
 		return qtrans_join($values);
