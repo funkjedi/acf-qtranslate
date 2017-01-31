@@ -146,7 +146,10 @@ class acf_qtranslate_plugin {
 		);
 
 		foreach (explode("\n", $this->get_plugin_setting('show_on_pages')) as $page) {
-			$pages[$page] = '';
+			$page = trim($page);
+			if ($page) {
+				$pages[$page] = '';
+			}
 		}
 
 		$config['acf-display-nodes'] = array(
