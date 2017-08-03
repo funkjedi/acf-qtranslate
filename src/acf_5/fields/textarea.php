@@ -1,6 +1,12 @@
 <?php
 
-class acf_qtranslate_acf_5_textarea extends acf_field {
+if($this->acf5_current_version() < 5.6) {
+    class acf_qtranslate_acf_5_textarea_dynamic extends acf_field_textarea {}
+} else {
+    class acf_qtranslate_acf_5_textarea_dynamic extends acf_field {}
+}
+
+class acf_qtranslate_acf_5_textarea extends acf_qtranslate_acf_5_textarea_dynamic {
 
     /**
      * The plugin instance.

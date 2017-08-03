@@ -1,6 +1,12 @@
 <?php
 
-class acf_qtranslate_acf_5_file extends acf_field {
+if($this->acf5_current_version() < 5.6) {
+    class acf_qtranslate_acf_5_file_dynamic extends acf_field_file {}
+} else {
+    class acf_qtranslate_acf_5_file_dynamic extends acf_field {}
+}
+
+class acf_qtranslate_acf_5_file extends acf_qtranslate_acf_5_file_dynamic {
 
     /**
      * The plugin instance.
