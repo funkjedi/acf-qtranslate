@@ -1,223 +1,223 @@
 <?php
 
-class acf_qtranslate_acf_5_file extends acf_field_file {
+class acf_qtranslate_acf_5_file extends acf_field {
 
-	/**
-	 * The plugin instance.
-	 * @var \acf_qtranslate_plugin
-	 */
-	protected $plugin;
-
-
-	/*
-	 *  __construct
-	 *
-	 *  This function will setup the field type data
-	 *
-	 *  @type	function
-	 *  @date	5/03/2014
-	 *  @since	5.0.0
-	 *
-	 *  @param	n/a
-	 *  @return	n/a
-	 */
-	function __construct($plugin) {
-		$this->plugin = $plugin;
-
-		$this->name = 'qtranslate_file';
-		$this->label = __("File", 'acf');
-		$this->category = __("qTranslate", 'acf');
-		$this->defaults = array(
-			'return_format' => 'array',
-			'library'       => 'all',
-			'min_size'      => 0,
-			'max_size'      => 0,
-			'mime_types'    => ''
-		);
-		$this->l10n  = array(
-			'select'     => __("Select File",'acf'),
-			'edit'       => __("Edit File",'acf'),
-			'update'     => __("Update File",'acf'),
-			'uploadedTo' => __("uploaded to this post",'acf'),
-		);
+    /**
+     * The plugin instance.
+     * @var \acf_qtranslate_plugin
+     */
+    protected $plugin;
 
 
-		// filters
-		add_filter('get_media_item_args',			array($this, 'get_media_item_args'));
+    /*
+     *  __construct
+     *
+     *  This function will setup the field type data
+     *
+     *  @type	function
+     *  @date	5/03/2014
+     *  @since	5.0.0
+     *
+     *  @param	n/a
+     *  @return	n/a
+     */
+    function __construct($plugin) {
+        $this->plugin = $plugin;
 
-		acf_field::__construct();
-	}
+        $this->name = 'qtranslate_file';
+        $this->label = __("File", 'acf');
+        $this->category = __("qTranslate", 'acf');
+        $this->defaults = array(
+            'return_format' => 'array',
+            'library'       => 'all',
+            'min_size'      => 0,
+            'max_size'      => 0,
+            'mime_types'    => ''
+        );
+        $this->l10n  = array(
+            'select'     => __("Select File",'acf'),
+            'edit'       => __("Edit File",'acf'),
+            'update'     => __("Update File",'acf'),
+            'uploadedTo' => __("uploaded to this post",'acf'),
+        );
 
-	/*
-	 *  render_field()
-	 *
-	 *  Create the HTML interface for your field
-	 *
-	 *  @param	$field - an array holding all the field's data
-	 *
-	 *  @type	action
-	 *  @since	3.6
-	 *  @date	23/01/13
-	 */
-	function render_field($field) {
-		global $q_config;
 
-		$languages = qtrans_getSortedLanguages(true);
-		$values = qtrans_split($field['value'], $quicktags = true);
-		$currentLanguage = $this->plugin->get_active_language();
+        // filters
+        add_filter('get_media_item_args',			array($this, 'get_media_item_args'));
 
-		// vars
-		$uploader = acf_get_setting('uploader');
+        acf_field::__construct();
+    }
 
-		// enqueue
-		if( $uploader == 'wp' ) {
-			acf_enqueue_uploader();
-		}
+    /*
+     *  render_field()
+     *
+     *  Create the HTML interface for your field
+     *
+     *  @param	$field - an array holding all the field's data
+     *
+     *  @type	action
+     *  @since	3.6
+     *  @date	23/01/13
+     */
+    function render_field($field) {
+        global $q_config;
 
-		// vars
-		$o = array(
-			'icon'		=> '',
-			'title'		=> '',
-			'url'		=> '',
-			'filesize'	=> '',
-			'filename'	=> '',
-		);
+        $languages = qtrans_getSortedLanguages(true);
+        $values = qtrans_split($field['value'], $quicktags = true);
+        $currentLanguage = $this->plugin->get_active_language();
 
-		$div = array(
-			'class'				=> 'acf-file-uploader acf-cf',
-			'data-library' 		=> $field['library'],
-			'data-mime_types'	=> $field['mime_types'],
-			'data-uploader'		=> $uploader
-		);
+        // vars
+        $uploader = acf_get_setting('uploader');
 
-		echo '<div class="multi-language-field multi-language-field-image">';
+        // enqueue
+        if( $uploader == 'wp' ) {
+            acf_enqueue_uploader();
+        }
 
-		foreach ($languages as $language) {
-			$class = 'wp-switch-editor';
-			if ($language === $currentLanguage) {
-				$class .= ' current-language';
-			}
-			echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
-		}
+        // vars
+        $o = array(
+            'icon'		=> '',
+            'title'		=> '',
+            'url'		=> '',
+            'filesize'	=> '',
+            'filename'	=> '',
+        );
 
-		$field_name = $field['name'];
+        $div = array(
+            'class'				=> 'acf-file-uploader acf-cf',
+            'data-library' 		=> $field['library'],
+            'data-mime_types'	=> $field['mime_types'],
+            'data-uploader'		=> $uploader
+        );
 
-		foreach ($languages as $language):
+        echo '<div class="multi-language-field multi-language-field-image">';
 
-			$field['name'] = $field_name . '[' . $language . ']';
-			$field['value'] = $values[$language];
-			$div['data-language'] = $language;
-			$div['class'] = 'acf-file-uploader acf-cf';
+        foreach ($languages as $language) {
+            $class = 'wp-switch-editor';
+            if ($language === $currentLanguage) {
+                $class .= ' current-language';
+            }
+            echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
+        }
 
-			// has value?
-			if( $field['value'] ) {
-				$file = get_post( $field['value'] );
-				if( $file ) {
-					$o['icon'] = wp_mime_type_icon( $file->ID );
-					$o['title']	= $file->post_title;
-					$o['filesize'] = @size_format(filesize( get_attached_file( $file->ID ) ));
-					$o['url'] = wp_get_attachment_url( $file->ID );
+        $field_name = $field['name'];
 
-					$explode = explode('/', $o['url']);
-					$o['filename'] = end( $explode );
-				}
+        foreach ($languages as $language):
 
-				// url exists
-				if( $o['url'] ) {
-					$div['class'] .= ' has-value';
-				}
-			}
+            $field['name'] = $field_name . '[' . $language . ']';
+            $field['value'] = $values[$language];
+            $div['data-language'] = $language;
+            $div['class'] = 'acf-file-uploader acf-cf';
 
-			if ($language === $currentLanguage) {
-				$div['class'] .= ' current-language';
-			}
+            // has value?
+            if( $field['value'] ) {
+                $file = get_post( $field['value'] );
+                if( $file ) {
+                    $o['icon'] = wp_mime_type_icon( $file->ID );
+                    $o['title']	= $file->post_title;
+                    $o['filesize'] = @size_format(filesize( get_attached_file( $file->ID ) ));
+                    $o['url'] = wp_get_attachment_url( $file->ID );
 
-			?>
-			<div <?php acf_esc_attr_e($div); ?>>
-				<div class="acf-hidden">
-					<?php acf_hidden_input(array( 'name' => $field['name'], 'value' => $field['value'], 'data-name' => 'id' )); ?>
-				</div>
-				<div class="show-if-value file-wrap acf-soh">
-					<div class="file-icon">
-						<img data-name="icon" src="<?php echo $o['icon']; ?>" alt=""/>
-					</div>
-					<div class="file-info">
-						<p>
-							<strong data-name="title"><?php echo $o['title']; ?></strong>
-						</p>
-						<p>
-							<strong><?php _e('File name', 'acf'); ?>:</strong>
-							<a data-name="filename" href="<?php echo $o['url']; ?>" target="_blank"><?php echo $o['filename']; ?></a>
-						</p>
-						<p>
-							<strong><?php _e('File size', 'acf'); ?>:</strong>
-							<span data-name="filesize"><?php echo $o['filesize']; ?></span>
-						</p>
+                    $explode = explode('/', $o['url']);
+                    $o['filename'] = end( $explode );
+                }
 
-						<ul class="acf-hl acf-soh-target">
-							<?php if( $uploader != 'basic' ): ?>
-								<li><a class="acf-icon -pencil dark" data-name="edit" href="#"></a></li>
-							<?php endif; ?>
-							<li><a class="acf-icon -cancel dark" data-name="remove" href="#"></a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="hide-if-value">
-					<?php if( $uploader == 'basic' ): ?>
+                // url exists
+                if( $o['url'] ) {
+                    $div['class'] .= ' has-value';
+                }
+            }
 
-						<?php if( $field['value'] && !is_numeric($field['value']) ): ?>
-							<div class="acf-error-message"><p><?php echo $field['value']; ?></p></div>
-						<?php endif; ?>
+            if ($language === $currentLanguage) {
+                $div['class'] .= ' current-language';
+            }
 
-						<input type="file" name="<?php echo $field['name']; ?>" id="<?php echo $field['id']; ?>" />
+            ?>
+            <div <?php acf_esc_attr_e($div); ?>>
+                <div class="acf-hidden">
+                    <?php acf_hidden_input(array( 'name' => $field['name'], 'value' => $field['value'], 'data-name' => 'id' )); ?>
+                </div>
+                <div class="show-if-value file-wrap acf-soh">
+                    <div class="file-icon">
+                        <img data-name="icon" src="<?php echo $o['icon']; ?>" alt=""/>
+                    </div>
+                    <div class="file-info">
+                        <p>
+                            <strong data-name="title"><?php echo $o['title']; ?></strong>
+                        </p>
+                        <p>
+                            <strong><?php _e('File name', 'acf'); ?>:</strong>
+                            <a data-name="filename" href="<?php echo $o['url']; ?>" target="_blank"><?php echo $o['filename']; ?></a>
+                        </p>
+                        <p>
+                            <strong><?php _e('File size', 'acf'); ?>:</strong>
+                            <span data-name="filesize"><?php echo $o['filesize']; ?></span>
+                        </p>
 
-					<?php else: ?>
+                        <ul class="acf-hl acf-soh-target">
+                            <?php if( $uploader != 'basic' ): ?>
+                                <li><a class="acf-icon -pencil dark" data-name="edit" href="#"></a></li>
+                            <?php endif; ?>
+                            <li><a class="acf-icon -cancel dark" data-name="remove" href="#"></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="hide-if-value">
+                    <?php if( $uploader == 'basic' ): ?>
 
-						<p style="margin:0;"><?php _e('No file selected','acf'); ?> <a data-name="add" class="acf-button button" href="#"><?php _e('Add File','acf'); ?></a></p>
+                        <?php if( $field['value'] && !is_numeric($field['value']) ): ?>
+                            <div class="acf-error-message"><p><?php echo $field['value']; ?></p></div>
+                        <?php endif; ?>
 
-					<?php endif; ?>
+                        <input type="file" name="<?php echo $field['name']; ?>" id="<?php echo $field['id']; ?>" />
 
-				</div>
-			</div>
+                    <?php else: ?>
 
-		<?php endforeach;
+                        <p style="margin:0;"><?php _e('No file selected','acf'); ?> <a data-name="add" class="acf-button button" href="#"><?php _e('Add File','acf'); ?></a></p>
 
-		echo '</div>';
-	}
+                    <?php endif; ?>
 
-	/*
-	 *  update_value()
-	 *
-	 *  This filter is appied to the $value before it is updated in the db
-	 *
-	 *  @type	filter
-	 *  @since	3.6
-	 *  @date	23/01/13
-	 *
-	 *  @param	$value - the value which will be saved in the database
-	 *  @param	$post_id - the $post_id of which the value will be saved
-	 *  @param	$field - the field array holding all the field options
-	 *
-	 *  @return	$value - the modified value
-	 */
-	function update_value($values, $post_id, $field) {
+                </div>
+            </div>
 
-		// validate
-		if ( !is_array($values) ) return false;
+        <?php endforeach;
 
-		if (function_exists('acf_connect_attachment_to_post')) {
-			foreach ($values as $value) {
+        echo '</div>';
+    }
 
-				// bail early if not attachment ID
-				if( !$value || !is_numeric($value) ) continue;
+    /*
+     *  update_value()
+     *
+     *  This filter is appied to the $value before it is updated in the db
+     *
+     *  @type	filter
+     *  @since	3.6
+     *  @date	23/01/13
+     *
+     *  @param	$value - the value which will be saved in the database
+     *  @param	$post_id - the $post_id of which the value will be saved
+     *  @param	$field - the field array holding all the field options
+     *
+     *  @return	$value - the modified value
+     */
+    function update_value($values, $post_id, $field) {
 
-				// maybe connect attacments to post
-				acf_connect_attachment_to_post( (int) $value, $post_id );
+        // validate
+        if ( !is_array($values) ) return false;
 
-			}
-		}
+        if (function_exists('acf_connect_attachment_to_post')) {
+            foreach ($values as $value) {
 
-		return qtrans_join($values);
-	}
+                // bail early if not attachment ID
+                if( !$value || !is_numeric($value) ) continue;
+
+                // maybe connect attacments to post
+                acf_connect_attachment_to_post( (int) $value, $post_id );
+
+            }
+        }
+
+        return qtrans_join($values);
+    }
 
 }
