@@ -28,7 +28,7 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
      * @return int
      */
     public function acf5_current_version() {
-        return (int) substr(acf()->version, 0, strrpos(acf()->version, "."));
+        return substr(acf()->version, 0, strrpos(acf()->version, "."));
     }
 
     /**
