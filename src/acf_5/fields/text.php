@@ -24,20 +24,39 @@ class acf_qtranslate_acf_5_text extends acf_field_text {
 	function __construct($plugin) {
 		$this->plugin = $plugin;
 
+		if (version_compare($plugin->acf_version(), '5.6.0') < 0) {
+			$this->initialize();
+		}
+
+		acf_field::__construct();
+	}
+
+	/*
+	 *  initialize
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
+	function initialize() {
+
+		// vars
 		$this->name = 'qtranslate_text';
 		$this->label = __("Text",'acf');
 		$this->category = __("qTranslate",'acf');
 		$this->defaults = array(
-			'default_value' => '',
-			'maxlength'     => '',
-			'placeholder'   => '',
-			'prepend'       => '',
-			'append'        => '',
-			'readonly'      => 0,
-			'disabled'      => 0,
+			'default_value'	=> '',
+			'maxlength'		=> '',
+			'placeholder'	=> '',
+			'prepend'		=> '',
+			'append'		=> ''
 		);
 
-		acf_field::__construct();
 	}
 
 	/*

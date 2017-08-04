@@ -23,35 +23,57 @@ class acf_qtranslate_acf_5_image extends acf_field_image {
 	function __construct($plugin) {
 		$this->plugin = $plugin;
 
+		if (version_compare($plugin->acf_version(), '5.6.0') < 0) {
+			$this->initialize();
+		}
+
+		acf_field::__construct();
+	}
+
+	/*
+	*  __construct
+	*
+	*  This function will setup the field type data
+	*
+	*  @type	function
+	*  @date	5/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+
+	function initialize() {
+
+		// vars
 		$this->name = 'qtranslate_image';
-		$this->label = __("Image", 'acf');
+		$this->label = __("Image",'acf');
 		$this->category = __("qTranslate", 'acf');
 		$this->defaults = array(
-			'return_format' => 'array',
-			'preview_size'  => 'thumbnail',
-			'library'       => 'all',
-			'min_width'     => 0,
-			'min_height'    => 0,
-			'min_size'      => 0,
-			'max_width'     => 0,
-			'max_height'    => 0,
-			'max_size'      => 0,
-			'mime_types'    => ''
+			'return_format'	=> 'array',
+			'preview_size'	=> 'thumbnail',
+			'library'		=> 'all',
+			'min_width'		=> 0,
+			'min_height'	=> 0,
+			'min_size'		=> 0,
+			'max_width'		=> 0,
+			'max_height'	=> 0,
+			'max_size'		=> 0,
+			'mime_types'	=> ''
 		);
 		$this->l10n = array(
-			'select'     => __("Select Image",'acf'),
-			'edit'       => __("Edit Image",'acf'),
-			'update'     => __("Update Image",'acf'),
-			'uploadedTo' => __("Uploaded to this post",'acf'),
-			'all'        => __("All images",'acf'),
+			'select'		=> __("Select Image",'acf'),
+			'edit'			=> __("Edit Image",'acf'),
+			'update'		=> __("Update Image",'acf'),
+			'uploadedTo'	=> __("Uploaded to this post",'acf'),
+			'all'			=> __("All images",'acf'),
 		);
 
 
 		// filters
-		add_filter('get_media_item_args',			array($this, 'get_media_item_args'));
-		add_filter('wp_prepare_attachment_for_js',	array($this, 'wp_prepare_attachment_for_js'), 10, 3);
+		add_filter('get_media_item_args',				array($this, 'get_media_item_args'));
+		add_filter('wp_prepare_attachment_for_js',		array($this, 'wp_prepare_attachment_for_js'), 10, 3);
 
-		acf_field::__construct();
 	}
 
 	/*

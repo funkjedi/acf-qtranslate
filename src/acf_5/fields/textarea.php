@@ -24,20 +24,39 @@ class acf_qtranslate_acf_5_textarea extends acf_field_textarea {
 	function __construct($plugin) {
 		$this->plugin = $plugin;
 
+		if (version_compare($plugin->acf_version(), '5.6.0') < 0) {
+			$this->initialize();
+		}
+
+		acf_field::__construct();
+	}
+
+	/*
+	 *  initialize
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
+	function initialize() {
+
+		// vars
 		$this->name = 'qtranslate_textarea';
 		$this->label = __("Text Area",'acf');
 		$this->category = __("qTranslate",'acf');
 		$this->defaults = array(
-			'default_value' => '',
-			'new_lines'     => '',
-			'maxlength'     => '',
-			'placeholder'   => '',
-			'readonly'      => 0,
-			'disabled'      => 0,
-			'rows'          => ''
+			'default_value'	=> '',
+			'new_lines'		=> '',
+			'maxlength'		=> '',
+			'placeholder'	=> '',
+			'rows'			=> ''
 		);
 
-		acf_field::__construct();
 	}
 
 	/*

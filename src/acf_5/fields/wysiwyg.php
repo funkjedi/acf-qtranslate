@@ -24,6 +24,31 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 	function __construct($plugin) {
 		$this->plugin = $plugin;
 
+		if (version_compare($plugin->acf_version(), '5.6.0') < 0) {
+			$this->initialize();
+		}
+
+		// actions
+		add_action('acf/input/admin_footer', 	array($this, 'input_admin_footer'));
+
+		acf_field::__construct();
+	}
+
+	/*
+	 *  initialize
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
+	function initialize() {
+
+		// vars
 		$this->name = 'qtranslate_wysiwyg';
 		$this->label = __("Wysiwyg Editor",'acf');
 		$this->category = __("qTranslate",'acf');
@@ -32,6 +57,7 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 			'toolbar'		=> 'full',
 			'media_upload' 	=> 1,
 			'default_value'	=> '',
+			'delay'			=> 0
 		);
 
 		// add acf_the_content filters
@@ -39,10 +65,6 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 			$this->add_filters();
 		}
 
-		// actions
-		add_action('acf/input/admin_footer', 	array($this, 'input_admin_footer'));
-
-		acf_field::__construct();
 	}
 
 	/*

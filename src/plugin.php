@@ -70,8 +70,16 @@ class acf_qtranslate_plugin {
 	 * Return the major version number for Advanced Custom Fields.
 	 * @return int
 	 */
+	public function acf_version() {
+		return acf()->settings['version'];
+	}
+
+	/**
+	 * Return the major version number for Advanced Custom Fields.
+	 * @return int
+	 */
 	public function acf_major_version() {
-		return (int) acf()->settings['version'][0];
+		return (int) $this->acf_version();
 	}
 
 	/**
@@ -141,7 +149,7 @@ class acf_qtranslate_plugin {
 	public function qtranslate_load_admin_page_config($config)
 	{
 		$pages = array(
-			'post.php' => '',
+			//'post.php' => '',
 			'admin.php' => 'page=',
 		);
 

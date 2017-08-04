@@ -3,8 +3,8 @@ Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
 Tested up to: 4.7.2
-Version: 1.7.22
-Stable tag: 1.7.22
+Version: 1.7.23
+Stable tag: 1.7.23
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.23 =
+* Bug Fix: Added ACF 5.6 compatibility
 
 = 1.7.22 =
 * Bug Fix: Prevent LSBs from loading on all pages by default
