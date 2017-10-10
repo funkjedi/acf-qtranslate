@@ -99,7 +99,7 @@ class acf_qtranslate_acf_5_textarea extends acf_field_textarea {
 
 		// special atts
 		foreach( $s as $k ) {
-			if( $field[ $k ] ) {
+			if( array_key_exists( $k, $field ) && $field[ $k ] ) {
 				$atts[ $k ] = $k;
 			}
 		}
