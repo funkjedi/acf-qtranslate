@@ -18,6 +18,8 @@ jQuery(window).load(function() {
 	// Selectors for supported field types
 	var field_types = [
 		'.field_type-text input:text',
+    '.field_type-text input[type="url"]',
+		'.field_type-text input[type="email"]',
 		'.field_type-textarea textarea',
 		'.field_type-wysiwyg .wp-editor-area'
 	].join(',');
