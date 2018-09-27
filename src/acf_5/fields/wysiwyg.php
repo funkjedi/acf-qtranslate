@@ -29,7 +29,6 @@ class acf_qtranslate_acf_5_wysiwyg extends acf_field_wysiwyg {
 		}
 
 		// actions
-		add_action('acf/input/admin_footer', 	array($this, 'input_admin_footer'));
 
 		acf_field::__construct();
 	}
