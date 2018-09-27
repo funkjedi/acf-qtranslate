@@ -113,3 +113,52 @@ acf.registerFieldType(acf.models.WysiwygField.extend({
     });
   }
 }));
+
+acf.registerFieldType(acf.models.UrlField.extend({
+  type: 'qtranslate_url',
+  $control: function(){
+    return this.$('.acf-input-wrap.current-language');
+  },
+
+  $input: function(){
+    return this.$('.acf-input-wrap.current-language input[type="url"]');
+  },
+  isValid: function(){
+
+    // vars
+    var val = this.val();
+
+    // bail early if no val
+    if( !val ) {
+      return false;
+    }
+
+    // url
+    if( val.indexOf('://') !== -1 ) {
+      return true;
+    }
+
+    // protocol relative url
+    if( val.indexOf('//') === 0 ) {
+      return true;
+    }
+
+    // relative url
+    if( val.indexOf('/') === 0 ) {
+      return true;
+    }
+
+    // return
+    return false;
+  },
+
+  render: function(){
+
+    // add class
+    if( this.isValid() ) {
+      this.$control().addClass('-valid');
+    } else {
+      this.$control().removeClass('-valid');
+    }
+  },
+}));

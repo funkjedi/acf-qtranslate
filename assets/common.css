@@ -67,6 +67,7 @@
 .multi-language-field > textarea,
 .multi-language-field > fieldset,
 .multi-language-field .acf_wysiwyg,
+.multi-language-field .acf-url,
 .multi-language-field .acf-editor-wrap,
 .multi-language-field .acf-file-uploader,
 .multi-language-field .acf-image-uploader { display: none }
@@ -77,6 +78,10 @@
 
 .multi-language-field-wysiwyg {
 	margin-top: 0;
+}
+
+.acf-input .acf-url input[type="text"] {
+	padding-left: 25px;
 }
 
 .multi-language-field .acf-file-uploader,
