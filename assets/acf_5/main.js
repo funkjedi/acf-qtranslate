@@ -1,51 +1,115 @@
-
 /**
  * Clone functionality from standard Image field type
  */
-acf.fields.qtranslate_image = acf.fields.image.extend({
-    type: 'qtranslate_image',
-    focus: function() {
-        this.$el = this.$field.find('.acf-image-uploader.current-language');
-        this.$input = this.$el.find('input[type="hidden"]');
-        this.$img = this.$el.find('img');
+acf.registerFieldType(acf.models.ImageField.extend({
+  type: 'qtranslate_image',
 
-        this.o = acf.get_data(this.$el);
+  $control: function(){
+    return this.$('.acf-image-uploader.current-language');
+  },
+
+  $input: function(){
+    return this.$('.acf-image-uploader.current-language input[type="hidden"]');
+  },
+
+  render: function( attachment ){
+    var control = this.$control();
+
+    // vars
+    attachment = this.validateAttachment( attachment );
+
+    // update image
+    control.find('img').attr({
+      src: attachment.url,
+      alt: attachment.alt,
+      title: attachment.title
+    });
+
+    // vars
+    var val = attachment.id || '';
+
+    // update val
+    this.val( val );
+
+    // update class
+    if( val ) {
+      control.addClass('has-value');
+    } else {
+      control.removeClass('has-value');
     }
-});
+  }
+}));
 
 /**
  * Clone functionality from standard File field type
  */
-acf.fields.qtranslate_file = acf.fields.file.extend({
-    type: 'qtranslate_file',
-    focus: function() {
-        this.$el = this.$field.find('.acf-file-uploader.current-language');
-        this.$input = this.$el.find('input[type="hidden"]');
+acf.registerFieldType(acf.models.QtranslateImageField.extend({
+  type: 'qtranslate_file',
+  render: function( attachment ){
+    var control = this.$control();
+    
+    // vars
+    attachment = this.validateAttachment( attachment );
 
-        this.o = acf.get_data(this.$el);
-    }
-});
+    // update image
+    this.$control().find(' img').attr({
+      src: attachment.icon,
+      alt: attachment.alt,
+      title: attachment.title
+    });
 
-/**
- * Clone functionality from standard WYSIWYG field type
- */
-acf.fields.qtranslate_wysiwyg = acf.fields.wysiwyg.extend({
-    type: 'qtranslate_wysiwyg',
-    focus: function() {
-        this.$el = this.$field.find('.wp-editor-wrap.current-language').last();
-        this.$textarea = this.$el.find('textarea');
-        this.o = acf.get_data(this.$el);
-        this.o.id = this.$textarea.attr('id');
-    },
-    initialize: function() {
-        var self = this;
-        this.$field.find('.wp-editor-wrap').each(function() {
-            self.$el = jQuery(this);
-            self.$textarea = self.$el.find('textarea');
-            self.o = acf.get_data(self.$el);
-            self.o.id = self.$textarea.attr('id');
-            acf.fields.wysiwyg.initialize.call(self);
-        });
-        this.focus();
+    // update elements
+    control.find('[data-name="title"]').text( attachment.title );
+    control.find('[data-name="filename"]').text( attachment.filename ).attr( 'href', attachment.url );
+    control.find('[data-name="filesize"]').text( attachment.filesizeHumanReadable );
+
+    // vars
+    var val = attachment.id || '';
+
+    // update val
+    acf.val( this.$input(), val );
+
+    // update class
+    if( val ) {
+      control.addClass('has-value');
+    } else {
+      control.removeClass('has-value');
     }
-});
+  },
+}));
+
+acf.registerFieldType(acf.models.WysiwygField.extend({
+  type: 'qtranslate_wysiwyg',
+  initializeEditor: function() {
+    var self = this;
+    this.$('.acf-editor-wrap').each(function() {
+      var $wrap = $(this);
+      var $textarea = $wrap.find('textarea');
+      var args = {
+        tinymce: true,
+        quicktags: true,
+        toolbar: self.get('toolbar'),
+        mode: self.getMode(),
+        field: self
+      };
+
+      // generate new id
+      var oldId = $textarea.attr('id');
+      var newId = acf.uniqueId('acf-editor-');
+
+      // rename
+      acf.rename({
+        target: $wrap,
+        search: oldId,
+        replace: newId,
+        destructive: true
+      });
+
+      // update id
+      self.set('id', newId, true);
+
+      // initialize
+      acf.tinymce.initialize(newId, args);
+    });
+  }
+}));
