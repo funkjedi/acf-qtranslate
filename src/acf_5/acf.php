@@ -29,6 +29,7 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 	public function include_fields() {
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/file.php';
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/image.php';
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/post_object.php';
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/text.php';
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/textarea.php';
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/wysiwyg.php';
@@ -40,6 +41,7 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 		acf()->fields->register_field_type(new acf_qtranslate_acf_5_image($this->plugin));
 		acf()->fields->register_field_type(new acf_qtranslate_acf_5_file($this->plugin));
 		acf()->fields->register_field_type(new acf_qtranslate_acf_5_url($this->plugin));
+		acf()->fields->register_field_type(new acf_qtranslate_acf_5_post_object($this->plugin));
 	}
 
 	/**
