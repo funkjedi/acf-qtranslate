@@ -2,9 +2,9 @@
 Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
-Tested up to: 4.7.2
-Version: 1.7.24
-Stable tag: 1.7.24
+Tested up to: 4.9.8
+Version: 1.7.25
+Stable tag: 1.7.25
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,10 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.25 =
+* Core: Added qTranslate suffix to field labels
+* Bug Fix: Fixed issue with File fields
 
 = 1.7.24 =
 * Core: (asedano) Added ACF5 support for URL field
@@ -188,4 +192,4 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 == Upgrade Notice ==
 
-Bug Fix: Fixed issue with saving File and Image fields after ACF 5.5.5 upgrade
+Bug Fix: Fixed issue with File fields

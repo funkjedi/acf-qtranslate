@@ -1,18 +1,57 @@
 <?php
 
-class acf_qtranslate_acf_5_url extends acf_qtranslate_acf_5_text {
+class acf_qtranslate_acf_5_url extends acf_field_url {
+
+	/**
+	 * The plugin instance.
+	 * @var \acf_qtranslate\plugin
+	 */
+	protected $plugin;
+
+
+	/*
+	 *  __construct
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
+	function __construct($plugin) {
+		$this->plugin = $plugin;
+
+		if (version_compare($plugin->acf_version(), '5.6.0') < 0) {
+			$this->initialize();
+		}
+
+		acf_field::__construct();
+	}
+
+	/*
+	 *  initialize
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
 	function initialize() {
 
 		// vars
 		$this->name = 'qtranslate_url';
-		$this->label = __("Url",'acf');
+		$this->label = __("Url (qTranslate)",'acf');
 		$this->category = __("qTranslate",'acf');
 		$this->defaults = array(
 			'default_value'	=> '',
-			'maxlength'		=> '',
 			'placeholder'	=> '',
-			'prepend'		=> '',
-			'append'		=> ''
 		);
 
 	}
@@ -35,90 +74,74 @@ class acf_qtranslate_acf_5_url extends acf_qtranslate_acf_5_text {
 		$currentLanguage = $this->plugin->get_active_language();
 
 		// vars
-		$o = array( 'type', 'id', 'class', 'name', 'value', 'placeholder' );
-		$s = array( 'readonly', 'disabled' );
-		$e = '';
-
-		// maxlength
-		if( $field['maxlength'] !== "" ) {
-			$o[] = 'maxlength';
-		}
-
-		// populate atts
 		$atts = array();
-		foreach( $o as $k ) {
-			$atts[ $k ] = $field[ $k ];
+		$keys = array( 'type', 'id', 'class', 'name', 'value', 'placeholder', 'pattern' );
+		$keys2 = array( 'readonly', 'disabled', 'required' );
+		$html = '';
+
+
+		// atts (value="123")
+		foreach( $keys as $k ) {
+			if( isset($field[ $k ]) ) $atts[ $k ] = $field[ $k ];
 		}
 
-		// special atts
-		foreach( $s as $k ) {
-			if( isset($field[ $k ]) && $field[ $k ] ) {
-				$atts[ $k ] = $k;
-			}
+
+		// atts2 (disabled="disabled")
+		foreach( $keys2 as $k ) {
+			if( !empty($field[ $k ]) ) $atts[ $k ] = $k;
 		}
+
+
+		// remove empty atts
+		$atts = acf_clean_atts( $atts );
+
 
 		// render
-		$e .= '<div class="acf-url-wrap multi-language-field">';
+		$html .= '<div class="acf-input-wrap multi-language-field">';
 
 		foreach ($languages as $language) {
 			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
-			$e .= '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
+			$html .= '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
+
+		$html .= '<div class="acf-url">';
+		$html .= '<i class="acf-icon -globe -small"></i>';
 
 		foreach ($languages as $language) {
 			$atts['class'] = $field['class'];
-
-			$atts['type'] = 'text';
+			if ($language === $currentLanguage) {
+				$atts['class'] .= ' current-language';
+			}
+			$atts['type'] = 'url';
 			$atts['name'] = $field['name'] . "[$language]";
 			$atts['value'] = $values[$language];
-
-			$container_class = 'acf-input-wrap acf-url';
-			if ($language === $currentLanguage) {
-				$container_class .= ' current-language';
-			}
-
-			$e .= '<div class="' . $container_class . '" data-language="' . $language . '">';
-			$e .= '<i class="acf-icon -globe -small"></i>';
-			$e .= '<input ' . acf_esc_attr( $atts ) . ' />';
-			$e .= '</div>';
-
+			$atts['data-language'] = $language;
+			$html .= acf_get_text_input( $atts );
 		}
 
-		$e .= '</div>';
+		$html .= '</div>';
+		$html .= '</div>';
 
 		// return
-		echo $e;
+		echo $html;
 	}
 
-	function validate_value( $valid, $value, $field, $input ){
-		foreach ($value as $valor) {
-			// bail early if empty
-			if ( empty( $valor ) ) {
-
-				continue;
-
-			}
-
-			if ( strpos( $valor, '://' ) !== false ) {
-
-				// url
-
-			} elseif ( strpos( $valor, '//' ) === 0 ) {
-
-				// protocol relative url
-
-			} elseif ( strpos( $valor, '/' ) === 0 ) {
-
-				// relative url
-
-			} else {
-
-				$valid = __( 'Value must be a valid URL', 'acf' );
-
-			}
-		}
-
-		// return
-		return $valid;
+	/*
+	 *  update_value()
+	 *
+	 *  This filter is appied to the $value before it is updated in the db
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value - the value which will be saved in the database
+	 *  @param	$post_id - the $post_id of which the value will be saved
+	 *  @param	$field - the field array holding all the field options
+	 *
+	 *  @return	$value - the modified value
+	 */
+	function update_value($value, $post_id, $field) {
+		return qtrans_join($value);
 	}
 }

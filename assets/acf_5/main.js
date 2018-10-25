@@ -1,6 +1,49 @@
-/**
- * Clone functionality from standard Image field type
- */
+
+
+acf.registerFieldType(acf.models.FileField.extend({
+  type: 'qtranslate_file',
+
+  $control: function(){
+    return this.$('.acf-file-uploader.current-language');
+  },
+
+  $input: function(){
+    return this.$('.acf-file-uploader.current-language input[type="hidden"]');
+  },
+
+  render: function( attachment ){
+
+    // vars
+    attachment = this.validateAttachment( attachment );
+
+    // update image
+    this.$control().find('img').attr({
+      src: attachment.icon,
+      alt: attachment.alt,
+      title: attachment.title
+    });
+
+    // update elements
+    this.$control().find('[data-name="title"]').text( attachment.title );
+    this.$control().find('[data-name="filename"]').text( attachment.filename ).attr( 'href', attachment.url );
+    this.$control().find('[data-name="filesize"]').text( attachment.filesizeHumanReadable );
+
+    // vars
+    var val = attachment.id || '';
+
+    // update val
+    acf.val( this.$input(), val );
+
+    // update class
+    if( val ) {
+      this.$control().addClass('has-value');
+    } else {
+      this.$control().removeClass('has-value');
+    }
+  }
+}));
+
+
 acf.registerFieldType(acf.models.ImageField.extend({
   type: 'qtranslate_image',
 
@@ -13,13 +56,12 @@ acf.registerFieldType(acf.models.ImageField.extend({
   },
 
   render: function( attachment ){
-    var control = this.$control();
 
     // vars
     attachment = this.validateAttachment( attachment );
 
     // update image
-    control.find('img').attr({
+    this.$control().find('img').attr({
       src: attachment.url,
       alt: attachment.alt,
       title: attachment.title
@@ -33,53 +75,30 @@ acf.registerFieldType(acf.models.ImageField.extend({
 
     // update class
     if( val ) {
-      control.addClass('has-value');
+      this.$control().addClass('has-value');
     } else {
-      control.removeClass('has-value');
+      this.$control().removeClass('has-value');
     }
   }
 }));
 
-/**
- * Clone functionality from standard File field type
- */
-acf.registerFieldType(acf.models.QtranslateImageField.extend({
-  type: 'qtranslate_file',
-  render: function( attachment ){
-    var control = this.$control();
-    
-    // vars
-    attachment = this.validateAttachment( attachment );
 
-    // update image
-    this.$control().find(' img').attr({
-      src: attachment.icon,
-      alt: attachment.alt,
-      title: attachment.title
-    });
+acf.registerFieldType(acf.models.UrlField.extend({
+  type: 'qtranslate_url',
 
-    // update elements
-    control.find('[data-name="title"]').text( attachment.title );
-    control.find('[data-name="filename"]').text( attachment.filename ).attr( 'href', attachment.url );
-    control.find('[data-name="filesize"]').text( attachment.filesizeHumanReadable );
-
-    // vars
-    var val = attachment.id || '';
-
-    // update val
-    acf.val( this.$input(), val );
-
-    // update class
-    if( val ) {
-      control.addClass('has-value');
-    } else {
-      control.removeClass('has-value');
-    }
+  $control: function(){
+    return this.$('.acf-input-wrap.current-language');
   },
+
+  $input: function(){
+    return this.$('.acf-input-wrap.current-language input[type="url"]');
+  }
 }));
+
 
 acf.registerFieldType(acf.models.WysiwygField.extend({
   type: 'qtranslate_wysiwyg',
+
   initializeEditor: function() {
     var self = this;
     this.$('.acf-editor-wrap').each(function() {
@@ -114,51 +133,3 @@ acf.registerFieldType(acf.models.WysiwygField.extend({
   }
 }));
 
-acf.registerFieldType(acf.models.UrlField.extend({
-  type: 'qtranslate_url',
-  $control: function(){
-    return this.$('.acf-input-wrap.current-language');
-  },
-
-  $input: function(){
-    return this.$('.acf-input-wrap.current-language input[type="url"]');
-  },
-  isValid: function(){
-
-    // vars
-    var val = this.val();
-
-    // bail early if no val
-    if( !val ) {
-      return false;
-    }
-
-    // url
-    if( val.indexOf('://') !== -1 ) {
-      return true;
-    }
-
-    // protocol relative url
-    if( val.indexOf('//') === 0 ) {
-      return true;
-    }
-
-    // relative url
-    if( val.indexOf('/') === 0 ) {
-      return true;
-    }
-
-    // return
-    return false;
-  },
-
-  render: function(){
-
-    // add class
-    if( this.isValid() ) {
-      this.$control().addClass('-valid');
-    } else {
-      this.$control().removeClass('-valid');
-    }
-  },
-}));

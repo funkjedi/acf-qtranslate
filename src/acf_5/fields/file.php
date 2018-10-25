@@ -47,7 +47,7 @@ class acf_qtranslate_acf_5_file extends acf_field_file {
 
 		// vars
 		$this->name = 'qtranslate_file';
-		$this->label = __("File",'acf');
+		$this->label = __("File (qTranslate)",'acf');
 		$this->category = __("qTranslate", 'acf');
 		$this->defaults = array(
 			'return_format'	=> 'array',
