@@ -35,9 +35,12 @@
 	z-index: 100;
     border: 1px solid #ededed;
     margin-left: -1px;
-    padding: 6px 7px;
     text-transform: uppercase;
 	cursor: pointer
+}
+
+.multi-language-field > .wp-switch-editor:last-of-type {
+	margin-left: 5px;
 }
 
 .multi-language-field input,
@@ -67,11 +70,11 @@
 .multi-language-field > textarea,
 .multi-language-field > fieldset,
 .multi-language-field .acf_wysiwyg,
-.multi-language-field .acf-url,
 .multi-language-field .acf-post-object,
 .multi-language-field .acf-editor-wrap,
 .multi-language-field .acf-file-uploader,
-.multi-language-field .acf-image-uploader { display: none }
+.multi-language-field .acf-image-uploader,
+.multi-language-field .acf-url > input { display: none }
 
 .multi-language-field .acf_input input,
 .multi-language-field .acf_input textarea,
@@ -81,8 +84,9 @@
 	margin-top: 0;
 }
 
-.acf-input .acf-url input[type="text"] {
-	padding-left: 25px;
+.multi-language-field .acf-url {
+	position: relative;
+	clear: both;
 }
 
 .multi-language-field .acf-file-uploader,

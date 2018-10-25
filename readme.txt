@@ -2,9 +2,9 @@
 Contributors: funkjedi
 Tags: acf, advanced custom fields, qtranslate, add-on, admin
 Requires at least: 3.5.0
-Tested up to: 4.7.2
-Version: 1.7.23
-Stable tag: 1.7.23
+Tested up to: 4.9.8
+Version: 1.7.25
+Stable tag: 1.7.25
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,7 @@ This plugin provides qTranslate-X compatible ACF4 and ACF5PRO field types for Te
 * qTranslate WYSIWYG (a wordpress wysiwyg editor, api returns html)
 * qTranslate Image (upload an image, api returns the url)
 * qTranslate File (upload a file, api returns the url)
+* qTranslate URL (type text, api returns text)
 
 The standard Text, Text Area and WYSIWYG field types can also be enabled for translation.
 
@@ -33,9 +34,9 @@ https://github.com/funkjedi/acf-qtranslate/issues/
 1. Upload `acf-qtranslate` directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
-= Requires ACF4 or ACF5PRO =
+= Requires ACF or ACFPRO =
 * [ACF](https://wordpress.org/plugins/advanced-custom-fields/)
-* [ACF5PRO](http://www.advancedcustomfields.com/pro/)
+* [ACFPRO](http://www.advancedcustomfields.com/pro/)
 
 = Requires qTranslate-X Plugin =
 * [qTranslate-X](https://wordpress.org/plugins/qtranslate-x/)
@@ -53,6 +54,15 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 
 == Changelog ==
+
+= 1.7.25 =
+* Core: Added qTranslate suffix to field labels
+* Bug Fix: Fixed issue with File fields
+
+= 1.7.24 =
+* Core: (asedano) Added ACF5 support for URL field
+* Bug Fix: (asedano) Added ACF 5.7 compatibility
+* Bug Fix: (asedano) Prevent PHP warnings about non-existent indexes
 
 = 1.7.23 =
 * Bug Fix: Added ACF 5.6 compatibility
@@ -182,4 +192,4 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 == Upgrade Notice ==
 
-Bug Fix: Fixed issue with saving File and Image fields after ACF 5.5.5 upgrade
+Bug Fix: Fixed issue with File fields

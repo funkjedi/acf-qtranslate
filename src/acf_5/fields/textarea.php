@@ -47,7 +47,7 @@ class acf_qtranslate_acf_5_textarea extends acf_field_textarea {
 
 		// vars
 		$this->name = 'qtranslate_textarea';
-		$this->label = __("Text Area",'acf');
+		$this->label = __("Text Area (qTranslate)",'acf');
 		$this->category = __("qTranslate",'acf');
 		$this->defaults = array(
 			'default_value'	=> '',
