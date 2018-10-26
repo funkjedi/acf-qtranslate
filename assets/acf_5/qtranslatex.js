@@ -1,5 +1,6 @@
 
 (function(){
+
 	var windowLoadCompleted = false;
 	jQuery(window).load(function() {
 
@@ -88,16 +89,22 @@
 		// Watch and remove content hooks when fields are removed
 		// however ACF removes the elements from the DOM early so
 		// we must hook into handler and perform updates there
-		var _hooked_repeater_remove = acf.fields.repeater.remove;
-		acf.fields.repeater.remove = function($el) {
+		var repeaterFieldRemove;
+
+		if (acf.models) {
+			repeaterFieldRemove = acf.models.RepeaterField.prototype.remove;
+		} else {
+			repeaterFieldRemove = acf.fields.repeater.remove;
+		}
+
+		function repeaterRemove($el) {
 			var row = ($el.$el || $el).closest('.acf-row'); // support old versions of ACF5PRO as well
 			row.find(_.toArray(field_types).join(',')).filter('.qtranxs-translatable').each(function() {
 				qTranslateConfig.qtx.removeContentHook(this);
 			});
 			// call the original handler
-			_hooked_repeater_remove.call(this, $el);
+			repeaterFieldRemove.call(this, $el);
 		};
-
 	});
 
 })();
