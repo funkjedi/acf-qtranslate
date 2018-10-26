@@ -32,16 +32,16 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/post_object.php';
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/text.php';
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/textarea.php';
-		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/wysiwyg.php';
 		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/url.php';
+		require_once ACF_QTRANSLATE_PLUGIN_DIR . 'src/acf_5/fields/wysiwyg.php';
 
+		acf()->fields->register_field_type(new acf_qtranslate_acf_5_file($this->plugin));
+		acf()->fields->register_field_type(new acf_qtranslate_acf_5_image($this->plugin));
+		acf()->fields->register_field_type(new acf_qtranslate_acf_5_post_object($this->plugin));
 		acf()->fields->register_field_type(new acf_qtranslate_acf_5_text($this->plugin));
 		acf()->fields->register_field_type(new acf_qtranslate_acf_5_textarea($this->plugin));
-		acf()->fields->register_field_type(new acf_qtranslate_acf_5_wysiwyg($this->plugin));
-		acf()->fields->register_field_type(new acf_qtranslate_acf_5_image($this->plugin));
-		acf()->fields->register_field_type(new acf_qtranslate_acf_5_file($this->plugin));
 		acf()->fields->register_field_type(new acf_qtranslate_acf_5_url($this->plugin));
-		acf()->fields->register_field_type(new acf_qtranslate_acf_5_post_object($this->plugin));
+		acf()->fields->register_field_type(new acf_qtranslate_acf_5_wysiwyg($this->plugin));
 	}
 
 	/**
@@ -58,7 +58,9 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 	public function format_value($value) {
 		if (is_string($value)) {
 			$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
+			$value = maybe_unserialize($value);
 		}
+
 		return $value;
 	}
 
@@ -101,9 +103,11 @@ class acf_qtranslate_acf_5 implements acf_qtranslate_acf_interface {
 			'flexible_content',
 			'qtranslate_file',
 			'qtranslate_image',
+			'qtranslate_post_object',
 			'qtranslate_text',
 			'qtranslate_textarea',
-			'qtranslate_wysiwyg'
+			'qtranslate_url',
+			'qtranslate_wysiwyg',
 		);
 
 		foreach (acf_get_field_groups($filter) as $field_group) {

@@ -83,6 +83,56 @@ acf.registerFieldType(acf.models.ImageField.extend({
 }));
 
 
+acf.registerFieldType(acf.models.PostObjectField.extend({
+  type: 'qtranslate_post_object',
+
+  $input: function(){
+    return this.$('.acf-post-object.current-language select');
+  },
+
+  initialize: function(){
+    var self = this;
+
+    // vars
+    var $select = this.$input();
+
+    // inherit data
+    this.inherit( $select );
+
+    // select2
+    if( this.get('ui') ) {
+
+      // populate ajax_data (allowing custom attribute to already exist)
+      var ajaxAction = this.get('ajax_action');
+      if( !ajaxAction ) {
+        ajaxAction = 'acf/fields/' + this.get('type') + '/query';
+      }
+
+      // select2
+      this.select2 = [];
+      this.$('.acf-post-object select').each(function() {
+        self.select2.push(acf.newSelect2(self.$(this), {
+          field: self,
+          ajax: self.get('ajax'),
+          multiple: self.get('multiple'),
+          placeholder: self.get('placeholder'),
+          allowNull: self.get('allow_null'),
+          ajaxAction: ajaxAction,
+        }));
+      });
+    }
+  },
+
+  onRemove: function(){
+    if( this.select2 ) {
+      for (var i=0; i < this.select2.length; i++) {
+        this.select2[i].destroy();
+      }
+    }
+  }
+}));
+
+
 acf.registerFieldType(acf.models.UrlField.extend({
   type: 'qtranslate_url',
 

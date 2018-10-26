@@ -57,6 +57,7 @@ The plugin is based on code samples posted to the ACF support forums by taeo bac
 
 = 1.7.25 =
 * Core: Added qTranslate suffix to field labels
+* Core: (asedano) Added ACF5 support for Post Object field
 * Bug Fix: Fixed issue with File fields
 
 = 1.7.24 =

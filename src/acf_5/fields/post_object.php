@@ -1,12 +1,26 @@
 <?php
 
 class acf_qtranslate_acf_5_post_object extends acf_field_post_object {
+
 	/**
 	 * The plugin instance.
 	 * @var \acf_qtranslate_plugin
 	 */
 	protected $plugin;
 
+
+	/*
+	 *  __construct
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
 	function __construct($plugin) {
 		$this->plugin = $plugin;
 
@@ -17,10 +31,38 @@ class acf_qtranslate_acf_5_post_object extends acf_field_post_object {
 		acf_field::__construct();
 	}
 
+	/*
+	 *  __construct
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
 	function initialize() {
-		parent::initialize();
+
+		// vars
 		$this->name = 'qtranslate_post_object';
+		$this->label = __("Post Object (qTranslate)",'acf');
 		$this->category = 'qTranslate';
+		$this->defaults = array(
+			'post_type'		=> array(),
+			'taxonomy'		=> array(),
+			'allow_null' 	=> 0,
+			'multiple'		=> 0,
+			'return_format'	=> 'object',
+			'ui'			=> 1,
+		);
+
+
+		// extra
+		add_action('wp_ajax_acf/fields/qtranslate_post_object/query',			array($this, 'ajax_query'));
+		add_action('wp_ajax_nopriv_acf/fields/qtranslate_post_object/query',	array($this, 'ajax_query'));
+
 	}
 
 	/*
@@ -37,190 +79,86 @@ class acf_qtranslate_acf_5_post_object extends acf_field_post_object {
 	function render_field($field) {
 		global $q_config;
 		$languages = qtrans_getSortedLanguages(true);
-		$values = $this->get_values($field['value']);
+		$values = array_map('maybe_unserialize', qtrans_split($field['value'], $quicktags = true));
 		$currentLanguage = $this->plugin->get_active_language();
 
-		// vars
-		$o = array( 'type', 'id', 'class', 'name', 'value' );
-		$s = array( 'readonly', 'disabled' );
-		$e = '';
-
 		// populate atts
-		$atts = array();
-		foreach( $o as $k ) {
-			$atts[ $k ] = $field[ $k ];
-		}
+		$atts = array(
+			'id' => $field['id'],
+			'name' => $field['name'],
+		);
 
-		// special atts
-		foreach( $s as $k ) {
-			if( isset($field[ $k ]) && $field[ $k ] ) {
-				$atts[ $k ] = $k;
-			}
-		}
-
+		// render
 		echo '<div class="multi-language-field multi-language-field-post-object">';
 
 		foreach ($languages as $language) {
-			$class = 'wp-switch-editor';
-			if ($language === $currentLanguage) {
-				$class .= ' current-language';
-			}
+			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
 			echo '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
 
 		foreach ($languages as $language) {
-			// Change Field into a select
-			$field['type'] = 'select';
-			$field['ui'] = 1;
-			$field['ajax'] = 1;
-			$field['choices'] = array();
+			$class = ($language === $currentLanguage) ? 'acf-post-object current-language' : 'acf-post-object';
+			$field['id'] = $atts['id'] . "-$language";
 			$field['name'] = $atts['name'] . "[$language]";
-			$field['value'] = @$values[$language];
+			$field['value'] = $values[$language];
 
-			$div = array(
-				'class' => 'acf-post-object acf-cf',
-				'data-language' => $language
-			);
-
-			if ($language === $currentLanguage) {
-				$div['class'] .= ' current-language';
-			} ?>
-
-			<div <?php acf_esc_attr_e( $div ); ?>><?php
-				// load posts
-				$posts = $this->get_posts( $values[$language], $field );
-
-				if( $posts ) {
-
-					foreach( array_keys($posts) as $i ) {
-
-						// vars
-						$post = acf_extract_var( $posts, $i );
-
-
-						// append to choices
-						$field['choices'][ $post->ID ] = $this->get_post_title( $post, $field );
-
-					}
-
-				}
-
-    			acf_render_field( $field ); ?>
-			</div><?php
+			echo '<div class="' . $class . '" data-language="' . $language . '">';
+			parent::render_field($field);
+			echo '</div>';
 		}
 
+		// return
 		echo '</div>';
 	}
 
-	function get_values($value) {
-		$languages = qtrans_getSortedLanguages(true);
+	/*
+	 *  format_value()
+	 *
+	 *  This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value (mixed) the value which was loaded from the database
+	 *  @param	$post_id (mixed) the $post_id from which the value was loaded
+	 *  @param	$field (array) the field array holding all the field options
+	 *
+	 *  @return	$value (mixed) the modified value
+	 */
+	function format_value($value, $post_id, $field) {
+		$value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
+		$value = maybe_unserialize($value);
 
-		// Protection for field type change
-		if (is_numeric($value)) {
-			$value = array_reduce($languages, function($acc, $language) use ($value) {
-				$acc[$language] = $value;
-				return $acc;
-			});
-		}
-
-		return $value;
+		return parent::format_value($value, $post_id, $field);
 	}
 
-	function get_posts( $value, $field ) {
-
-		// bail early if no value
-		if( empty($value) ) return false;
-
-
-		if (!is_array($value)) {
-		    $value = [$value];
-        }
-
-		// get posts
-		$posts = acf_get_posts(array(
-			'post__in'	=> $value,
-			'post_type'	=> $field['post_type']
-		));
-
-
-		// return
-		return $posts;
-
-	}
-
-
-	function format_value( $value, $post_id, $field ) {
-		$currentLanguage = $this->plugin->get_active_language();
-
-		$value = $this->get_values($value);
-
-		// bail early if no value
-		if( empty($value) ) return false;
-
-
-		// load posts if needed
-		if( $field['return_format'] == 'object' ) {
-
-			$value = $this->get_posts( $value[$currentLanguage], $field );
-
-		}
-
-
-		// convert back from array if neccessary
-		if( !$field['multiple'] && acf_is_array($value) ) {
-
-			$value = current($value);
-
-		}
-
-
-		// return value
-		return $value;
-
-	}
-
-	function update_value( $value, $post_id, $field ) {
+	/*
+	 *  update_value()
+	 *
+	 *  This filter is appied to the $value before it is updated in the db
+	 *
+	 *  @type	filter
+	 *  @since	3.6
+	 *  @date	23/01/13
+	 *
+	 *  @param	$value - the value which will be saved in the database
+	 *  @param	$post_id - the $post_id of which the value will be saved
+	 *  @param	$field - the field array holding all the field options
+	 *
+	 *  @return	$value - the modified value
+	 */
+	function update_value($values, $post_id, $field) {
 
 		// validate
-		if( empty($value) ) {
+		if ( !is_array($values) ) return false;
 
-			return $value;
-
+		foreach ($values as &$value) {
+			$value = parent::update_value($value, $post_id, $field);
+			$value = maybe_serialize($value);
 		}
 
-		$languages = qtrans_getSortedLanguages(true);
-
-		foreach ($languages as $language) {
-			// format
-			if ( is_array( $value[$language] ) ) {
-
-				// array
-				foreach ( $value[$language] as $k => $v ) {
-
-					// object?
-					if ( is_object( $v ) && isset( $v->ID ) ) {
-
-						$value[$language][ $k ] = $v->ID;
-
-					}
-
-				}
-
-
-				// save value as strings, so we can clearly search for them in SQL LIKE statements
-				$value[$language] = array_map( 'strval', $value[$language] );
-
-			} elseif ( is_object( $value[$language] ) && isset( $value[$language]->ID ) ) {
-
-				// object
-				$value[$language] = $value[$language]->ID;
-
-			}
-		}
-
-
-		// return
-		return $value;
-
+		return qtrans_join($values);
 	}
+
 }

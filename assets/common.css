@@ -110,3 +110,9 @@
 	background-color: #f5f5f5;
 	border-bottom-color: #f5f5f5;
 }
+
+.multi-language-field-post-object .select2-container--default .select2-selection--multiple,
+.multi-language-field-post-object .select2-container--default.select2-container--focus .select2-selection--multiple {
+	border-color: #ddd;
+	border-radius: 0;
+}

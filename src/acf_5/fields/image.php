@@ -8,6 +8,7 @@ class acf_qtranslate_acf_5_image extends acf_field_image {
 	 */
 	protected $plugin;
 
+
 	/*
 	 *  __construct
 	 *
@@ -31,18 +32,17 @@ class acf_qtranslate_acf_5_image extends acf_field_image {
 	}
 
 	/*
-	*  __construct
-	*
-	*  This function will setup the field type data
-	*
-	*  @type	function
-	*  @date	5/03/2014
-	*  @since	5.0.0
-	*
-	*  @param	n/a
-	*  @return	n/a
-	*/
-
+	 *  __construct
+	 *
+	 *  This function will setup the field type data
+	 *
+	 *  @type	function
+	 *  @date	5/03/2014
+	 *  @since	5.0.0
+	 *
+	 *  @param	n/a
+	 *  @return	n/a
+	 */
 	function initialize() {
 
 		// vars

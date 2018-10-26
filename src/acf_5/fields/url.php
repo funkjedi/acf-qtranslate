@@ -144,4 +144,5 @@ class acf_qtranslate_acf_5_url extends acf_field_url {
 	function update_value($value, $post_id, $field) {
 		return qtrans_join($value);
 	}
+
 }
