@@ -111,7 +111,7 @@ acf.registerFieldType(acf.models.PostObjectField.extend({
       // select2
       this.select2 = [];
       this.$('.acf-post-object select').each(function() {
-        self.select2.push(acf.newSelect2(self.$(this), {
+        self.select2.push(acf.newSelect2(jQuery(this), {
           field: self,
           ajax: self.get('ajax'),
           multiple: self.get('multiple'),
@@ -152,7 +152,7 @@ acf.registerFieldType(acf.models.WysiwygField.extend({
   initializeEditor: function() {
     var self = this;
     this.$('.acf-editor-wrap').each(function() {
-      var $wrap = $(this);
+      var $wrap = jQuery(this);
       var $textarea = $wrap.find('textarea');
       var args = {
         tinymce: true,
