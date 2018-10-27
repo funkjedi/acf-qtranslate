@@ -47,7 +47,7 @@ class acf_qtranslate_acf_5_file extends acf_field_file {
 
 		// vars
 		$this->name = 'qtranslate_file';
-		$this->label = __("File (qTranslate)",'acf');
+		$this->label = __("File (qTranslate)", 'acf-qtranslate');
 		$this->category = __("qTranslate", 'acf');
 		$this->defaults = array(
 			'return_format'	=> 'array',
@@ -154,47 +154,47 @@ class acf_qtranslate_acf_5_file extends acf_field_file {
 			}
 
 			?>
-			<div <?php acf_esc_attr_e($div); ?>>
-				<div class="acf-hidden">
-					<?php acf_hidden_input(array( 'name' => $field['name'], 'value' => $field['value'], 'data-name' => 'id' )); ?>
-				</div>
-				<div class="show-if-value file-wrap acf-soh">
+			<div <?php acf_esc_attr_e( $div ); ?>>
+				<?php acf_hidden_input(array( 'name' => $field['name'], 'value' => $field['value'], 'data-name' => 'id' )); ?>
+				<div class="show-if-value file-wrap">
 					<div class="file-icon">
-						<img data-name="icon" src="<?php echo $o['icon']; ?>" alt=""/>
+						<img data-name="icon" src="<?php echo esc_url($o['icon']); ?>" alt=""/>
 					</div>
 					<div class="file-info">
 						<p>
-							<strong data-name="title"><?php echo $o['title']; ?></strong>
+							<strong data-name="title"><?php echo esc_html($o['title']); ?></strong>
 						</p>
 						<p>
 							<strong><?php _e('File name', 'acf'); ?>:</strong>
-							<a data-name="filename" href="<?php echo $o['url']; ?>" target="_blank"><?php echo $o['filename']; ?></a>
+							<a data-name="filename" href="<?php echo esc_url($o['url']); ?>" target="_blank"><?php echo esc_html($o['filename']); ?></a>
 						</p>
 						<p>
 							<strong><?php _e('File size', 'acf'); ?>:</strong>
-							<span data-name="filesize"><?php echo $o['filesize']; ?></span>
+							<span data-name="filesize"><?php echo esc_html($o['filesize']); ?></span>
 						</p>
-
-						<ul class="acf-hl acf-soh-target">
-							<?php if( $uploader != 'basic' ): ?>
-								<li><a class="acf-icon -pencil dark" data-name="edit" href="#"></a></li>
-							<?php endif; ?>
-							<li><a class="acf-icon -cancel dark" data-name="remove" href="#"></a></li>
-						</ul>
+					</div>
+					<div class="acf-actions -hover">
+						<?php
+						if( $uploader != 'basic' ):
+						?><a class="acf-icon -pencil dark" data-name="edit" href="#" title="<?php _e('Edit', 'acf'); ?>"></a><?php
+						endif;
+						?><a class="acf-icon -cancel dark" data-name="remove" href="#" title="<?php _e('Remove', 'acf'); ?>"></a>
 					</div>
 				</div>
 				<div class="hide-if-value">
 					<?php if( $uploader == 'basic' ): ?>
 
 						<?php if( $field['value'] && !is_numeric($field['value']) ): ?>
-							<div class="acf-error-message"><p><?php echo $field['value']; ?></p></div>
+							<div class="acf-error-message"><p><?php echo acf_esc_html($field['value']); ?></p></div>
 						<?php endif; ?>
 
-						<input type="file" name="<?php echo $field['name']; ?>" id="<?php echo $field['id']; ?>" />
+						<label class="acf-basic-uploader">
+							<?php acf_file_input(array( 'name' => $field['name'], 'id' => $field['id'] )); ?>
+						</label>
 
 					<?php else: ?>
 
-						<p style="margin:0;"><?php _e('No file selected','acf'); ?> <a data-name="add" class="acf-button button" href="#"><?php _e('Add File','acf'); ?></a></p>
+						<p><?php _e('No file selected','acf'); ?> <a data-name="add" class="acf-button button" href="#"><?php _e('Add File','acf'); ?></a></p>
 
 					<?php endif; ?>
 
