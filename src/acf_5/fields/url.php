@@ -47,7 +47,7 @@ class acf_qtranslate_acf_5_url extends acf_field_url {
 
 		// vars
 		$this->name = 'qtranslate_url';
-		$this->label = __("Url (qTranslate)",'acf');
+		$this->label = __("URL (qTranslate)", 'acf-qtranslate');
 		$this->category = __("qTranslate",'acf');
 		$this->defaults = array(
 			'default_value'	=> '',
