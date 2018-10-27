@@ -28,6 +28,8 @@
 		// Selectors for supported field types
 		var field_types = {
 			text:      'input:text',
+      url:       'input[type="url"]',
+      email:     'input[type="email"]',
 			textarea:  'textarea',
 			wysiwyg:   '.wp-editor-area',
 		};
