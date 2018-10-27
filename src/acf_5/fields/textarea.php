@@ -1,6 +1,6 @@
 <?php
 
-class acf_qtranslate_acf_5_url extends acf_field_url {
+class acf_qtranslate_acf_5_textarea extends acf_field_textarea {
 
 	/**
 	 * The plugin instance.
@@ -46,12 +46,15 @@ class acf_qtranslate_acf_5_url extends acf_field_url {
 	function initialize() {
 
 		// vars
-		$this->name = 'qtranslate_url';
-		$this->label = __("URL (qTranslate)", 'acf-qtranslate');
+		$this->name = 'qtranslate_textarea';
+		$this->label = __("Text Area (qTranslate)", 'acf-qtranslate');
 		$this->category = __("qTranslate",'acf');
 		$this->defaults = array(
 			'default_value'	=> '',
+			'new_lines'		=> '',
+			'maxlength'		=> '',
 			'placeholder'	=> '',
+			'rows'			=> ''
 		);
 
 	}
@@ -74,56 +77,57 @@ class acf_qtranslate_acf_5_url extends acf_field_url {
 		$currentLanguage = $this->plugin->get_active_language();
 
 		// vars
+		$o = array( 'id', 'class', 'name', 'placeholder', 'rows' );
+		$s = array( 'readonly', 'disabled' );
+		$e = '';
+
+		// maxlength
+		if( $field['maxlength'] !== '' ) {
+			$o[] = 'maxlength';
+		}
+
+		// rows
+		if( empty($field['rows']) ) {
+			$field['rows'] = 8;
+		}
+
+		// populate atts
 		$atts = array();
-		$keys = array( 'type', 'id', 'class', 'name', 'value', 'placeholder', 'pattern' );
-		$keys2 = array( 'readonly', 'disabled', 'required' );
-		$html = '';
-
-
-		// atts (value="123")
-		foreach( $keys as $k ) {
-			if( isset($field[ $k ]) ) $atts[ $k ] = $field[ $k ];
+		foreach( $o as $k ) {
+			$atts[ $k ] = $field[ $k ];
 		}
 
-
-		// atts2 (disabled="disabled")
-		foreach( $keys2 as $k ) {
-			if( !empty($field[ $k ]) ) $atts[ $k ] = $k;
+		// special atts
+		foreach( $s as $k ) {
+			if( isset($field[ $k ]) && $field[ $k ] ) {
+				$atts[ $k ] = $k;
+			}
 		}
-
-
-		// remove empty atts
-		$atts = acf_clean_atts( $atts );
-
 
 		// render
-		$html .= '<div class="acf-input-wrap multi-language-field">';
+		$e .= '<div class="acf-input-wrap multi-language-field">';
 
 		foreach ($languages as $language) {
 			$class = ($language === $currentLanguage) ? 'wp-switch-editor current-language' : 'wp-switch-editor';
-			$html .= '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
+			$e .= '<a class="' . $class . '" data-language="' . $language . '">' . $q_config['language_name'][$language] . '</a>';
 		}
-
-		$html .= '<div class="acf-url">';
-		$html .= '<i class="acf-icon -globe -small"></i>';
 
 		foreach ($languages as $language) {
 			$atts['class'] = $field['class'];
 			if ($language === $currentLanguage) {
 				$atts['class'] .= ' current-language';
 			}
-			$atts['type'] = 'url';
 			$atts['name'] = $field['name'] . "[$language]";
-			$atts['value'] = $values[$language];
 			$atts['data-language'] = $language;
-			$html .= acf_get_text_input( $atts );
+			$e .= '<textarea ' . acf_esc_attr( $atts ) . ' >';
+			$e .= esc_textarea( $values[$language] );
+			$e .= '</textarea>';
 		}
 
-		$html .= '</div>';
-		$html .= '</div>';
+		$e .= '</div>';
 
 		// return
-		echo $html;
+		echo $e;
 	}
 
 	/*
