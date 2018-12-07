@@ -47,7 +47,7 @@ class acf_qtranslate_acf_5_post_object extends acf_field_post_object {
 
 		// vars
 		$this->name = 'qtranslate_post_object';
-		$this->label = __("Post Object (qTranslate)",'acf');
+		$this->label = __("Post Object (qTranslate)", 'acf-qtranslate');
 		$this->category = 'qTranslate';
 		$this->defaults = array(
 			'post_type'		=> array(),
