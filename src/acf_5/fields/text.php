@@ -78,7 +78,7 @@ class acf_qtranslate_acf_5_text extends acf_field_text {
 
 		// vars
 		$o = array( 'type', 'id', 'class', 'name', 'value', 'placeholder' );
-		$s = array( 'readonly', 'disabled' );
+		$s = array( 'readonly', 'disabled', 'required' );
 		$e = '';
 
 		// maxlength
