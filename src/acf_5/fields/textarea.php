@@ -78,7 +78,7 @@ class acf_qtranslate_acf_5_textarea extends acf_field_textarea {
 
 		// vars
 		$o = array( 'id', 'class', 'name', 'placeholder', 'rows' );
-		$s = array( 'readonly', 'disabled' );
+		$s = array( 'readonly', 'disabled', 'required' );
 		$e = '';
 
 		// maxlength
